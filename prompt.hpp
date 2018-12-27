@@ -1,10 +1,12 @@
 #ifndef PROMPT_H
 #define PROMPT_H
 
+#include <vector>
+#include "segment.hpp"
+#include "theme.hpp"
 
 class Prompt
 {
-    std::vector <Segment> segments;
     ShellInfo    shellInfo;
     Symbols      symbols;
     Theme        theme;

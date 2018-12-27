@@ -6,9 +6,11 @@
 
 struct Segment
 {
-    int ID;
+    Segment(std::string content, Style style);
     std::string content;
+    Style style;
 };
+
 
 
 #endif
