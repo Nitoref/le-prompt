@@ -1,26 +1,33 @@
 #ifndef THEME_H
 #define THEME_H
 
+// #include "include/json.hpp"
+// using nlohmann::json;
+
 
 struct ShellInfo;
-extern ShellInfo Bash;
-extern ShellInfo Zsh;
-extern ShellInfo Bare;
-
 struct Symbols;
-extern Symbols AnglySymbols;
-extern Symbols CurvySymbols;
-extern Symbols FlatSymbols;
-
+struct Style;
 struct Theme;
-extern Theme   Default;
-extern Theme   SolarizedDark16;
-extern Theme   SolarizedLight16;
-extern Theme   LowContrast;
+
+const extern ShellInfo Bash;
+const extern ShellInfo Zsh;
+const extern ShellInfo Bare;
+
+const extern Symbols AnglySymbols;
+const extern Symbols CurvySymbols;
+const extern Symbols FlatSymbols;
+
+const extern Theme   Default;
+const extern Theme   SolarizedDark16;
+const extern Theme   SolarizedLight16;
+const extern Theme   LowContrast;
+
 
 
 struct ShellInfo
 {
+    ShellInfo() = default;
     const char* colorTemplate;
     const char* rootIndicator;
     const char* escapedBackslash;
@@ -30,6 +37,7 @@ struct ShellInfo
 
 struct Symbols
 {
+    Symbols() = default;
     const char* Lock;
     const char* Network;
     const char* Separator;
@@ -44,12 +52,25 @@ struct Symbols
     const char* GitUntracked;
 };
 
+// typedef enum {
+//     TEXT_BOLD        = (1u << 0),
+//     TEXT_FAINT       = (1u << 1),
+//     TEXT_ITALIC      = (1u << 2),
+//     TEXT_UNDERLINE   = (1u << 3),
+//     TEXT_BLINK_1     = (1u << 4),
+//     TEXT_BLINK_2     = (1u << 5),
+//     TEXT_CROSSED_OUT = (1u << 6),
+//     TEXT_FRAMED      = (1u << 7),
+//     TEXT_ENCIRCLED   = (1u << 8),
+//     TEXT_OVERLINED   = (1u << 9)
+// } text_style;
 
 struct Style
 {
+    Style() = default;
     int   fg;
     int   bg;
-    char* opt;
+    // text_style opt;
 };
 
 
@@ -93,5 +114,13 @@ struct Theme
     Style NixShell;
     Style Duration;
 };
+
+
+// void to_json(json& j, const Style& s);
+// void from_json(const json& j, Style& s);
+
+// void to_json(json& j, const Style& s);
+// void from_json(const json& j, Style& s);
+
 
 #endif

@@ -5,23 +5,23 @@
 #include <map>
 #include <future>
 
+#include "include/json.hpp"
+using json = nlohmann::json;
 
-
-
-struct X {
-    int* a;
-    int  b;
-    int  c;
-};
-
-
-typedef int (*functionPointer)(char);
 
 // int main(int argc, char const *argv[])
 // {
-//     int *j;
-//     // if (int *j = NULL)
-//     if (int *j = new int(0))
-//         printf("HELLO\n");
-//     std::exit(0);
+//     std::ifstream i("theme.json");
+//     json j;
+//     i >> j;
+
+//     int x;
+//     x = j["Node"]["fg"];
+//     x = j["Load"]["fg"];
+//     x = j["NixShell"]["fg"];
+//     x = j["Duration"]["fg"];
+
+
+//     x = j["ihefiefiei"];
+//     std::cout << x << '\n';
 // }
