@@ -2,38 +2,54 @@
 #define THEME_H
 
 
+struct ShellInfo;
+extern ShellInfo Bash;
+extern ShellInfo Zsh;
+extern ShellInfo Bare;
+
+struct Symbols;
+extern Symbols AnglySymbols;
+extern Symbols CurvySymbols;
+extern Symbols FlatSymbols;
+
+struct Theme;
+extern Theme   Default;
+extern Theme   SolarizedDark16;
+extern Theme   SolarizedLight16;
+extern Theme   LowContrast;
+
+
 struct ShellInfo
 {
-    std::string colorTemplate;
-    std::string rootIndicator;
-    std::string escapedBackslash;
-    std::string escapedBacktick;
-    std::string escapedDollar;
+    const char* colorTemplate;
+    const char* rootIndicator;
+    const char* escapedBackslash;
+    const char* escapedBacktick;
+    const char* escapedDollar;
 };
-
 
 struct Symbols
 {
-    std::string Lock;
-    std::string Network;
-    std::string Separator;
-    std::string SeparatorThin;
-    std::string GitBranch;
-    std::string GitDetached;
-    std::string GitAhead;
-    std::string GitBehind;
-    std::string GitStaged;
-    std::string GitNotStaged;
-    std::string GitConflicted;
-    std::string GitUntracked;
+    const char* Lock;
+    const char* Network;
+    const char* Separator;
+    const char* SeparatorThin;
+    const char* GitBranch;
+    const char* GitDetached;
+    const char* GitAhead;
+    const char* GitBehind;
+    const char* GitStaged;
+    const char* GitNotStaged;
+    const char* GitConflicted;
+    const char* GitUntracked;
 };
 
 
 struct Style
 {
-    int          fg;
-    int          bg;
-    std::string opt;
+    int   fg;
+    int   bg;
+    char* opt;
 };
 
 
@@ -77,6 +93,5 @@ struct Theme
     Style NixShell;
     Style Duration;
 };
-
 
 #endif
