@@ -30,8 +30,7 @@ segmentGit2(PromptOpt *p)
     RepoStats stats  = {0, 0, 0, 0, 0, 0};
     char *branchName = NULL;
     Segment *segment;
-    Style      style = p -> theme -> RepoDirty;
-    // Style      style = p -> theme -> RepoClean;
+    Style      style = p -> theme -> RepoClean;
  
     get_git_status(&branchName, &stats);
     if (branchName == NULL)
@@ -48,7 +47,7 @@ segmentGit2(PromptOpt *p)
        || stats.untracked
        || stats.conflicted)
     {
-        // segment -> style = p -> theme -> RepoDirty;
+        segment -> style = p -> theme -> RepoDirty;
         if(!strcmp(p->args->GitMode, "compact"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
@@ -85,7 +84,7 @@ segmentGit2(PromptOpt *p)
             }
         }
     }
-    return new Segment(branchName, style);
+    return segment;
 }
 
 
