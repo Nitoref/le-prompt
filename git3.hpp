@@ -17,25 +17,25 @@ struct segmentGit
         size_t conflicted;
     };
 
-    PromptOpt   *p;
+    PromptOpt   *opt;
     Segment     *segment;
     std::thread thread;
 
     static RepoStats stats;
     static  char* repoName;
 
-    segmentGit(PromptOpt *p):p(p)
-    {
+    segmentGit(PromptOpt *opt){
+        this->opt = opt;
     };
-
-    Segment* getSegment(){
-        return NULL;
-    }
 
     Segment* get(){
         if (thread.joinable())
             thread.join();
         return segment;
+    }
+
+    Segment* getSegment(){
+        return NULL;
     }
 
     void set(){
@@ -51,7 +51,10 @@ struct segmentGit
     }
 };
 
-// struct segmentGit
+struct segmentGitAhead: public segmentGit
+{
+
+};
 
 
 

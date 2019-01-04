@@ -40,22 +40,13 @@ segmentGit2(PromptOpt *p)
 
     segment = new Segment(branchName, style);
 
-printf("\n");
-printf("%d\n", stats.ahead);
-printf("%d\n", stats.behind);
-printf("%d\n", stats.staged);
-printf("%d\n", stats.notStaged);
-printf("%d\n", stats.untracked);
-printf("%d\n", stats.conflicted);
-
-    if ( stats.ahead
-       | stats.behind
-       | stats.staged
-       | stats.notStaged
-       | stats.untracked
-       | stats.conflicted)
+    if (  stats.ahead
+       || stats.behind
+       || stats.staged
+       || stats.notStaged
+       || stats.untracked
+       || stats.conflicted)
     {
-        printf("DIRTTT\n");
         segment -> style = p -> theme -> RepoDirty;
         if(!strcmp(p->args->GitMode, "compact"))
         {
