@@ -30,7 +30,8 @@ segmentGit2(PromptOpt *p)
     RepoStats stats  = {0, 0, 0, 0, 0, 0};
     char *branchName = NULL;
     Segment *segment;
-    Style      style = p -> theme -> RepoClean;
+    Style      style = p -> theme -> RepoDirty;
+    // Style      style = p -> theme -> RepoClean;
  
     get_git_status(&branchName, &stats);
     if (branchName == NULL)
