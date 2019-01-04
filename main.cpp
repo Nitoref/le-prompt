@@ -1,7 +1,8 @@
-#include <iostream>
-#include <cstring>
-#include <vector>
-#include <array>
+#include <ios>
+
+#include "git3.hpp"
+
+
 
 #include "prompt.hpp"
 #include "promptOptions.hpp"
@@ -9,13 +10,11 @@
 
 int main(int argc, char const *argv[])
 {
+    std::ios_base::sync_with_stdio(false);
+
     const char *modules = "user,host,pwd";
     PromptOpt opt = PromptOpt(&DefaultArgs, &Bash, &CurvySymbols, &LowContrast);
     Prompt prompt = Prompt(opt);
-    prompt.appendSegment("user");
-    prompt.appendSegment("host");
-    prompt.appendSegment("pwd");
-    prompt.appendSegment("root");
-    prompt.appendSegment("exit");
+    prompt.parseSegments("user,host,pwd,git2,root,exit");
     prompt.print();
 }

@@ -7,7 +7,8 @@
 #include "theme.hpp"
 
 
-struct Segment{
+struct Segment
+{
     char* content;
     Style style;
     Segment() = default;

@@ -5,7 +5,11 @@
 #include "theme.hpp"
 
 struct PromptOpt{
-    PromptOpt(const Arguments *args, const ShellInfo *shell, const Symbols *symbols, const Theme *theme)
+    PromptOpt(
+        const Arguments *args,
+        const ShellInfo *shell,
+        const Symbols   *symbols,
+        const Theme     *theme)
     {
         this->shell   = shell;
         this->symbols = symbols;

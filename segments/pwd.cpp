@@ -6,7 +6,7 @@
 #include "../segments.hpp"
 
 
-char* getHome()
+static char* getHome()
 {
     char *home = getenv("HOME");
     if (home == NULL)
@@ -16,7 +16,7 @@ char* getHome()
     return home;
 }
 
-int removeHome(char** path)
+static int removeHome(char** path)
 {
     char *home = getHome();
     if (home == NULL)

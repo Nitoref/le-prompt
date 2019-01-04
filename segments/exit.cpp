@@ -1,56 +1,69 @@
+#include <unordered_map> 
 #include "../segments.hpp"
 
 
-std::map<int, std::string> signalMap
+std::unordered_map<int, std::string> signalMap
 {
-    {         1,     "ERROR"},
-    {         2,     "USAGE"},
-    {       126,    "NOPERM"},
-    {       127,  "NOTFOUND"},
-    {   1 + 128,    "SIGHUP"},   // hangup
-    {   2 + 128,    "SIGINT"},   // interrupt
-    {   3 + 128,   "SIGQUIT"},   // quit
-    {   4 + 128,    "SIGILL"},   // illegal instruction (not reset when caught)
-    {   5 + 128,   "SIGTRAP"},   // trace trap (not reset when caught)
-    {   6 + 128,   "SIGABRT"},   // abort()
-    {   7 + 128,    "SIGEMT"},   // EMT instruction
-    {   8 + 128,    "SIGFPE"},   // floating point exception
-    {   9 + 128,   "SIGKILL"},   // kill (cannot be caught or ignored)
-    {  10 + 128,    "SIGBUS"},   // bus error
-    {  11 + 128,   "SIGSEGV"},   // segmentation violation
-    {  12 + 128,    "SIGSYS"},   // bad argument to system call
-    {  13 + 128,   "SIGPIPE"},   // write on a pipe with no one to read it
-    {  14 + 128,   "SIGALRM"},   // alarm clock
-    {  15 + 128,   "SIGTERM"},   // software termination signal from kill
-    {  16 + 128,    "SIGURG"},   // urgent condition on IO channel
-    {  17 + 128,   "SIGSTOP"},   // sendable stop signal not from tty
-    {  18 + 128,   "SIGTSTP"},   // stop signal from tty
-    {  19 + 128,   "SIGCONT"},   // continue a stopped process
-    {  20 + 128,   "SIGCHLD"},   // to parent on child stop or exit
-    {  21 + 128,   "SIGTTIN"},   // to readers pgrp upon background tty read
-    {  22 + 128,   "SIGTTOU"},   // like TTIN for output if (tp->t_local&LTOSTOP)
-    {  23 + 128,     "SIGIO"},   // input/output possible signal
-    {  24 + 128,   "SIGXCPU"},   // exceeded CPU time limit
-    {  25 + 128,   "SIGXFSZ"},   // exceeded file size limit
-    {  26 + 128, "SIGVTALRM"},   // virtual time alarm
-    {  27 + 128,   "SIGPROF"},   // profiling time alarm
-    {  28 + 128,  "SIGWINCH"},   // window size changes
-    {  29 + 128,   "SIGINFO"},   // information request
+    {   1      ,     "ERROR"},
+    {   2      ,     "USAGE"},
+    { 126      ,    "NOPERM"},
+    { 127      ,  "NOTFOUND"},
+    { 128 +  1 ,    "SIGHUP"},   // hangup
+    { 128 +  2 ,    "SIGINT"},   // interrupt
+    { 128 +  3 ,   "SIGQUIT"},   // quit
+    { 128 +  4 ,    "SIGILL"},   // illegal instruction (not reset when caught)
+    { 128 +  5 ,   "SIGTRAP"},   // trace trap (not reset when caught)
+    { 128 +  6 ,   "SIGABRT"},   // abort()
+    { 128 +  7 ,    "SIGEMT"},   // EMT instruction
+    { 128 +  8 ,    "SIGFPE"},   // floating point exception
+    { 128 +  9 ,   "SIGKILL"},   // kill (cannot be caught or ignored)
+    { 128 + 10 ,    "SIGBUS"},   // bus error
+    { 128 + 11 ,   "SIGSEGV"},   // segmentation violation
+    { 128 + 12 ,    "SIGSYS"},   // bad argument to system call
+    { 128 + 13 ,   "SIGPIPE"},   // write on a pipe with no one to read it
+    { 128 + 14 ,   "SIGALRM"},   // alarm clock
+    { 128 + 15 ,   "SIGTERM"},   // software termination signal from kill
+    { 128 + 16 ,    "SIGURG"},   // urgent condition on IO channel
+    { 128 + 17 ,   "SIGSTOP"},   // sendable stop signal not from tty
+    { 128 + 18 ,   "SIGTSTP"},   // stop signal from tty
+    { 128 + 19 ,   "SIGCONT"},   // continue a stopped process
+    { 128 + 20 ,   "SIGCHLD"},   // to parent on child stop or exit
+    { 128 + 21 ,   "SIGTTIN"},   // to readers pgrp upon background tty read
+    { 128 + 22 ,   "SIGTTOU"},   // like TTIN for output if (tp->t_local&LTOSTOP)
+    { 128 + 23 ,     "SIGIO"},   // input/output possible signal
+    { 128 + 24 ,   "SIGXCPU"},   // exceeded CPU time limit
+    { 128 + 25 ,   "SIGXFSZ"},   // exceeded file size limit
+    { 128 + 26 , "SIGVTALRM"},   // virtual time alarm
+    { 128 + 27 ,   "SIGPROF"},   // profiling time alarm
+    { 128 + 28 ,  "SIGWINCH"},   // window size changes
+    { 128 + 29 ,   "SIGINFO"},   // information request
 };
 
-Segment* segmentExit(PromptOpt *p)
+Segment*
+segmentExit(PromptOpt *p)
 {
     char* meaning;
-    if (p->args->PrevError == 0)
+    int error = p->args->PrevError;
+
+    if (error == 0)
+    {
         return NULL;
+    }
 
     if (p->args->NumericExitCodes)
-        asprintf(&meaning, "%d", p->args->PrevError);
+    {
+        asprintf(&meaning, "%d", error);
+    }
     else
-        try {
-            meaning = strdup(signalMap.at(p->args->PrevError).c_str());
-        } catch (...) {
+    {
+        try 
+        {
+            meaning = strdup(signalMap.at(error).c_str());
+        }
+        catch (...)
+        {
             return NULL;
         }
+    }
     return new Segment(meaning, p->theme->CmdFailed);
 }
