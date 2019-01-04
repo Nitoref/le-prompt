@@ -51,7 +51,7 @@ struct segmentGit
     }
 };
 
-struct segmentGit
+// struct segmentGit
 
 
 
