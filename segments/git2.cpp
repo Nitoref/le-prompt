@@ -47,7 +47,7 @@ segmentGit2(PromptOpt *p)
        || stats.untracked
        || stats.conflicted)
     {
-        segment -> style = p -> theme -> RepoDirty;
+        // segment -> style = p -> theme -> RepoDirty;
         if(!strcmp(p->args->GitMode, "compact"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
