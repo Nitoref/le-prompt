@@ -55,6 +55,7 @@ printf("%d\n", stats.conflicted);
        | stats.untracked
        | stats.conflicted)
     {
+        printf("DIRTTT\n");
         segment -> style = p -> theme -> RepoDirty;
         if(!strcmp(p->args->GitMode, "compact"))
         {
