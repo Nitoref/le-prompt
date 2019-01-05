@@ -1,6 +1,7 @@
 #ifndef PS1_H
 #define PS1_H
 
+#include <unordered_map> 
 #include <iostream>
 #include <vector>
 #include <string>
@@ -21,7 +22,7 @@ struct Prompt {
     
     Prompt(PromptOpt options):options(options){
         segments.reserve(10);
-            std::vector<Segment*> s (
+            std::unordered_map<int, Segment*> s (
                 {1, new SegmentUser(&this->options)},
                 {2, new SegmentRoot(&this->options)},
                 {3, new SegmentPwd(&this->options)},
