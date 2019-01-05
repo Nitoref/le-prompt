@@ -41,7 +41,7 @@ static const std::unordered_map<int, std::string> signalMap
 };
 
 Segment*
-SegmentExit::getSegment()
+SegmentExit::makeSegment()
 {
     char* meaning;
     int error = opt->args->PrevError;

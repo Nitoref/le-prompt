@@ -1,27 +1,33 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <thread>
-#include <map>
-#include <future>
+// #include <iostream>
+// #include <fstream>
+// #include <string>
+// #include <vector>
+// #include <thread>
+// #include <map>
+// #include <future>
 
-#include "include/json.hpp"
-using json = nlohmann::json;
+// #include "include/json.hpp"
+// using json = nlohmann::json;
 
 
 // int main(int argc, char const *argv[])
 // {
-//     std::ifstream i("theme.json");
-//     json j;
-//     i >> j;
 
-//     int x;
-//     x = j["Node"]["fg"];
-//     x = j["Load"]["fg"];
-//     x = j["NixShell"]["fg"];
-//     x = j["Duration"]["fg"];
+//     std::string x = std::string(std::string("Hello") + std::string(" ") + std::to_string(5));
+//     std::cout << x << std::endl;
 
 
-//     x = j["ihefiefiei"];
-//     std::cout << x << '\n';
+//     // std::ifstream i("theme.json");
+//     // json j;
+//     // i >> j;
+
+//     // int x;
+//     // x = j["Node"]["fg"];
+//     // x = j["Load"]["fg"];
+//     // x = j["NixShell"]["fg"];
+//     // x = j["Duration"]["fg"];
+
+
+//     // x = j["ihefiefiei"];
+//     // std::cout << x << '\n';
 // }

@@ -4,7 +4,7 @@
 
 
 Segment*
-SegmentUser::getSegment()
+SegmentUser::makeSegment()
 {
     Style style;
     char *user;

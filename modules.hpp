@@ -6,32 +6,32 @@
 
 struct SegmentUser: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 struct SegmentRoot: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 struct SegmentPwd: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 struct SegmentHost: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 struct SegmentGit: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 struct SegmentExit: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    Segment* getSegment();
+    Segment* makeSegment();
 };
 
 

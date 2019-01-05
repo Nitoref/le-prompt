@@ -4,7 +4,7 @@
 
 
 Segment*
-SegmentRoot::getSegment()
+SegmentRoot::makeSegment()
 {
     Style style;
     if (opt -> args -> PrevError == 0)

@@ -30,7 +30,7 @@ static int removeHome(char** path)
 }
 
 Segment*
-SegmentPwd::getSegment()
+SegmentPwd::makeSegment()
 {
     char *path = getenv("PWD");
     if (path == NULL)

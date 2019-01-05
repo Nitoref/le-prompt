@@ -15,32 +15,31 @@ struct ThreadedSegment
     std::thread thread;
 
 
-    ThreadedSegment(PromptOpt *opt){
-        this->opt = opt;
-    };
+    // Constructor
+    ThreadedSegment(PromptOpt *opt);
 
-    Segment* get(){
-        if (thread.joinable())
-            thread.join();
-        return segment;
-    }
-
+    // Returns pointer to segment 
     virtual
-    Segment* getSegment(){
-        return NULL;
-    }
+    Segment*
+    makeSegment();
+    
+    // Assign makeSegment() to segment
+    void
+    create();
 
-    void set(){
-        segment = getSegment();
-    }
-
-    void init()
-    {
-        if (!thread.joinable())
-            thread = std::thread([&]{
-                set();
-            });
-    }
+    // Spawn thread with create()
+    void
+    init();
+    
+    // Join thread if joinable
+    void
+    join();
+    
+    // Call join(), then return segment
+    Segment*
+    get();
 };
+
+
 
 #endif

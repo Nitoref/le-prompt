@@ -10,12 +10,12 @@
 
 struct RepoStats
 {
-    size_t ahead;
-    size_t behind;
-    size_t staged;
-    size_t notStaged;
-    size_t untracked;
-    size_t conflicted;
+    size_t ahead = 0;
+    size_t behind = 0;
+    size_t staged = 0;
+    size_t notStaged = 0;
+    size_t untracked = 0;
+    size_t conflicted = 0;
 };
 
 static int get_git_status(char **branchName, RepoStats *stats);
@@ -27,7 +27,7 @@ static int get_name(char **branch, RepoStats *stats, git_repository *repo);
 
 
 Segment*
-SegmentGit::getSegment()
+SegmentGit::makeSegment()
 {
     RepoStats stats;
     char *branchName = NULL;

@@ -8,7 +8,7 @@
 
 
 Segment*
-SegmentHost::getSegment()
+SegmentHost::makeSegment()
 {
     char *hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
