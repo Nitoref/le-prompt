@@ -3,25 +3,32 @@
 
 #include <iostream>
 #include <vector>
-#include <thread>
-#include <future>
 #include <string>
 #include <sstream>
 
 #include "colorutils.hpp"
-#include "segments.hpp"
+#include "segment.hpp"
 #include "prompt.hpp"
 
+#include "modules.hpp"
 
 struct Prompt {
 
-    std::vector<std::future<Segment*>> segments;
+    std::vector<int> segments;
     PromptOpt options;
     int length    =  0;
     int prevColor = -1;
     
     Prompt(PromptOpt options):options(options){
         segments.reserve(10);
+            std::vector<Segment*> s (
+                {1, new SegmentUser(&this->options)},
+                {2, new SegmentRoot(&this->options)},
+                {3, new SegmentPwd(&this->options)},
+                {4, new SegmentExit(&this->options)},
+                {5, new SegmentGit(&this->options)},
+                {6, new SegmentHost(&this->options)}
+            );
     }
 
     void parseSegments(const char *name);
@@ -29,6 +36,7 @@ struct Prompt {
     void printSegment(Segment s);
     void print();
     void reset();
+
 };
 
 
@@ -37,22 +45,20 @@ void Prompt::parseSegments(const char *str)
     std::string buff;
     std::stringstream ss(str);
     while(std::getline(ss, buff, ','))
-        if (SegmentFnPointer fn = getSegmentFn(buff.c_str()))
-            segments.push_back(std::async(*fn, &options));
+        // TODO
+        continue;
 }
 
 void Prompt::appendSegment(const char *str){
-    if (SegmentFnPointer fn = getSegmentFn(str))
-        segments.push_back(std::async(*fn, &options));
+    // TODO
 };
 
 
 void Prompt::print()
 {
     for (auto &segment : segments){
-        if (Segment *s = segment.get()){
-            printSegment(*s);
-        }
+        // TODO
+        continue;
     }
     reset();
 }

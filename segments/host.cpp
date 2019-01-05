@@ -3,11 +3,13 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "../modules.hpp"
 
-#include "../segments.hpp"
 
 
-Segment* segmentHost(PromptOpt *p) {
+Segment*
+SegmentHost::getSegment()
+{
     char *hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
 
@@ -15,5 +17,5 @@ Segment* segmentHost(PromptOpt *p) {
     if (delimiter != NULL)
         *delimiter = '\0';        
 
-    return new Segment(hostname, p->theme->Hostname);
+    return new Segment(hostname, opt->theme->Hostname);
 };

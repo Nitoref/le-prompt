@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include "../modules.hpp"
 
-#include "../segments.hpp"
 
-
-Segment* segmentUser(PromptOpt *p)
+Segment*
+SegmentUser::getSegment()
 {
     Style style;
     char *user;
@@ -13,9 +13,9 @@ Segment* segmentUser(PromptOpt *p)
     if (user == NULL)
         return NULL;
     if (getuid() != 0)
-        style = p->theme->Username;
+        style = opt->theme->Username;
     else
-        style = p->theme->UsernameRoot;
+        style = opt->theme->UsernameRoot;
 
     return new Segment(user, style);
-}
+};

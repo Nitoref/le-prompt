@@ -1,8 +1,9 @@
 #include <unordered_map> 
-#include "../segments.hpp"
+#include "../modules.hpp"
 
 
-std::unordered_map<int, std::string> signalMap
+
+static const std::unordered_map<int, std::string> signalMap
 {
     {   1      ,     "ERROR"},
     {   2      ,     "USAGE"},
@@ -40,17 +41,17 @@ std::unordered_map<int, std::string> signalMap
 };
 
 Segment*
-segmentExit(PromptOpt *p)
+SegmentExit::getSegment()
 {
     char* meaning;
-    int error = p->args->PrevError;
+    int error = opt->args->PrevError;
 
     if (error == 0)
     {
         return NULL;
     }
 
-    if (p->args->NumericExitCodes)
+    if (opt->args->NumericExitCodes)
     {
         asprintf(&meaning, "%d", error);
     }
@@ -65,5 +66,5 @@ segmentExit(PromptOpt *p)
             return NULL;
         }
     }
-    return new Segment(meaning, p->theme->CmdFailed);
-}
+    return new Segment(meaning, opt->theme->CmdFailed);
+};

@@ -1,9 +1,9 @@
 #include <pwd.h>
 #include <unistd.h>
 #include <string.h>
+#include "../modules.hpp"
 
 
-#include "../segments.hpp"
 
 
 static char* getHome()
@@ -29,13 +29,14 @@ static int removeHome(char** path)
     return 1;
 }
 
-Segment* segmentPwd(PromptOpt *p) {
-
+Segment*
+SegmentPwd::getSegment()
+{
     char *path = getenv("PWD");
     if (path == NULL)
         return NULL;
     
     removeHome(&path);
 
-    return new Segment(path, p->theme->Path);
-}
+    return new Segment(path, opt->theme->Path);
+};

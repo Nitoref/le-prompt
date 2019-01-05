@@ -1,14 +1,16 @@
 #include <stdlib.h>
-#include "../segments.hpp"
+#include "../modules.hpp"
 
 
-Segment* segmentRoot(PromptOpt *p)
+
+Segment*
+SegmentRoot::getSegment()
 {
     Style style;
-    if (p -> args -> PrevError == 0)
-        style = p->theme->CmdPassed;
+    if (opt -> args -> PrevError == 0)
+        style = opt->theme->CmdPassed;
     else
-        style = p->theme->CmdFailed;
+        style = opt->theme->CmdFailed;
 
-    return new Segment(strdup(p->shell->rootIndicator), style);
-}
+    return new Segment(strdup(opt->shell->rootIndicator), style);
+};
