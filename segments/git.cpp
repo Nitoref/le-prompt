@@ -26,21 +26,17 @@ static int get_name(char **branch, RepoStats *stats, git_repository *repo);
 
 
 
-Segment*
+void
 SegmentGit::makeSegment()
 {
     RepoStats stats;
-    char *branchName = NULL;
-    Segment *segment;
-    Style      style = opt->theme->RepoClean;
+    segment.style = opt->theme->RepoClean;
  
-    get_git_status(&branchName, &stats);
-    if (branchName == NULL)
+    get_git_status(&segment.content, &stats);
+    if (segment.content == NULL)
     {
-        return NULL;
+        return;
     }
-
-    segment = new Segment(branchName, style);
 
     if (  stats.ahead
        || stats.behind
@@ -49,7 +45,7 @@ SegmentGit::makeSegment()
        || stats.untracked
        || stats.conflicted)
     {
-        segment -> style = opt -> theme -> RepoDirty;
+        segment.style = opt -> theme -> RepoDirty;
         if(!strcmp(opt->args->GitMode, "compact"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
@@ -81,12 +77,14 @@ SegmentGit::makeSegment()
 
             if (strlen(statsStr) > 1)
             {
-                branchName = (char*)realloc(branchName, strlen(branchName) + strlen(statsStr) + 1);
-                strcat(branchName, statsStr);
+                segment.content = (char*)realloc(
+                    segment.content,
+                    strlen(segment.content) + strlen(statsStr) + 1
+                );
+                strcat(segment.content, statsStr);
             }
         }
     }
-    return segment;
 };
 
 static
@@ -217,7 +215,6 @@ get_stats(RepoStats *stats, git_repository *repo, git_status_list *status)
          else
          if (s->status & GIT_STATUS_WT_NEW){
              stats -> untracked++;
-             // printf("untracked : %s\n", s->index_to_workdir->new_file.path);
          }
          else
          {

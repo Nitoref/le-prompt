@@ -6,35 +6,23 @@ ThreadedSegment::ThreadedSegment(PromptOpt *opt){
 }
 
 
-Segment*
+void
 ThreadedSegment::makeSegment(){
-    return NULL;
+    ;
 }
 
 void
 ThreadedSegment::init(){
     if (!thread.joinable())
         thread = std::thread([&]{
-            create();
+            makeSegment();
         });
 }
 
-void
-ThreadedSegment::create()
-{
-    segment = makeSegment();
-}
 
 void
 ThreadedSegment::join()
 {
     if (thread.joinable())
         thread.join();
-}
-
-Segment*
-ThreadedSegment::get()
-{
-    join();
-    return segment;
 }

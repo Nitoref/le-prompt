@@ -39,8 +39,8 @@ struct SegmentGit2: public ThreadedSegment
     int get_ahead_behind();
     int get_stats(git_status_list *status);
 
-    Segment* makeSegment(){
-        return NULL;
+    void makeSegment(){
+        ;
     }
 };
 
@@ -49,16 +49,14 @@ struct SegmentGit2: public ThreadedSegment
 
 struct SegmentGitAhead: public SegmentGit2
 {
-    Segment* makeSegment(){
+    void makeSegment(){
         if (!set)
             get_git_status();
         if (stats.ahead)
         {
-            char* out;
-            asprintf(&out, "%s %zu", opt->symbols->GitAhead, stats.ahead);
-            return new Segment(out, opt->theme->GitAhead);
+            asprintf(&segment.content, "%s %zu", opt->symbols->GitAhead, stats.ahead);
+            segment.style = opt->theme->GitAhead;
         }
-        return NULL;
     };
 };
 

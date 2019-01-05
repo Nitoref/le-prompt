@@ -3,19 +3,13 @@
 #include "../modules.hpp"
 
 
-Segment*
+void
 SegmentUser::makeSegment()
 {
-    Style style;
-    char *user;
-    user = getenv("USER");
+    segment.content = getenv("USER");
 
-    if (user == NULL)
-        return NULL;
     if (getuid() != 0)
-        style = opt->theme->Username;
+        segment.style = opt->theme->Username;
     else
-        style = opt->theme->UsernameRoot;
-
-    return new Segment(user, style);
+        segment.style = opt->theme->UsernameRoot;
 };

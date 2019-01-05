@@ -29,14 +29,13 @@ static int removeHome(char** path)
     return 1;
 }
 
-Segment*
+void
 SegmentPwd::makeSegment()
 {
-    char *path = getenv("PWD");
-    if (path == NULL)
-        return NULL;
+    segment.content = getenv("PWD");
+    if (segment.content == NULL)
+        return;
     
-    removeHome(&path);
-
-    return new Segment(path, opt->theme->Path);
+    removeHome(&segment.content);
+    segment.style = opt->theme->Path;
 };

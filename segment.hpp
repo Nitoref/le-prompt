@@ -11,11 +11,23 @@ struct Segment
 {
     char* content;
     Style style;
-    Segment() = default;
-    Segment(char* content, Style style){
-        this->content = content;
-        this->style = style;
+    
+    Segment(){
+        content = NULL;
     };
+
+    Segment(Style style):
+        style(style)
+    {};
+    
+    Segment(char* content):
+        content(content)
+    {};
+
+    Segment(char* content, Style style):
+        style(style),
+        content(content)
+    {};
 };
 
 #endif

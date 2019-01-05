@@ -7,15 +7,15 @@
 
 
 
-Segment*
+void
 SegmentHost::makeSegment()
 {
-    char *hostname = (char*)malloc(HOSTNAME_MAX);
-    gethostname(hostname, HOSTNAME_MAX);
+    segment.content = (char*)malloc(HOSTNAME_MAX);
+    gethostname(segment.content, HOSTNAME_MAX);
 
-    char *delimiter = strchr(hostname, '.');
+    char *delimiter = strchr(segment.content, '.');
     if (delimiter != NULL)
-        *delimiter = '\0';        
+        *delimiter = '\0';
 
-    return new Segment(hostname, opt->theme->Hostname);
+    segment.style = opt->theme->Hostname;
 };

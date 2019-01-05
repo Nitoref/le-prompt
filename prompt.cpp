@@ -49,8 +49,9 @@ void Prompt::appendSegment(ThreadedSegment *s){
 void Prompt::print()
 {
     for (auto &thread : threads){
-        if (Segment *s = thread->get()){
-            printSegment(*s);
+        thread->join();
+        if (thread->segment.content){
+            printSegment(thread->segment);
         }
     }
     reset();

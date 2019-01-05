@@ -40,31 +40,29 @@ static const std::unordered_map<int, std::string> signalMap
     { 128 + 29 ,   "SIGINFO"},   // information request
 };
 
-Segment*
+void
 SegmentExit::makeSegment()
 {
-    char* meaning;
     int error = opt->args->PrevError;
-
-    if (error == 0)
+    if (!error)
     {
-        return NULL;
+        return;
     }
 
     if (opt->args->NumericExitCodes)
     {
-        asprintf(&meaning, "%d", error);
+        asprintf(&segment.content, "%d", error);
     }
     else
     {
         try 
         {
-            meaning = strdup(signalMap.at(error).c_str());
+            segment.content = strdup(signalMap.at(error).c_str());
         }
         catch (...)
         {
-            return NULL;
+            return;
         }
     }
-    return new Segment(meaning, opt->theme->CmdFailed);
+    segment.style = opt->theme->CmdFailed;
 };

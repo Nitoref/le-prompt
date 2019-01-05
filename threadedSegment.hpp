@@ -11,7 +11,7 @@
 struct ThreadedSegment
 {
     PromptOpt   *opt;
-    Segment     *segment;
+    Segment     segment;
     std::thread thread;
 
 
@@ -20,12 +20,9 @@ struct ThreadedSegment
 
     // Returns pointer to segment 
     virtual
-    Segment*
-    makeSegment();
-    
-    // Assign makeSegment() to segment
     void
-    create();
+    makeSegment();
+
 
     // Spawn thread with create()
     void
@@ -34,10 +31,6 @@ struct ThreadedSegment
     // Join thread if joinable
     void
     join();
-    
-    // Call join(), then return segment
-    Segment*
-    get();
 };
 
 

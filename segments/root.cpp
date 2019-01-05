@@ -3,14 +3,13 @@
 
 
 
-Segment*
+void
 SegmentRoot::makeSegment()
 {
-    Style style;
-    if (opt -> args -> PrevError == 0)
-        style = opt->theme->CmdPassed;
-    else
-        style = opt->theme->CmdFailed;
+    segment.content = strdup(opt->shell->rootIndicator);
 
-    return new Segment(strdup(opt->shell->rootIndicator), style);
+    if (opt -> args -> PrevError == 0)
+        segment.style = opt->theme->CmdPassed;
+    else
+        segment.style = opt->theme->CmdFailed;
 };
