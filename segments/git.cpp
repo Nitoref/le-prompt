@@ -19,7 +19,7 @@ struct RepoStats
 };
 
 static int get_git_status(char **branchName, RepoStats *stats);
-static int get_stats(RepoStats *stats, git_repository *repo, git_status_list *status);
+static int get_stats(RepoStats *stats, git_status_list *status);
 static int get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head);
 static int get_name(char **branch, RepoStats *stats, git_repository *repo);
 
@@ -30,7 +30,7 @@ void
 SegmentGit::makeSegment()
 {
     RepoStats stats;
-    segment.style = opt->theme->RepoClean;
+    segment.style = opt.theme.RepoClean;
  
     get_git_status(&segment.content, &stats);
     if (segment.content == NULL)
@@ -45,34 +45,34 @@ SegmentGit::makeSegment()
        || stats.untracked
        || stats.conflicted)
     {
-        segment.style = opt -> theme -> RepoDirty;
-        if(!strcmp(opt->args->GitMode, "compact"))
+        segment.style = opt.theme.RepoDirty;
+        if(!strcmp(opt.args.GitMode, "compact"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
             strcpy(statsStr, " ");
             if (stats.ahead)
             {
-                strcat(statsStr, opt->symbols->GitAhead);
+                strcat(statsStr, opt.symbols.GitAhead);
             }
             if (stats.behind)
             {
-                strcat(statsStr, opt->symbols->GitBehind);
+                strcat(statsStr, opt.symbols.GitBehind);
             }
             if (stats.staged)
             {
-                strcat(statsStr, opt->symbols->GitStaged);
+                strcat(statsStr, opt.symbols.GitStaged);
             }
             if (stats.notStaged)
             {
-                strcat(statsStr, opt->symbols->GitNotStaged);
+                strcat(statsStr, opt.symbols.GitNotStaged);
             }
             if (stats.untracked)
             {
-                strcat(statsStr, opt->symbols->GitUntracked);
+                strcat(statsStr, opt.symbols.GitUntracked);
             }
             if (stats.conflicted)
             {
-                strcat(statsStr, opt->symbols->GitConflicted);
+                strcat(statsStr, opt.symbols.GitConflicted);
             }
 
             if (strlen(statsStr) > 1)
@@ -125,7 +125,7 @@ get_git_status(char **branchName, RepoStats *stats)
         return 1;
     }
 
-    if (get_stats(stats, repo, status))
+    if (get_stats(stats, status))
     {
         return 1;
     }
@@ -195,7 +195,7 @@ get_name(char **branch, RepoStats *stats, git_repository *repo)
 
 static
 int
-get_stats(RepoStats *stats, git_repository *repo, git_status_list *status)
+get_stats(RepoStats *stats, git_status_list *status)
 {
     size_t maxi = git_status_list_entrycount(status);
     const git_status_entry *s;

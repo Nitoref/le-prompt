@@ -10,19 +10,17 @@
 
 struct ThreadedSegment
 {
-    PromptOpt   *opt;
+    PromptOpt   &opt;
     Segment     segment;
     std::thread thread;
 
-
     // Constructor
-    ThreadedSegment(PromptOpt *opt);
+    ThreadedSegment(PromptOpt &opt);
 
-    // Returns pointer to segment 
+    // Assign content and style to segment
     virtual
     void
     makeSegment();
-
 
     // Spawn thread with create()
     void

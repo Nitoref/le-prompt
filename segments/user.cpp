@@ -9,7 +9,7 @@ SegmentUser::makeSegment()
     segment.content = getenv("USER");
 
     if (getuid() != 0)
-        segment.style = opt->theme->Username;
+        segment.style = opt.theme.Username;
     else
-        segment.style = opt->theme->UsernameRoot;
+        segment.style = opt.theme.UsernameRoot;
 };

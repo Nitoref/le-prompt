@@ -1,9 +1,9 @@
 #include "threadedSegment.hpp"
 
 
-ThreadedSegment::ThreadedSegment(PromptOpt *opt){
-    this->opt = opt;
-}
+ThreadedSegment::ThreadedSegment(PromptOpt &opt):
+    opt(opt)
+{}
 
 
 void

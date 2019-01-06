@@ -2,14 +2,13 @@
 #include "../modules.hpp"
 
 
-
 void
 SegmentRoot::makeSegment()
 {
-    segment.content = strdup(opt->shell->rootIndicator);
+    segment.content = strdup(opt.shell.rootIndicator);
 
-    if (opt -> args -> PrevError == 0)
-        segment.style = opt->theme->CmdPassed;
+    if (opt.args.PrevError == 0)
+        segment.style = opt.theme.CmdPassed;
     else
-        segment.style = opt->theme->CmdFailed;
+        segment.style = opt.theme.CmdFailed;
 };

@@ -17,5 +17,5 @@ SegmentHost::makeSegment()
     if (delimiter != NULL)
         *delimiter = '\0';
 
-    segment.style = opt->theme->Hostname;
+    segment.style = opt.theme.Hostname;
 };

@@ -2,15 +2,11 @@
 #define PS1_H
 
 #include <unordered_map> 
-#include <iostream>
 #include <vector>
-#include <string>
-#include <sstream>
 
 #include "colorutils.hpp"
 #include "segment.hpp"
 #include "prompt.hpp"
-
 #include "modules.hpp"
 
 struct Prompt {

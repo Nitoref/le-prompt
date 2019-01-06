@@ -6,20 +6,20 @@
 
 struct PromptOpt{
     PromptOpt(
-        const Arguments *args,
-        const ShellInfo *shell,
-        const Symbols   *symbols,
-        const Theme     *theme)
-    {
-        this->shell   = shell;
-        this->symbols = symbols;
-        this->theme   = theme;
-        this->args    = args;
-    }
-    const Arguments    *args;
-    const ShellInfo    *shell;
-    const Symbols      *symbols;
-    const Theme        *theme;
+        const Arguments &args,
+        const ShellInfo &shell,
+        const Symbols   &symbols,
+        const Theme     &theme
+    ):
+        shell(shell),
+        symbols(symbols),
+        theme(theme),
+        args(args)
+    {}
+    const Arguments    &args;
+    const ShellInfo    &shell;
+    const Symbols      &symbols;
+    const Theme        &theme;
 };
 
 

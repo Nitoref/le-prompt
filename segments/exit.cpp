@@ -43,13 +43,13 @@ static const std::unordered_map<int, std::string> signalMap
 void
 SegmentExit::makeSegment()
 {
-    int error = opt->args->PrevError;
+    int error = opt.args.PrevError;
     if (!error)
     {
         return;
     }
 
-    if (opt->args->NumericExitCodes)
+    if (opt.args.NumericExitCodes)
     {
         asprintf(&segment.content, "%d", error);
     }
@@ -64,5 +64,5 @@ SegmentExit::makeSegment()
             return;
         }
     }
-    segment.style = opt->theme->CmdFailed;
+    segment.style = opt.theme.CmdFailed;
 };

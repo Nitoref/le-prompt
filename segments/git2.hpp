@@ -54,8 +54,8 @@ struct SegmentGitAhead: public SegmentGit2
             get_git_status();
         if (stats.ahead)
         {
-            asprintf(&segment.content, "%s %zu", opt->symbols->GitAhead, stats.ahead);
-            segment.style = opt->theme->GitAhead;
+            asprintf(&segment.content, "%s %zu", opt.symbols.GitAhead, stats.ahead);
+            segment.style = opt.theme.GitAhead;
         }
     };
 };
@@ -64,7 +64,7 @@ struct SegmentGitAhead: public SegmentGit2
 // {
 //     Segment* makeSegment(){
 //         if (stats.behind)
-//             return new Segment(std::string(opt->symbols->GitBehind) + " " +std::to_string(stats.behind));
+//             return new Segment(std::string(opt.symbols.GitBehind) + " " +std::to_string(stats.behind));
 //     };
 // };
 
@@ -72,7 +72,7 @@ struct SegmentGitAhead: public SegmentGit2
 // {
 //     Segment* makeSegment(){
 //         if (stats.staged)
-//             return new Segment(std::string(opt->symbols->GitStaged) + " " +std::to_string(stats.staged));
+//             return new Segment(std::string(opt.symbols.GitStaged) + " " +std::to_string(stats.staged));
 //     };
 // };
 
@@ -80,7 +80,7 @@ struct SegmentGitAhead: public SegmentGit2
 // {
 //     Segment* makeSegment(){
 //         if (stats.notStaged)
-//             return new Segment(std::string(opt->symbols->GitNotStaged) + " " +std::to_string(stats.notStaged));
+//             return new Segment(std::string(opt.symbols.GitNotStaged) + " " +std::to_string(stats.notStaged));
 //     };
 // };
 
@@ -88,7 +88,7 @@ struct SegmentGitAhead: public SegmentGit2
 // {
 //     Segment* makeSegment(){
 //         if (stats.untracked)
-//             return new Segment(std::string(opt->symbols->GitUntracked) + " " +std::to_string(stats.untracked));
+//             return new Segment(std::string(opt.symbols.GitUntracked) + " " +std::to_string(stats.untracked));
 //     };
 // };
 
@@ -96,7 +96,7 @@ struct SegmentGitAhead: public SegmentGit2
 // {
 //     Segment* makeSegment(){
 //         if (stats.Conflicted)
-//             return new Segment(std::string(opt->symbols->GitConflicted) + " " +std::to_string(stats.Conflicted));
+//             return new Segment(std::string(opt.symbols.GitConflicted) + " " +std::to_string(stats.Conflicted));
 //     };
 // };
 

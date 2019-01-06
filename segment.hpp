@@ -1,9 +1,6 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include <cstring>
-#include <thread>
-
 #include "theme.hpp"
 
 

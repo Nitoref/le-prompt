@@ -37,5 +37,5 @@ SegmentPwd::makeSegment()
         return;
     
     removeHome(&segment.content);
-    segment.style = opt->theme->Path;
+    segment.style = opt.theme.Path;
 };
