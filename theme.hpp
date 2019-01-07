@@ -4,12 +4,7 @@
 #include "cpptoml.hpp"
 
 
-
 struct ShellInfo;
-struct Symbols;
-struct Style;
-struct Theme;
-
 const extern ShellInfo Bash;
 const extern ShellInfo Zsh;
 const extern ShellInfo Bare;
@@ -46,9 +41,8 @@ struct Symbols
 
 struct Style
 {
-    Style(std::shared_ptr<cpptoml::table> style, const char* key, Style s);
-    Style(int fg, int bg):fg(fg),bg(bg){};
     Style() = default;
+    Style(int fg, int bg):fg(fg),bg(bg){};
     int   fg;
     int   bg;
 };
@@ -57,7 +51,7 @@ struct Style
 struct Theme
 {
     Theme() = default;
-    Theme(std::shared_ptr<cpptoml::table> theme);
+    Theme(std::shared_ptr<cpptoml::table> conf);
     Style Separator     = { 15  , 0 } ;
     Style Username      = { 250 , 240};
     Style UsernameRoot  = { 250 , 124};
