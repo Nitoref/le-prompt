@@ -1,15 +1,16 @@
 #include <stdexcept>
 #include <memory>
 #include <string>
+#include <cstring>
 #include <array>
 
 
-char* strnrchr(char *s, int c, int n)
+const char* strnrchr(const char *s, char c, int n)
 {
     if (s != NULL)
         for (int i = strlen(s); i >= 0; i--)
             if (s[i] == c)
-                if (n-- == 0)
+                if (--n == 0)
                     return &s[i];
     return NULL;
 }

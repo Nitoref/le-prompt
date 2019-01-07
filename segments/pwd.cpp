@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "../modules.hpp"
+#include "../utils.hpp"
 
 
 
@@ -29,6 +30,23 @@ static int removeHome(char** path)
     return 1;
 }
 
+static int fold(char* path)
+{
+    const char *sep = "…";
+    char *stop = strnrchr(path, '/', 3);
+    if (stop != NULL){
+        char *start = strchr(path, '/');
+        if (start != NULL && start != stop){
+            memmove(start + strlen(sep) + 1, stop, path + strlen(path) - stop + 1);
+            for (int i = 0; i < 3; i++)
+                start[i+1] = sep[i];
+            return 1;
+        }
+
+    }
+    return 0;
+}
+
 void
 SegmentPwd::makeSegment()
 {
@@ -37,5 +55,6 @@ SegmentPwd::makeSegment()
         return;
     
     removeHome(&segment.content);
+    fold(segment.content);
     segment.style = opt.theme.Path;
 };

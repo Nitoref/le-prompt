@@ -1,21 +1,43 @@
 [args]
+
+# Git segment mode. Valid are "fancy", "simple"
 GitMode     = "simple"
+
+# Path segment mode. Valid are "fancy", "simple"
 CwdMode     = "simple"
+
+# Max amount of subdirectory to show in path segment
 CwdMaxDepth = 0
-CwdMaxDirSize = 0
+
+# Colorize the hostname with a hash of itself
 ColorizeHostname = false
-Shell    = "bash"
+
+# List of segment to load in prompt.
 Modules  = "user,host,ssh,perms,pwd,git,jobs,root,exit"
+
+# List of segment to load in prompt.
 Segments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
-MaxWidthPercentage   = 0
+
+# Maximum width percentage of terminal occupied by prompt
+MaxWidthRatio   = 0
+
+# Minimum width of a segment
 TruncateSegmentWidth = 0
-PrevError = 0
+
+# Show numeric exit status instead of description
 NumericExitCodes = false
+
+# List of absolute path that will be ignored by the git segment
 IgnoreRepos = ""
+
+# Shortens names for GKE Kube clusters
 ShortenGKENames = false
+
+# List of key=value that will be replaced in path segment
 PathAliases = ""
+
+# Number of wall-clock seconds elapsed for the previous command
 Duration    = ""
-TermWidth   = 0
 
 
 [symbols]
@@ -34,150 +56,40 @@ GitUntracked  = "…"
 
 
 [theme]
-
-  [theme.Separator]
-  fg = 15
-
-  [theme.Username]
-  fg = 250
-  bg = 240
-
-  [theme.UsernameRoot]
-  fg = 250
-  bg = 124
-
-  [theme.Hostname]
-  fg = 250
-  bg = 238
-
-  [theme.Home]
-  fg = 15
-  bg = 31
-
-  [theme.Path]
-  fg = 250
-  bg = 237
-
-  [theme.Cwd]
-  fg = 254
-  bg = 237
-
-  [theme.Readonly]
-  fg = 254
-  bg = 124
-
-  [theme.Ssh]
-  fg = 254
-  bg = 166
-
-  [theme.DockerMachine]
-  fg = 177
-  bg = 55
-
-  [theme.KubeCluster]
-  fg = 117
-  bg = 26
-
-  [theme.KubeNamespace]
-  fg = 170
-  bg = 17
-
-  [theme.DotEnv]
-  fg = 15
-  bg = 55
-
-  [theme.Aws]
-  fg = 15
-  bg = 22
-
-  [theme.RepoClean]
-  fg = 0
-  bg = 148
-
-  [theme.RepoDirty]
-  fg = 15
-  bg = 161
-
-  [theme.Jobs]
-  fg = 39
-  bg = 238
-
-  [theme.CmdPassed]
-  fg = 15
-  bg = 236
-
-  [theme.CmdFailed]
-  fg = 15
-  bg = 161
-
-  [theme.SvnChanges]
-  fg = 22
-  bg = 148
-
-  [theme.GitAhead]
-  fg = 250
-  bg = 240
-
-  [theme.GitBehind]
-  fg = 250
-  bg = 240
-
-  [theme.GitStaged]
-  fg = 15
-  bg = 22
-
-  [theme.GitNotStaged]
-  fg = 15
-  bg = 130
-
-  [theme.GitUntracked]
-  fg = 15
-  bg = 52
-
-  [theme.GitConflicted]
-  fg = 15
-  bg = 9
-
-  [theme.GitStashed]
-  fg = 15
-  bg = 20
-
-  [theme.VirtualEnv]
-  fg = 0
-  bg = 35
-
-  [theme.VirtualGo]
-  fg = 0
-  bg = 35
-
-  [theme.Perlbrew]
-  fg = 0
-  bg = 20
-
-  [theme.TFWs]
-  fg = 15
-  bg = 26
-
-  [theme.Time]
-  fg = 15
-  bg = 236
-
-  [theme.ShellVar]
-  fg = 52
-  bg = 11
-
-  [theme.Node]
-  fg = 15
-  bg = 40
-
-  [theme.Load]
-  fg = 15
-  bg = 22
-
-  [theme.NixShell]
-  fg = 0
-  bg = 69
-
-  [theme.Duration]
-  fg = 250
-  bg = 237
+Separator         = { fg =   15 }
+Username          = { fg =  234, bg =  250}
+UsernameRoot      = { fg =  234, bg =  198}
+Hostname          = { fg =  234, bg =  252}
+Home              = { fg =   30, bg =   15}
+Path              = { fg =  234, bg =  254}
+Cwd               = { fg =  236, bg =  254}
+Readonly          = { fg =  124, bg =  253}
+Ssh               = { fg =  166, bg =  254}
+DockerMachine     = { fg =   55, bg =  177}
+KubeCluster       = { fg =  117, bg =   26}
+KubeNamespace     = { fg =  170, bg =   17}
+DotEnv            = { fg =   15, bg =   55}
+ # Aws              = { fg  = ?, bg = ?}
+RepoClean         = { fg =  232, bg =  230}
+RepoDirty         = { fg =  232, bg =  223}
+Jobs              = { fg =  238, bg =   39}
+CmdPassed         = { fg =   18, bg =    7}
+CmdFailed         = { fg =  254, bg =  124}
+SvnChanges        = { fg =  148, bg =   22}
+GitAhead          = { fg =  240, bg =  250}
+GitBehind         = { fg =  240, bg =  251}
+GitStaged         = { fg =   22, bg =   15}
+GitNotStaged      = { fg =  130, bg =   15}
+GitUntracked      = { fg =   52, bg =   15}
+GitConflicted     = { fg =    9, bg =   15}
+GitStashed        = { fg =   15, bg =   20}
+VirtualEnv        = { fg =   35, bg =  254}
+VirtualGo         = { fg =   35, bg =  254}
+Perlbrew          = { fg =   20, bg =   15}
+TFWs              = { fg =   15, bg =   26}
+Time              = { fg =  236, bg =  15}
+# ShellVar          = { fg =  ?, bg = ?}
+# Node              = { fg =  ?, bg = ?}
+Load              = { fg =   15, bg =   22}
+NixShell          = { fg =   69, bg =  254}
+# Duration          = { fg =  ?, bg = ?}

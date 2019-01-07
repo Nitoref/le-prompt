@@ -2,7 +2,7 @@
 #define UTILS_H
 
 
-char* strnrchr(const char *s, int c, int n);
+char* strnrchr(const char *s, char c, int n);
 char* astrrepl(const char *str, const char *a, const char *b);
 char* astrrepl2(const char *str, const char *a, const char *b);
 void  strrepl(char *str, const char *a, const char *b);
