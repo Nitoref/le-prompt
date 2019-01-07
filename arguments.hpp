@@ -6,23 +6,22 @@ struct Arguments
 {
     const char* GitMode;
     const char* CwdMode;
-    const int   CwdMaxDepth;
-    const int   CwdMaxDirSize;
-    const int   ColorizeHostname;
-    const int   EastAsianWidth;
-    const int   PromptOnNewLine;
+    int   CwdMaxDepth;
+    int   CwdMaxDirSize;
+    bool  ColorizeHostname;
+    int   PromptOnNewLine;
     const char* Mode;
     const char* Shell;
     const char* Modules;
-    const int   MaxWidthPercentage;
-    const int   TruncateSegmentWidth;
-    const int   PrevError;
-    const int   NumericExitCodes;
+    int   MaxWidthPercentage;
+    int   TruncateSegmentWidth;
+    int   PrevError;
+    bool  NumericExitCodes;
     const char* IgnoreRepos;
-    const int   ShortenGKENames;
+    bool  ShortenGKENames;
     const char* PathAliases;
     const char* Duration;
-    const int   TermWidth;
+    int   TermWidth;
 };
 
 extern Arguments DefaultArgs;

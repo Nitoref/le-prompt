@@ -3,7 +3,6 @@
 
 #include <thread>
 
-#include "theme.hpp"
 #include "segment.hpp"
 #include "promptOptions.hpp"
 

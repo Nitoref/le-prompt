@@ -1,0 +1,183 @@
+[args]
+GitMode     = "simple"
+CwdMode     = "simple"
+CwdMaxDepth = 0
+CwdMaxDirSize = 0
+ColorizeHostname = false
+Shell    = "bash"
+Modules  = "user,host,ssh,perms,pwd,git,jobs,root,exit"
+Segments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
+MaxWidthPercentage   = 0
+TruncateSegmentWidth = 0
+PrevError = 0
+NumericExitCodes = false
+IgnoreRepos = ""
+ShortenGKENames = false
+PathAliases = ""
+Duration    = ""
+TermWidth   = 0
+
+
+[symbols]
+Lock          = ""
+Network       = ""
+Separator     = ""
+SeparatorThin = ""
+GitBranch     = ""
+GitDetached   = "➦"
+GitAhead      = "⬆"
+GitBehind     = "⬇"
+GitStaged     = "✔"
+GitNotStaged  = "✎"
+GitConflicted = "✼"
+GitUntracked  = "…"
+
+
+[theme]
+
+  [theme.Separator]
+  fg = 15
+
+  [theme.Username]
+  fg = 250
+  bg = 240
+
+  [theme.UsernameRoot]
+  fg = 250
+  bg = 124
+
+  [theme.Hostname]
+  fg = 250
+  bg = 238
+
+  [theme.Home]
+  fg = 15
+  bg = 31
+
+  [theme.Path]
+  fg = 250
+  bg = 237
+
+  [theme.Cwd]
+  fg = 254
+  bg = 237
+
+  [theme.Readonly]
+  fg = 254
+  bg = 124
+
+  [theme.Ssh]
+  fg = 254
+  bg = 166
+
+  [theme.DockerMachine]
+  fg = 177
+  bg = 55
+
+  [theme.KubeCluster]
+  fg = 117
+  bg = 26
+
+  [theme.KubeNamespace]
+  fg = 170
+  bg = 17
+
+  [theme.DotEnv]
+  fg = 15
+  bg = 55
+
+  [theme.Aws]
+  fg = 15
+  bg = 22
+
+  [theme.RepoClean]
+  fg = 0
+  bg = 148
+
+  [theme.RepoDirty]
+  fg = 15
+  bg = 161
+
+  [theme.Jobs]
+  fg = 39
+  bg = 238
+
+  [theme.CmdPassed]
+  fg = 15
+  bg = 236
+
+  [theme.CmdFailed]
+  fg = 15
+  bg = 161
+
+  [theme.SvnChanges]
+  fg = 22
+  bg = 148
+
+  [theme.GitAhead]
+  fg = 250
+  bg = 240
+
+  [theme.GitBehind]
+  fg = 250
+  bg = 240
+
+  [theme.GitStaged]
+  fg = 15
+  bg = 22
+
+  [theme.GitNotStaged]
+  fg = 15
+  bg = 130
+
+  [theme.GitUntracked]
+  fg = 15
+  bg = 52
+
+  [theme.GitConflicted]
+  fg = 15
+  bg = 9
+
+  [theme.GitStashed]
+  fg = 15
+  bg = 20
+
+  [theme.VirtualEnv]
+  fg = 0
+  bg = 35
+
+  [theme.VirtualGo]
+  fg = 0
+  bg = 35
+
+  [theme.Perlbrew]
+  fg = 0
+  bg = 20
+
+  [theme.TFWs]
+  fg = 15
+  bg = 26
+
+  [theme.Time]
+  fg = 15
+  bg = 236
+
+  [theme.ShellVar]
+  fg = 52
+  bg = 11
+
+  [theme.Node]
+  fg = 15
+  bg = 40
+
+  [theme.Load]
+  fg = 15
+  bg = 22
+
+  [theme.NixShell]
+  fg = 0
+  bg = 69
+
+  [theme.Duration]
+  fg = 250
+  bg = 237

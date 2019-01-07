@@ -46,7 +46,7 @@ SegmentGit::makeSegment()
        || stats.conflicted)
     {
         segment.style = opt.theme.RepoDirty;
-        if(!strcmp(opt.args.GitMode, "compact"))
+        if(!strcmp(opt.args.GitMode, "simple"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
             strcpy(statsStr, " ");

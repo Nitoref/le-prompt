@@ -1,4 +1,5 @@
 #include "prompt.hpp"
+#include "colorutils.hpp"
 
 #include <iostream>
 #include <string>

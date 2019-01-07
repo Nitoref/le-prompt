@@ -19,7 +19,6 @@ ThreadedSegment::init(){
         });
 }
 
-
 void
 ThreadedSegment::join()
 {

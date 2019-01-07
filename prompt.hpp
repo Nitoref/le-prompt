@@ -4,9 +4,6 @@
 #include <unordered_map> 
 #include <vector>
 
-#include "colorutils.hpp"
-#include "segment.hpp"
-#include "prompt.hpp"
 #include "modules.hpp"
 
 struct Prompt {
