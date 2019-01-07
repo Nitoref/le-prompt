@@ -2,6 +2,7 @@
 
 #include "prompt.hpp"
 #include "promptOptions.hpp"
+#include "yamlParser.hpp"
 
 
 int main(int argc, char const *argv[])
