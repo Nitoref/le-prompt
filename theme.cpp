@@ -3,7 +3,8 @@
 #include <cstring>
 
 
-const ShellInfo Bash =
+const
+ShellInfo Bash =
 {
      .colorTemplate = "\\[\\e%s\\]",
      .rootIndicator = "\\$",
@@ -12,7 +13,8 @@ const ShellInfo Bash =
      .escapedDollar = "\\$",
 };
 
-const ShellInfo Zsh =
+const
+ShellInfo Zsh =
 {
      .colorTemplate = "%%{\e%s%%}",
      // .colorTemplate = "%%{\u001b%s%%}",
@@ -22,7 +24,8 @@ const ShellInfo Zsh =
      .escapedDollar = "\\$",
 };
 
-const ShellInfo Bare =
+const
+ShellInfo Bare =
 {
      // .colorTemplate = "%s",
      .colorTemplate = "\e%s",
@@ -65,7 +68,6 @@ inline void getStyleFromToml(Style& style, std::shared_ptr<cpptoml::table> k)
 
 Theme::Theme(std::shared_ptr<cpptoml::table> conf)
 {
-  // std::shared_ptr<cpptoml::table> theme = conf->get_table("theme");
   auto theme = conf->get_table("theme");
   if (!theme)
     return;

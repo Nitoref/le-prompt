@@ -33,12 +33,10 @@ ThreadedSegment* Prompt::getSegmentByName(std::string str)
 }
 
 
-void Prompt::parseSegments(std::string str)
+void Prompt::parseSegments()
 {
-    std::string buff;
-    std::stringstream ss(str);
-    while(std::getline(ss, buff, ','))
-        if (ThreadedSegment *s = getSegmentByName(buff)){
+    for (auto& segment: options.args.Segments)
+        if (ThreadedSegment *s = getSegmentByName(segment)){
             appendSegment(s);
         }
 }

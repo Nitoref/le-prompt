@@ -16,7 +16,7 @@ struct Prompt {
     
     Prompt(PromptOpt options);
 
-    void parseSegments(std::string str);
+    void parseSegments();
     void appendSegment(ThreadedSegment *s);
     void printSegment(Segment s);
     void print();

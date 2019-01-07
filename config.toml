@@ -22,7 +22,7 @@ Segments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
 MaxWidthRatio   = 0
 
 # Minimum width of a segment
-TruncateSegmentWidth = 0
+MaxSegmentWidth = 0
 
 # Show numeric exit status instead of description
 NumericExitCodes = false

@@ -16,7 +16,7 @@ struct Arguments
      int CwdMaxDepth      = 0;
      int CwdMaxDirSize    = 0;
      int MaxWidthRatio    = 0;
-     int TruncateSegmentWidth = 0;
+     int MaxSegmentWidth  = 0;
     bool ColorizeHostname = false;
     bool NumericExitCodes = false;
     bool ShortenGKENames  = false;
