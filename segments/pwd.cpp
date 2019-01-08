@@ -7,44 +7,64 @@
 
 
 
-static char* getHome()
+static
+char*
+getHome()
 {
     char *home = getenv("HOME");
     if (home == NULL)
+    {
         home = getpwuid(getuid())->pw_dir;
+    }
     if (home == NULL)
+    {
         return NULL;
+    }
     return home;
 }
 
-static int removeHome(char** path)
+static
+int
+removeHome(char** path)
 {
     char *home = getHome();
     if (home == NULL)
+    {
         return 0;
+    }
     int homeLength = strlen(home);
     if (!homeLength || strncmp(*path, home, homeLength))
+    {
         return 0;
+    }
     *path = &((*path)[homeLength - 1]);
     **path = '~';
     return 1;
 }
 
-static int fold(char* path)
+static
+int
+fold(char* path)
 {
     const char *sep = "…";
     char *stop = strnrchr(path, '/', 3);
-    if (stop != NULL){
-        char *start = strchr(path, '/');
-        if (start != NULL && start != stop){
-            memmove(start + strlen(sep) + 1, stop, path + strlen(path) - stop + 1);
-            for (int i = 0; i < 3; i++)
-                start[i+1] = sep[i];
-            return 1;
-        }
-
+    if (stop == NULL)
+    {
+        return 0;
     }
-    return 0;
+    char *start = strchr(path, '/');
+    if (start == NULL || start == stop)
+    {
+        return 0;
+    }
+    memmove(
+        start + strlen(sep) + 1,
+        stop,
+        path + strlen(path) - stop + 1
+    );
+    for (int i = 0; i < 3; i++)
+        start[i+1] = sep[i];
+    return 1;
 }
 
 void

@@ -5,7 +5,8 @@
 #include <array>
 
 
-const char* strnrchr(const char *s, char c, int n)
+const char*
+strnrchr(const char *s, char c, int n)
 {
     if (s != NULL)
         for (int i = strlen(s); i >= 0; i--)
@@ -16,7 +17,8 @@ const char* strnrchr(const char *s, char c, int n)
 }
 
 
-void strrepl(char *str, const char *a, const char *b)
+void
+strrepl(char *str, const char *a, const char *b)
 {
     for (char *cursor = str; (cursor = strstr(cursor, a)) != NULL;)
     {
@@ -33,7 +35,8 @@ void strrepl(char *str, const char *a, const char *b)
     }
 }
 
-char* astrrepl(const char *str, const char *a, const char *b)
+char*
+astrrepl(const char *str, const char *a, const char *b)
 {
     char* strd = strdup(str);
     for (char *cursor = strd; (cursor = strstr(cursor, a)) != NULL;)
@@ -52,14 +55,16 @@ char* astrrepl(const char *str, const char *a, const char *b)
     return strd;
 }
 
-void prepend(char* str, const char *s)
+void
+prepend(char* str, const char *s)
 {
     memmove(str + strlen(s), str, strlen(str) + 1);
     for (int i = 0; s[i] != '\0'; i++)
        str[i] = s[i];
 }
 
-std::string exec(const char* cmd)
+std::string
+exec(const char* cmd)
 {
     std::array<char, 1024> buffer;
     std::string result;
@@ -80,7 +85,8 @@ std::string exec(const char* cmd)
 
 // Props to http://www.daemonology.net/blog/2008-06-05-faster-utf8-strlen.html
 #define ONEMASK ((size_t)(-1) / 0xFF)
-size_t strlen_utf8(const char * s_)
+size_t 
+strlen_utf8(const char * s_)
 {
     const char * s;
     size_t count = 0;

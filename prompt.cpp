@@ -20,7 +20,8 @@ Prompt::Prompt(PromptOpt options):options(options)
 }
 
 
-ThreadedSegment* Prompt::getSegmentByName(std::string str)
+ThreadedSegment*
+Prompt::getSegmentByName(std::string str)
 {
     try
     {
@@ -33,35 +34,44 @@ ThreadedSegment* Prompt::getSegmentByName(std::string str)
 }
 
 
-void Prompt::parseSegments()
+void
+Prompt::parseSegments()
 {
     for (auto& segment: options.args.Segments)
+    {
         if (ThreadedSegment *s = getSegmentByName(segment)){
             appendSegment(s);
         }
+    }
 }
 
 
-void Prompt::appendSegment(ThreadedSegment *s){
+void
+Prompt::appendSegment(ThreadedSegment *s){
     s->init();
     threads.push_back(s);
 };
 
 
 
-void Prompt::print()
+void
+Prompt::print()
 {
-    for (auto &thread : threads){
+    for (auto &thread : threads)
+    {
         thread->join();
-        if (thread->segment.content){
-            printSegment(thread->segment);
+        if (!thread->segment.content)
+        {
+            continue;
         }
+        printSegment(thread->segment);
     }
     reset();
 }
 
 
-void Prompt::printSegment(Segment s)
+void
+Prompt::printSegment(Segment s)
 {
     if (s.style.bg == prevColor)
     {
@@ -85,7 +95,8 @@ void Prompt::printSegment(Segment s)
 }
 
 
-void Prompt::reset(){
+void
+Prompt::reset(){
     resetStyle();
     setFg(prevColor);
     printf("%s  ", options.symbols.Separator);

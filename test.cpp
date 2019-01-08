@@ -1,5 +1,6 @@
 #include "cpptoml.hpp"
 #include <iostream>
+#include <unordered_map>
 #include <unistd.h>
 #include <fstream>
 #include <string>
@@ -29,16 +30,13 @@
 //     j.at("thumbnailUrl").get_to(a.thumbnailUrl);
 // }
 
-struct T {
-    int x;
-    int y;
+std::unordered_map<std::string, std::string> m =
+{
+    {"Hello", "world"}
 };
-
 
 // int main(int argc, char const *argv[])
 // {
-//     auto config  = cpptoml::parse_file("/Users/nitoref/Desktop/powerless/C++/test.toml");
-//     auto t = config->get_table("test");
-//     auto u = config->get_as<T>("test");
-// //     std::cout << t->get_as<int>("x").value_or(17);
+//     auto& x = m["Jack"];
+//     std::cout << x << '\n';
 // }

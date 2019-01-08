@@ -4,6 +4,7 @@
 
 #include "threadedSegment.hpp"
 
+
 struct SegmentUser: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
     void makeSegment();

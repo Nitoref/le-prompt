@@ -3,6 +3,8 @@
 
 Arguments DefaultArgs = Arguments();
 
+
+
 Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
 {
   auto args = conf->get_table("args");
@@ -24,11 +26,21 @@ Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
   if ((b = args -> get_as<bool> ("ShortenGKENames")))    {ShortenGKENames   = *b;};
   if ((s = args -> get_as<std::string> ("GitMode")))     {GitMode     = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("CwdMode")))     {CwdMode     = strdup(s->c_str());};
-  if ((s = args -> get_as<std::string> ("Symbols")))     {Symbols     = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("Shell")))       {Shell       = strdup(s->c_str());};
-  if ((s = args -> get_as<std::string> ("Modules")))     {Modules     = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("IgnoreRepos"))) {IgnoreRepos = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("PathAliases"))) {PathAliases = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("Duration")))    {Duration    = strdup(s->c_str());};
   if ((a = args -> get_array_of<std::string>("Segments"))){Segments   = *a;};
+
 };
+
+
+void
+Arguments::get_shell()
+{
+  char *shell = getenv("SHELL");
+  if (shell == NULL)
+  {
+    shell = "bash";
+  }
+}

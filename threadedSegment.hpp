@@ -9,8 +9,11 @@
 
 struct ThreadedSegment
 {
+    // Pointer to father's options
     PromptOpt   &opt;
+    // Segment 
     Segment     segment;
+    // Thread
     std::thread thread;
 
     // Constructor

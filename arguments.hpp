@@ -8,6 +8,8 @@
 
 struct Arguments
 {
+    enum ShellType {BASH, ZSH, FISH};
+
     Arguments() = default;
     Arguments(std::shared_ptr<cpptoml::table> args);
     void parse(std::shared_ptr<cpptoml::table> args);
@@ -22,13 +24,14 @@ struct Arguments
     bool ShortenGKENames  = false;
     const char* GitMode   = "simple";
     const char* CwdMode   = "simple";
-    const char* Symbols   = "curvy";
-    const char* Shell     = "bash";
-    const char* Modules   = "user,host,ssh,perms,pwd,git,jobs,root,exit";
+    const char* Shell     = NULL;
     std::vector<std::string> Segments = {"user","host","pwd","git","root","exit"};
     const char* IgnoreRepos = NULL;
     const char* PathAliases = NULL;
     const char* Duration = NULL;
+
+    void
+    get_shell();
 };
 
 extern Arguments DefaultArgs;

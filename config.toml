@@ -1,10 +1,10 @@
 [args]
 
 # Git segment mode. Valid are "fancy", "simple"
-GitMode     = "simple"
+GitMode = "simple"
 
 # Path segment mode. Valid are "fancy", "simple"
-CwdMode     = "simple"
+CwdMode = "simple"
 
 # Max amount of subdirectory to show in path segment
 CwdMaxDepth = 0
@@ -13,13 +13,10 @@ CwdMaxDepth = 0
 ColorizeHostname = false
 
 # List of segment to load in prompt.
-Modules  = "user,host,ssh,perms,pwd,git,jobs,root,exit"
-
-# List of segment to load in prompt.
 Segments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
 
 # Maximum width percentage of terminal occupied by prompt
-MaxWidthRatio   = 0
+MaxWidthRatio = 0
 
 # Minimum width of a segment
 MaxSegmentWidth = 0
@@ -37,7 +34,12 @@ ShortenGKENames = false
 PathAliases = ""
 
 # Number of wall-clock seconds elapsed for the previous command
-Duration    = ""
+Duration = ""
+
+# Aliases
+Alias = [
+    {'some/random/path' = 'shortcut'}
+]
 
 
 [symbols]

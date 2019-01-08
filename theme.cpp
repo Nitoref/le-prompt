@@ -6,33 +6,33 @@
 const
 ShellInfo Bash =
 {
-     .colorTemplate = "\\[\\e%s\\]",
-     .rootIndicator = "\\$",
+  .colorTemplate    = "\\[\\e%s\\]",
+  .rootIndicator    = "\\$",
   .escapedBackslash = "\\\\",
-   .escapedBacktick = "\\`",
-     .escapedDollar = "\\$",
+  .escapedBacktick  = "\\`",
+  .escapedDollar    = "\\$",
 };
 
 const
 ShellInfo Zsh =
 {
-     .colorTemplate = "%%{\e%s%%}",
-     // .colorTemplate = "%%{\u001b%s%%}",
-     .rootIndicator = "%#",
+  // .colorTemplate = "%%{\u001b%s%%}",
+  .colorTemplate    = "%%{\e%s%%}",
+  .rootIndicator    = "%#",
   .escapedBackslash = "\\",
-   .escapedBacktick = "\\`",
-     .escapedDollar = "\\$",
+  .escapedBacktick  = "\\`",
+  .escapedDollar    = "\\$",
 };
 
 const
 ShellInfo Bare =
 {
-     // .colorTemplate = "%s",
-     .colorTemplate = "\e%s",
-     .rootIndicator = "$",
+   // .colorTemplate = "%s",
+  .colorTemplate    = "\e%s",
+  .rootIndicator    = "$",
   .escapedBackslash = "\\",
-   .escapedBacktick = "`",
-     .escapedDollar = "$",
+  .escapedBacktick  = "`",
+  .escapedDollar    = "$",
 };
 
 
@@ -40,7 +40,9 @@ Symbols::Symbols(std::shared_ptr<cpptoml::table> conf)
 {
   auto symbols = conf->get_table("symbols");
   if (!symbols)
+  {
     return;
+  }
 
   cpptoml::option<std::string> i;
   if ((i = conf->get_as<std::string>("Lock"))){Lock = strdup(i->c_str());};
@@ -61,16 +63,22 @@ Symbols::Symbols(std::shared_ptr<cpptoml::table> conf)
 inline void getStyleFromToml(Style& style, std::shared_ptr<cpptoml::table> k)
 {
   if (cpptoml::option<int> i = k->get_as<int>("fg"))
+  {
     style.fg = *i;
+  }
   if (cpptoml::option<int> i = k->get_as<int>("bg"))
+  {
     style.bg = *i;
+  }
 }
 
 Theme::Theme(std::shared_ptr<cpptoml::table> conf)
 {
   auto theme = conf->get_table("theme");
   if (!theme)
+  {
     return;
+  }
 
   int i;
   std::shared_ptr<cpptoml::table> k;

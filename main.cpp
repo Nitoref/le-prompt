@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 
+#include "string.hpp"
 #include "utils.hpp"
 #include "prompt.hpp"
 #include "promptOptions.hpp"
@@ -12,9 +13,17 @@
 
 int main(int argc, char const *argv[])
 {
+
+
+    string s = NULL;
+    string ss = "bitch";
+    if (s.empty())
+        std::cout << "yeah " << s << ss << '\n';
+
+
+
     std::ios_base::sync_with_stdio(false);
     std::shared_ptr<cpptoml::table> config;
-    
     try
     {
         config  = cpptoml::parse_file(argv[4]);
@@ -24,13 +33,13 @@ int main(int argc, char const *argv[])
         std::cout << "Error parsing config.";
     }
 
+
     Arguments arg = config ? Arguments(config)
                            : Arguments();
     Symbols sym = config ? Symbols(config)
                          : Symbols();
     Theme  thm = config ? Theme(config)
                         : Theme();   
-
     PromptOpt opt = PromptOpt(arg, Bash, sym, thm);
     Prompt prompt = Prompt(opt);
     prompt.parseSegments();
