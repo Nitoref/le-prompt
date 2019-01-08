@@ -1,39 +1,50 @@
+#include <string>
+#include <cstring>
 #include "theme.hpp"
 #include <memory>
 #include <cstring>
 
 
-const
-ShellInfo Bash =
-{
-  .colorTemplate    = "\\[\\e%s\\]",
-  .rootIndicator    = "\\$",
-  .escapedBackslash = "\\\\",
-  .escapedBacktick  = "\\`",
-  .escapedDollar    = "\\$",
-};
 
-const
-ShellInfo Zsh =
+Shell::Shell(const char* sh)
 {
-  // .colorTemplate = "%%{\u001b%s%%}",
-  .colorTemplate    = "%%{\e%s%%}",
-  .rootIndicator    = "%#",
-  .escapedBackslash = "\\",
-  .escapedBacktick  = "\\`",
-  .escapedDollar    = "\\$",
-};
-
-const
-ShellInfo Bare =
-{
-   // .colorTemplate = "%s",
-  .colorTemplate    = "\e%s",
-  .rootIndicator    = "$",
-  .escapedBackslash = "\\",
-  .escapedBacktick  = "`",
-  .escapedDollar    = "$",
-};
+  char *s = strdup(sh);
+  if (char *c = strchr(s, '-'))
+  {
+    s = c + 1;
+  }
+  if (char *c = strchr(s, '/'))
+  {
+    s = c + 1;
+  }
+  if (!strcmp(s, "zsh"))
+  {
+    // colorTemplate = "%%{\u001b%s%%}";
+    colorTemplate    = "%%{\e%s%%}";
+    rootIndicator    = "%#";
+    escapedBackslash = "\\";
+    escapedBacktick  = "\\`";
+    escapedDollar    = "\\$";
+  }
+  else
+  if (!strcmp(s, "fish"))
+  {
+    // colorTemplate = "%s",
+    colorTemplate    = "\e%s";
+    rootIndicator    = "$";
+    escapedBackslash = "\\";
+    escapedBacktick  = "`";
+    escapedDollar    = "$";
+  }
+  else // Defaults to bash
+  {
+    colorTemplate    = "\\[\\e%s\\]";
+    rootIndicator    = "\\$";
+    escapedBackslash = "\\\\";
+    escapedBacktick  = "\\`";
+    escapedDollar    = "\\$";
+  };
+}
 
 
 Symbols::Symbols(std::shared_ptr<cpptoml::table> conf)
@@ -60,7 +71,7 @@ Symbols::Symbols(std::shared_ptr<cpptoml::table> conf)
 };
 
 
-inline void getStyleFromToml(Style& style, std::shared_ptr<cpptoml::table> k)
+inline void get_style_from_toml(Style& style, std::shared_ptr<cpptoml::table> k)
 {
   if (cpptoml::option<int> i = k->get_as<int>("fg"))
   {
@@ -82,41 +93,41 @@ Theme::Theme(std::shared_ptr<cpptoml::table> conf)
 
   int i;
   std::shared_ptr<cpptoml::table> k;
-  if ((k = theme->get_table("Separator"))){getStyleFromToml(Separator, k);};
-  if ((k = theme->get_table("Username"))){getStyleFromToml(Username, k);};
-  if ((k = theme->get_table("UsernameRoot"))){getStyleFromToml(UsernameRoot, k);};
-  if ((k = theme->get_table("Hostname"))){getStyleFromToml(Hostname, k);};
-  if ((k = theme->get_table("Home"))){getStyleFromToml(Home, k);};
-  if ((k = theme->get_table("Path"))){getStyleFromToml(Path, k);};
-  if ((k = theme->get_table("Cwd"))){getStyleFromToml(Cwd, k);};
-  if ((k = theme->get_table("Readonly"))){getStyleFromToml(Readonly, k);};
-  if ((k = theme->get_table("Ssh"))){getStyleFromToml(Ssh, k);};
-  if ((k = theme->get_table("DockerMachine"))){getStyleFromToml(DockerMachine, k);};
-  if ((k = theme->get_table("KubeCluster"))){getStyleFromToml(KubeCluster, k);};
-  if ((k = theme->get_table("KubeNamespace"))){getStyleFromToml(KubeNamespace, k);};
-  if ((k = theme->get_table("DotEnv"))){getStyleFromToml(DotEnv, k);};
-  if ((k = theme->get_table("Aws"))){getStyleFromToml(Aws, k);};
-  if ((k = theme->get_table("RepoClean"))){getStyleFromToml(RepoClean, k);};
-  if ((k = theme->get_table("RepoDirty"))){getStyleFromToml(RepoDirty, k);};
-  if ((k = theme->get_table("Jobs"))){getStyleFromToml(Jobs, k);};
-  if ((k = theme->get_table("CmdPassed"))){getStyleFromToml(CmdPassed, k);};
-  if ((k = theme->get_table("CmdFailed"))){getStyleFromToml(CmdFailed, k);};
-  if ((k = theme->get_table("SvnChanges"))){getStyleFromToml(SvnChanges, k);};
-  if ((k = theme->get_table("GitAhead"))){getStyleFromToml(GitAhead, k);};
-  if ((k = theme->get_table("GitBehind"))){getStyleFromToml(GitBehind, k);};
-  if ((k = theme->get_table("GitStaged"))){getStyleFromToml(GitStaged, k);};
-  if ((k = theme->get_table("GitNotStaged"))){getStyleFromToml(GitNotStaged, k);};
-  if ((k = theme->get_table("GitUntracked"))){getStyleFromToml(GitUntracked, k);};
-  if ((k = theme->get_table("GitConflicted"))){getStyleFromToml(GitConflicted, k);};
-  if ((k = theme->get_table("GitStashed"))){getStyleFromToml(GitStashed, k);};
-  if ((k = theme->get_table("VirtualEnv"))){getStyleFromToml(VirtualEnv, k);};
-  if ((k = theme->get_table("VirtualGo"))){getStyleFromToml(VirtualGo, k);};
-  if ((k = theme->get_table("Perlbrew"))){getStyleFromToml(Perlbrew, k);};
-  if ((k = theme->get_table("TFWs"))){getStyleFromToml(TFWs, k);};
-  if ((k = theme->get_table("Time"))){getStyleFromToml(Time, k);};
-  if ((k = theme->get_table("ShellVar"))){getStyleFromToml(ShellVar, k);};
-  if ((k = theme->get_table("Node"))){getStyleFromToml(Node, k);};
-  if ((k = theme->get_table("Load"))){getStyleFromToml(Load, k);};
-  if ((k = theme->get_table("NixShell"))){getStyleFromToml(NixShell, k);};
-  if ((k = theme->get_table("Duration"))){getStyleFromToml(Duration, k);};
+  if ((k = theme->get_table("Separator"))){get_style_from_toml(Separator, k);};
+  if ((k = theme->get_table("Username"))){get_style_from_toml(Username, k);};
+  if ((k = theme->get_table("UsernameRoot"))){get_style_from_toml(UsernameRoot, k);};
+  if ((k = theme->get_table("Hostname"))){get_style_from_toml(Hostname, k);};
+  if ((k = theme->get_table("Home"))){get_style_from_toml(Home, k);};
+  if ((k = theme->get_table("Path"))){get_style_from_toml(Path, k);};
+  if ((k = theme->get_table("Cwd"))){get_style_from_toml(Cwd, k);};
+  if ((k = theme->get_table("Readonly"))){get_style_from_toml(Readonly, k);};
+  if ((k = theme->get_table("Ssh"))){get_style_from_toml(Ssh, k);};
+  if ((k = theme->get_table("DockerMachine"))){get_style_from_toml(DockerMachine, k);};
+  if ((k = theme->get_table("KubeCluster"))){get_style_from_toml(KubeCluster, k);};
+  if ((k = theme->get_table("KubeNamespace"))){get_style_from_toml(KubeNamespace, k);};
+  if ((k = theme->get_table("DotEnv"))){get_style_from_toml(DotEnv, k);};
+  if ((k = theme->get_table("Aws"))){get_style_from_toml(Aws, k);};
+  if ((k = theme->get_table("RepoClean"))){get_style_from_toml(RepoClean, k);};
+  if ((k = theme->get_table("RepoDirty"))){get_style_from_toml(RepoDirty, k);};
+  if ((k = theme->get_table("Jobs"))){get_style_from_toml(Jobs, k);};
+  if ((k = theme->get_table("CmdPassed"))){get_style_from_toml(CmdPassed, k);};
+  if ((k = theme->get_table("CmdFailed"))){get_style_from_toml(CmdFailed, k);};
+  if ((k = theme->get_table("SvnChanges"))){get_style_from_toml(SvnChanges, k);};
+  if ((k = theme->get_table("GitAhead"))){get_style_from_toml(GitAhead, k);};
+  if ((k = theme->get_table("GitBehind"))){get_style_from_toml(GitBehind, k);};
+  if ((k = theme->get_table("GitStaged"))){get_style_from_toml(GitStaged, k);};
+  if ((k = theme->get_table("GitNotStaged"))){get_style_from_toml(GitNotStaged, k);};
+  if ((k = theme->get_table("GitUntracked"))){get_style_from_toml(GitUntracked, k);};
+  if ((k = theme->get_table("GitConflicted"))){get_style_from_toml(GitConflicted, k);};
+  if ((k = theme->get_table("GitStashed"))){get_style_from_toml(GitStashed, k);};
+  if ((k = theme->get_table("VirtualEnv"))){get_style_from_toml(VirtualEnv, k);};
+  if ((k = theme->get_table("VirtualGo"))){get_style_from_toml(VirtualGo, k);};
+  if ((k = theme->get_table("Perlbrew"))){get_style_from_toml(Perlbrew, k);};
+  if ((k = theme->get_table("TFWs"))){get_style_from_toml(TFWs, k);};
+  if ((k = theme->get_table("Time"))){get_style_from_toml(Time, k);};
+  if ((k = theme->get_table("ShellVar"))){get_style_from_toml(ShellVar, k);};
+  if ((k = theme->get_table("Node"))){get_style_from_toml(Node, k);};
+  if ((k = theme->get_table("Load"))){get_style_from_toml(Load, k);};
+  if ((k = theme->get_table("NixShell"))){get_style_from_toml(NixShell, k);};
+  if ((k = theme->get_table("Duration"))){get_style_from_toml(Duration, k);};
 }

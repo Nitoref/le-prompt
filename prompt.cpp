@@ -23,14 +23,16 @@ Prompt::Prompt(PromptOpt options):options(options)
 ThreadedSegment*
 Prompt::getSegmentByName(std::string str)
 {
-    try
-    {
-        return segments.at(str);
-    }
-    catch (...)
-    {
-        return NULL;
-    }
+    // try
+    // {
+    //     return segments.at(str);
+    // }
+    // catch (...)
+    // {
+    //     return NULL;
+    // }
+    auto& s = segments[str];
+    return s ? : NULL;
 }
 
 

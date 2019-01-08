@@ -1,8 +1,6 @@
 #include "arguments.hpp"
 #include <stdlib.h>
-
-Arguments DefaultArgs = Arguments();
-
+#include "string"
 
 
 Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
@@ -31,16 +29,4 @@ Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
   if ((s = args -> get_as<std::string> ("PathAliases"))) {PathAliases = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("Duration")))    {Duration    = strdup(s->c_str());};
   if ((a = args -> get_array_of<std::string>("Segments"))){Segments   = *a;};
-
 };
-
-
-void
-Arguments::get_shell()
-{
-  char *shell = getenv("SHELL");
-  if (shell == NULL)
-  {
-    shell = "bash";
-  }
-}

@@ -35,7 +35,7 @@ struct SegmentGit2: public ThreadedSegment
     static git_reference *head;
 
     int get_git_status();
-    int get_name();
+    int get_branch_name();
     int get_ahead_behind();
     int get_stats(git_status_list *status);
 

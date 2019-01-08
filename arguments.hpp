@@ -29,9 +29,6 @@ struct Arguments
     const char* IgnoreRepos = NULL;
     const char* PathAliases = NULL;
     const char* Duration = NULL;
-
-    void
-    get_shell();
 };
 
 extern Arguments DefaultArgs;

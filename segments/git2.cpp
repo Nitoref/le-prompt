@@ -22,15 +22,14 @@ SegmentGit2::get_git_status()
 {
     set = true;
 
-    git_repository  *repo    = NULL;
     git_status_list *status;
-    git_status_options statusopt = GIT_STATUS_OPTIONS_INIT;
+    git_status_options opt = GIT_STATUS_OPTIONS_INIT;
  
     git_libgit2_init();
 
-    statusopt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+    opt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 
-    statusopt.flags = \
+    opt.flags = \
         GIT_STATUS_OPT_INCLUDE_UNTRACKED        |
         GIT_STATUS_OPT_RENAMES_INDEX_TO_WORKDIR |
         GIT_STATUS_OPT_EXCLUDE_SUBMODULES       |
@@ -38,35 +37,17 @@ SegmentGit2::get_git_status()
         GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
 
     if (git_repository_open_ext(&repo, ".", 0, NULL))
-    {
         return 1;
-    }
-    
-    if (get_name())
-    {
+    if (get_branch_name())
         return 1; 
-    }
-
     if (get_ahead_behind())
-    {
         return 1;
-    };
-
-
     if (git_repository_is_bare(repo))
-    {
-        return 0; // cannot status on bare repo
-    }
-
-    if (git_status_list_new(&status, repo, &statusopt))
-    {
+        return 0;
+    if (git_status_list_new(&status, repo, &opt))
         return 1;
-    }
-
     if (get_stats(status))
-    {
         return 1;
-    }
  
     git_status_list_free(status);
     git_repository_free(repo);
@@ -78,12 +59,13 @@ SegmentGit2::get_git_status()
 int 
 SegmentGit2::get_ahead_behind()
 {
-    int    error;
     git_reference *upstream = NULL;
 
-    error = git_branch_upstream(&upstream, head);
+    int error = git_branch_upstream(&upstream, head);
     if (error)
+    {
         return error;
+    }
 
     git_graph_ahead_behind(
         &(stats.ahead), &(stats.behind),
@@ -96,23 +78,31 @@ SegmentGit2::get_ahead_behind()
 
 
 int
-SegmentGit2::get_name()
+SegmentGit2::get_branch_name()
 {    
     git_reference *head     = NULL;
 
     int error = git_repository_head(&head, repo);
     if (error)
     {
-        if (error == GIT_ENOTFOUND || error == GIT_EUNBORNBRANCH)
+        if (error == GIT_ENOTFOUND ||
+            error == GIT_EUNBORNBRANCH
+        ){
             branchName = strdup("HEAD (no branch)");
+        }
         else
+        {
             return 1;
+        }
     }
 
     if (git_repository_head_detached(repo))
     {
         branchName = (char*)malloc(8*sizeof(char));
-        git_oid_tostr(branchName, sizeof(branchName), git_reference_target(head));
+        git_oid_tostr(
+            branchName, sizeof(branchName), 
+            git_reference_target(head)
+        );
     }
     else
     {
@@ -123,7 +113,6 @@ SegmentGit2::get_name()
     git_reference_free(head);
     return 0;
 }
-
 
 
 int

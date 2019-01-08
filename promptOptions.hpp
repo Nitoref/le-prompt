@@ -7,7 +7,7 @@
 struct PromptOpt{
     PromptOpt(
         const Arguments &args,
-        const ShellInfo &shell,
+        const Shell &shell,
         const Symbols   &symbols,
         const Theme     &theme
     ):
@@ -16,10 +16,10 @@ struct PromptOpt{
         theme(theme),
         args(args)
     {}
-    const Arguments    &args;
-    const ShellInfo    &shell;
-    const Symbols      &symbols;
-    const Theme        &theme;
+    const Arguments &args;
+    const Shell     &shell;
+    const Symbols   &symbols;
+    const Theme     &theme;
 };
 
 

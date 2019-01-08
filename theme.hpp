@@ -4,15 +4,10 @@
 #include "cpptoml.hpp"
 
 
-struct ShellInfo;
-const extern ShellInfo Bash;
-const extern ShellInfo Zsh;
-const extern ShellInfo Bare;
-
-
-struct ShellInfo
+struct Shell
 {
-    ShellInfo() = default;
+    Shell() = default;
+    Shell(const char *sh);
     const char* colorTemplate;
     const char* rootIndicator;
     const char* escapedBackslash;

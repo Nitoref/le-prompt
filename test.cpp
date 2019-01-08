@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <thread>
 #include <map>
@@ -30,13 +31,24 @@
 //     j.at("thumbnailUrl").get_to(a.thumbnailUrl);
 // }
 
-std::unordered_map<std::string, std::string> m =
-{
-    {"Hello", "world"}
-};
+// std::unordered_map<std::string, std::string> m =
+// {
+//     {"Hello", "world"}
+// };
 
 // int main(int argc, char const *argv[])
 // {
 //     auto& x = m["Jack"];
 //     std::cout << x << '\n';
+
+//     std::string s = "Salut comment va";
+//     char* c = &*s.begin();
+
+    
+
+//     memmove (c, c+5, 5+strlen());
+//     // *c = 'H';
+//     std::cout << s << '\n';
+//     std::cout << c << '\n';
+
 // }
