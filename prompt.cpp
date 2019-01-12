@@ -1,12 +1,14 @@
 #include "prompt.hpp"
-#include "colorutils.hpp"
+#include "utils.hpp"
 
 #include <iostream>
 #include <string>
 #include <sstream>
 
 
-Prompt::Prompt(PromptOpt options):options(options)
+Prompt::Prompt(PromptOpt options):
+    options(options),
+    printer(options.shell)
 {
     segments = {
         {"user", new SegmentUser(this->options)},
@@ -23,41 +25,49 @@ Prompt::Prompt(PromptOpt options):options(options)
 ThreadedSegment*
 Prompt::getSegmentByName(std::string str)
 {
-    // try
-    // {
-    //     return segments.at(str);
-    // }
-    // catch (...)
-    // {
-    //     return NULL;
-    // }
     auto& s = segments[str];
     return s ? : NULL;
 }
 
 
 void
-Prompt::parseSegments()
+Prompt::parseLeftSegments(std::vector<std::string> segments)
 {
-    for (auto& segment: options.args.Segments)
+    for (auto& segment: segments)
     {
         if (ThreadedSegment *s = getSegmentByName(segment)){
-            appendSegment(s);
+            s->init();
+            threads.push_back(s);
         }
     }
 }
 
+void
+Prompt::parseRightSegments(std::vector<std::string> segments)
+{
+    for (auto& segment: segments)
+    {
+        if (ThreadedSegment *s = getSegmentByName(segment)){
+            s->init();
+            rightThreads.push_back(s);
+        }
+    }
+}
 
 void
-Prompt::appendSegment(ThreadedSegment *s){
-    s->init();
-    threads.push_back(s);
-};
-
+Prompt::parseLeftSegments()
+{
+    parseLeftSegments(options.args.LeftSegments);
+}
+void
+Prompt::parseRightSegments()
+{
+    parseRightSegments(options.args.RightSegments);
+}
 
 
 void
-Prompt::print()
+Prompt::printLeft()
 {
     for (auto &thread : threads)
     {
@@ -71,36 +81,80 @@ Prompt::print()
     reset();
 }
 
+void
+Prompt::printRight()
+{
+    for (auto &thread : rightThreads)
+    {
+        thread->join();
+        if (!thread->segment.content)
+        {
+            continue;
+        }
+        printRSegment(thread->segment);
+    }
+    printer.resetStyle();
+}
+
 
 void
 Prompt::printSegment(Segment s)
 {
     if (s.style.bg == prevColor)
     {
-        length += strlen(options.symbols.SeparatorThin);
-        setFg(s.style.fg);
+        length += strlen_utf8(options.symbols.SeparatorThin);
+        printer.setFg(s.style.fg);
         printf("%s", options.symbols.SeparatorThin);
     }
     else
     if (prevColor != -1)
     {
-        length += strlen(options.symbols.Separator);
-        setBg(s.style.bg);
-        setFg(prevColor);
+        length += strlen_utf8(options.symbols.Separator);
+        printer.setBg(s.style.bg);
+        printer.setFg(prevColor);
         printf("%s", options.symbols.Separator);
     }
-    setBg(s.style.bg);
-    setFg(s.style.fg);
+    printer.setBg(s.style.bg);
+    printer.setFg(s.style.fg);
     printf(" %s ",s.content);
-    length += strlen(s.content) + 2;
+    length += strlen_utf8(s.content) + 2;
+    prevColor = s.style.bg;
+}
+
+void
+Prompt::printRSegment(Segment s)
+{
+    if (s.style.bg == prevColor)
+    {
+        length += strlen_utf8(options.symbols.RSeparatorThin);
+        printer.setBg(s.style.fg);
+        printf("%s", options.symbols.RSeparatorThin);
+    }
+    else
+    {
+        length += strlen_utf8(options.symbols.RSeparator);
+        if (prevColor != -1)
+            printer.setBg(prevColor);
+        printer.setFg(s.style.bg);
+        printf("%s", options.symbols.RSeparator);
+    }
+    printer.setBg(s.style.bg);
+    printer.setFg(s.style.fg);
+    printf(" %s ",s.content);
+    length += strlen_utf8(s.content) + 2;
     prevColor = s.style.bg;
 }
 
 
 void
 Prompt::reset(){
-    resetStyle();
-    setFg(prevColor);
+    printer.resetStyle();
+    printer.setFg(prevColor);
     printf("%s  ", options.symbols.Separator);
-    resetStyle();
+    printer.resetStyle();
 }
+
+
+
+// g++ -Oz -o build/powerline -std=c++17 *.cpp ./*/*.cpp -lgit2 -Iinclude
+// clang++ -std=c++2a -Wall -Werror -D_LIBCPP_DISABLE_AVAILABILITY test.cpp -I/Users/nitoref/Desktop/powerless/C++/include/

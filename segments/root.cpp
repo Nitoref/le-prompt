@@ -5,7 +5,7 @@
 void
 SegmentRoot::makeSegment()
 {
-    segment.content = strdup(opt.shell.rootIndicator);
+    segment.content = strdup(opt.shell.indicator_);
 
     if (opt.args.PrevError == 0)
         segment.style = opt.theme.CmdPassed;

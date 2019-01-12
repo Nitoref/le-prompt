@@ -8,29 +8,32 @@ struct Shell
 {
     Shell() = default;
     Shell(const char *sh);
-    const char* colorTemplate;
-    const char* rootIndicator;
-    const char* escapedBackslash;
-    const char* escapedBacktick;
-    const char* escapedDollar;
+    const char* escape_    ;//= "\\[\\e[";
+    const char* epacse_    ;//= "m\\]";
+    const char* indicator_ ;//= "\\$";
+    const char* backslash_ ;//= "\\\\";
+    const char* backtick_  ;//= "\\`";
+    const char* dollar_    ;//= "\\$";
 };
 
 struct Symbols
 {
     Symbols() = default;
     Symbols(std::shared_ptr<cpptoml::table> syms);
-    const char* Lock          = "\uE0A2"; // ""
-    const char* Network       = "\uE0A2"; // ""
-    const char* Separator     = "\uE0B4"; // ""
-    const char* SeparatorThin = "\uE0B5"; // ""
-    const char* GitBranch     = "\uE0A0"; // ""
-    const char* GitDetached   = "\u27A6"; // "➦"
-    const char* GitAhead      = "\u2B06"; // "⬆"
-    const char* GitBehind     = "\u2B07"; // "⬇"
-    const char* GitStaged     = "\u2714"; // "✔"
-    const char* GitNotStaged  = "\u270E"; // "✎"
-    const char* GitConflicted = "\u273C"; // "✼"
-    const char* GitUntracked  = "\u2026"; // "…"
+    const char* Lock           = "\uE0A2"; // ""
+    const char* Network        = "\uE0A2"; // ""
+    const char* Separator      = "\uE0B4"; // ""
+    const char* RSeparator     = "\uE0B4"; // ""
+    const char* SeparatorThin  = "\uE0B5"; // ""
+    const char* RSeparatorThin = "\uE0B5"; // ""
+    const char* GitBranch      = "\uE0A0"; // ""
+    const char* GitDetached    = "\u27A6"; // "➦"
+    const char* GitAhead       = "\u2B06"; // "⬆"
+    const char* GitBehind      = "\u2B07"; // "⬇"
+    const char* GitStaged      = "\u2714"; // "✔"
+    const char* GitNotStaged   = "\u270E"; // "✎"
+    const char* GitConflicted  = "\u273C"; // "✼"
+    const char* GitUntracked   = "\u2026"; // "…"
 };
 
 

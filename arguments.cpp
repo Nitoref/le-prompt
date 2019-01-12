@@ -1,6 +1,5 @@
 #include "arguments.hpp"
 #include <stdlib.h>
-#include "string"
 
 
 Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
@@ -26,7 +25,8 @@ Arguments::Arguments(std::shared_ptr<cpptoml::table> conf)
   if ((s = args -> get_as<std::string> ("CwdMode")))     {CwdMode     = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("Shell")))       {Shell       = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("IgnoreRepos"))) {IgnoreRepos = strdup(s->c_str());};
-  if ((s = args -> get_as<std::string> ("PathAliases"))) {PathAliases = strdup(s->c_str());};
   if ((s = args -> get_as<std::string> ("Duration")))    {Duration    = strdup(s->c_str());};
-  if ((a = args -> get_array_of<std::string>("Segments"))){Segments   = *a;};
+  if ((a = args -> get_array_of<std::string>("LeftSegments"))){LeftSegments  = *a;};
+  if ((a = args -> get_array_of<std::string>("RightSegments"))){RightSegments = *a;};
+  // if ((a = args -> get_array_of<std::pair<std::string>>("PathAliases"))){Segments   = *a;};
 };

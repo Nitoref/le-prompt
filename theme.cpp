@@ -1,7 +1,6 @@
-#include <string>
-#include <cstring>
 #include "theme.hpp"
-#include <memory>
+
+#include <string>
 #include <cstring>
 
 
@@ -17,32 +16,42 @@ Shell::Shell(const char* sh)
   {
     s = c + 1;
   }
-  if (!strcmp(s, "zsh"))
+  if (!strncmp(s, "zsh", 3))
   {
-    // colorTemplate = "%%{\u001b%s%%}";
-    colorTemplate    = "%%{\e%s%%}";
-    rootIndicator    = "%#";
-    escapedBackslash = "\\";
-    escapedBacktick  = "\\`";
-    escapedDollar    = "\\$";
+    escape_    = "%{\e[";
+    epacse_    = "m%}";
+    indicator_ = "%#";
+    backslash_ = "\\";
+    backtick_  = "\\`";
+    dollar_    = "\\$";
   }
   else
-  if (!strcmp(s, "fish"))
+  if (!strncmp(s, "fish", 4))
   {
-    // colorTemplate = "%s",
-    colorTemplate    = "\e%s";
-    rootIndicator    = "$";
-    escapedBackslash = "\\";
-    escapedBacktick  = "`";
-    escapedDollar    = "$";
+    escape_    = "\x1b[",
+    epacse_    = "\x1b(B\x1b[m";
+    indicator_ = "$";
+    backslash_ = "\\";
+    backtick_  = "`";
+    dollar_    = "$";
   }
+  // else // Defaults to bash
+  // {
+  //   escape_    = "\e[";
+  //   epacse_    = "m";
+  //   indicator_ = "\\$";
+  //   backslash_ = "\\\\";
+  //   backtick_  = "\\`";
+  //   dollar_    = "\\$";
+  // };
   else // Defaults to bash
   {
-    colorTemplate    = "\\[\\e%s\\]";
-    rootIndicator    = "\\$";
-    escapedBackslash = "\\\\";
-    escapedBacktick  = "\\`";
-    escapedDollar    = "\\$";
+    escape_    = "\\[\\e[";
+    epacse_    = "m\\]";
+    indicator_ = "\\$";
+    backslash_ = "\\\\";
+    backtick_  = "\\`";
+    dollar_    = "\\$";
   };
 }
 
@@ -56,22 +65,26 @@ Symbols::Symbols(std::shared_ptr<cpptoml::table> conf)
   }
 
   cpptoml::option<std::string> i;
-  if ((i = conf->get_as<std::string>("Lock"))){Lock = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("Network"))){Network = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("Separator"))){Separator = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("SeparatorThin"))){SeparatorThin = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitBranch"))){GitBranch = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitDetached"))){GitDetached = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitAhead"))){GitAhead = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitBehind"))){GitBehind = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitStaged"))){GitStaged = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitNotStaged"))){GitNotStaged = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitConflicted"))){GitConflicted = strdup(i->c_str());};
-  if ((i = conf->get_as<std::string>("GitUntracked"))){GitUntracked = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("Lock")))          { Lock    = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("Network")))       { Network = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("Separator")))     { Separator = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("Separator")))     { Separator = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("SeparatorThin"))) { SeparatorThin = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("RSeparator")))    { RSeparator = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("RSeparatorThin"))){ RSeparatorThin = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitBranch")))     { GitBranch   = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitDetached")))   { GitDetached = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitAhead")))      { GitAhead  = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitBehind")))     { GitBehind = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitStaged")))     { GitStaged = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitNotStaged")))  { GitNotStaged  = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitConflicted"))) { GitConflicted = strdup(i->c_str());};
+  if ((i = symbols -> get_as<std::string>("GitUntracked")))  { GitUntracked  = strdup(i->c_str());};
 };
 
 
-inline void get_style_from_toml(Style& style, std::shared_ptr<cpptoml::table> k)
+static inline void 
+get_style_from_toml(Style& style, std::shared_ptr<cpptoml::table> k)
 {
   if (cpptoml::option<int> i = k->get_as<int>("fg"))
   {

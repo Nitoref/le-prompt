@@ -5,21 +5,22 @@
 #include "theme.hpp"
 
 struct PromptOpt{
+    PromptOpt() = default;
     PromptOpt(
-        const Arguments &args,
-        const Shell &shell,
-        const Symbols   &symbols,
-        const Theme     &theme
+        Arguments args,
+        Symbols   symbols,
+        Theme     theme,
+        Shell     shell
     ):
-        shell(shell),
+        args(args),
         symbols(symbols),
         theme(theme),
-        args(args)
+        shell(shell)
     {}
-    const Arguments &args;
-    const Shell     &shell;
-    const Symbols   &symbols;
-    const Theme     &theme;
+    Arguments args;
+    Symbols   symbols;
+    Theme     theme;
+    Shell     shell;
 };
 
 

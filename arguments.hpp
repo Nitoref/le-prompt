@@ -1,15 +1,12 @@
 #ifndef ARGUMENTS_H
 #define ARGUMENTS_H
 
-#include <memory>
 #include <string>
 #include <vector>
 #include "cpptoml.hpp"
 
 struct Arguments
 {
-    enum ShellType {BASH, ZSH, FISH};
-
     Arguments() = default;
     Arguments(std::shared_ptr<cpptoml::table> args);
     void parse(std::shared_ptr<cpptoml::table> args);
@@ -25,10 +22,11 @@ struct Arguments
     const char* GitMode   = "simple";
     const char* CwdMode   = "simple";
     const char* Shell     = NULL;
-    std::vector<std::string> Segments = {"user","host","pwd","git","root","exit"};
     const char* IgnoreRepos = NULL;
-    const char* PathAliases = NULL;
     const char* Duration = NULL;
+    std::vector<std::string> LeftSegments = {"user","host","pwd","root","exit"};
+    std::vector<std::string> RightSegments = {"git"};
+    std::vector<std::pair<std::string, std::string>> PathAliases;
 };
 
 extern Arguments DefaultArgs;

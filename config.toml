@@ -12,8 +12,11 @@ CwdMaxDepth = 0
 # Colorize the hostname with a hash of itself
 ColorizeHostname = false
 
-# List of segment to load in prompt.
-Segments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
+# List of segment to load in left prompt.
+LeftSegments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
+
+# # List of segment to load in rigt prompt.
+RightSegments = ["git","jobs"]
 
 # Maximum width percentage of terminal occupied by prompt
 MaxWidthRatio = 0
@@ -38,23 +41,26 @@ Duration = ""
 
 # Aliases
 Alias = [
-    {'some/random/path' = 'shortcut'}
+    {'some/random/path' = 'shortcut'},
+    {'Documents' = 'cheese'}
 ]
 
 
 [symbols]
-Lock          = ""
-Network       = ""
-Separator     = ""
-SeparatorThin = ""
-GitBranch     = ""
-GitDetached   = "➦"
-GitAhead      = "⬆"
-GitBehind     = "⬇"
-GitStaged     = "✔"
-GitNotStaged  = "✎"
-GitConflicted = "✼"
-GitUntracked  = "…"
+Lock           = ""
+Network        = ""
+Separator      = ""
+SeparatorThin  = ""
+RSeparator     = ""
+RSeparatorThin = ""
+GitBranch      = ""
+GitDetached    = "➦"
+GitAhead       = "⬆"
+GitBehind      = "⬇"
+GitStaged      = "✔"
+GitNotStaged   = "✎"
+GitConflicted  = "✼"
+GitUntracked   = "…"
 
 
 [theme]

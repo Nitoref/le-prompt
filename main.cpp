@@ -4,43 +4,32 @@
 
 #include "utils.hpp"
 #include "prompt.hpp"
-#include "promptOptions.hpp"
 
-#include "cpptoml.hpp"
-
-
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char const *argv[])
 {
-    Arguments arg;
-    Symbols sym;
-    Theme  thm;
-    Shell sh;
-
     std::ios_base::sync_with_stdio(false);
-    std::shared_ptr<cpptoml::table> config;
-    
+    PromptOpt options;
     try {
-        config  = cpptoml::parse_file(argv[3]);}
-    catch(...) {
-        std::cout << "Error parsing config file.";}
+        auto config = cpptoml::parse_file(argv[3]);
+        options.args    = Arguments(config);
+        options.symbols = Symbols(config);
+        options.theme   = Theme(config);
+    }
+    catch(cpptoml::parse_exception& ex) {
+        std::cerr << "Error parsing config file :\n\t" << ex.what() << std::endl;
+    }
 
-    arg = config ? Arguments(config)
-                 : Arguments();
-    sym = config ? Symbols(config)
-                 : Symbols();
-    thm = config ? Theme(config)
-                 : Theme();
-    sh  = Shell(argv[1]);
+    // Get terminal width
+    options.args.TermWidth = std::stoi(argv[4]);
 
-    arg.PrevError = std::stoi(argv[2]);
-    
-    PromptOpt opt = PromptOpt(arg, sh, sym, thm);
+    options.shell  = Shell(argv[1]);
+    options.args.PrevError = std::stoi(argv[2]);
 
-    Prompt prompt = Prompt(opt);
-    prompt.parseSegments();
-    prompt.print();
+    Prompt prompt = Prompt(options);
+    prompt.parseLeftSegments();
+    prompt.printLeft();
 }
-
-
-// g++ -Oz -o build/powerline -std=c++17 *.cpp ./*/*.cpp -lgit2 -Iinclude
