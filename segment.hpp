@@ -22,7 +22,7 @@ struct Segment
     {};
 
     Segment(char* content,
-             Style style):
+            Style style):
         style(style),
         content(content)
     {};

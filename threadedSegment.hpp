@@ -9,30 +9,39 @@
 
 struct ThreadedSegment
 {
-    // Pointer to father's options
     PromptOpt   &opt;
-    // Segment 
     Segment     segment;
-    // Thread
     std::thread thread;
 
-    // Constructor
-    ThreadedSegment(PromptOpt &opt);
+    // Initialize with prompt options
+    ThreadedSegment(PromptOpt &opt):
+    opt(opt){};
 
-    // Assign content and style to segment
+    // Get content and style
     virtual
     void
-    makeSegment();
+    make()
+    {};
 
     // Spawn thread with create()
     void
-    init();
-    
+    init()
+    {
+        if (!thread.joinable()){
+            thread = std::thread([&]{
+                make();
+            });
+        }
+    }
+
     // Join thread if joinable
     void
-    join();
+    join()
+    {
+        if (thread.joinable())
+            thread.join();
+    }
 };
-
 
 
 #endif

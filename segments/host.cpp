@@ -8,7 +8,7 @@
 
 
 void
-SegmentHost::makeSegment()
+SegmentHost::make()
 {
     segment.content = (char*)malloc(HOSTNAME_MAX);
     gethostname(segment.content, HOSTNAME_MAX);
@@ -17,5 +17,5 @@ SegmentHost::makeSegment()
     if (delimiter != NULL)
         *delimiter = '\0';
 
-    segment.style = opt.theme.Hostname;
+    segment.style = opt.theme.hostname;
 };

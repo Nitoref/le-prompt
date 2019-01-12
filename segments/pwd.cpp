@@ -68,7 +68,7 @@ fold(char* path)
 }
 
 void
-SegmentPwd::makeSegment()
+SegmentPwd::make()
 {
     segment.content = getenv("PWD");
     if (segment.content == NULL)
@@ -76,5 +76,5 @@ SegmentPwd::makeSegment()
     
     removeHome(&segment.content);
     fold(segment.content);
-    segment.style = opt.theme.Path;
+    segment.style = opt.theme.path;
 };

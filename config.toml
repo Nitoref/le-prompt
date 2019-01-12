@@ -1,48 +1,33 @@
 [args]
-
-# Git segment mode. Valid are "fancy", "simple"
-GitMode = "simple"
-
-# Path segment mode. Valid are "fancy", "simple"
-CwdMode = "simple"
-
-# Max amount of subdirectory to show in path segment
-CwdMaxDepth = 0
-
-# Colorize the hostname with a hash of itself
-ColorizeHostname = false
-
-# List of segment to load in left prompt.
-LeftSegments = ["user","host","ssh","perms","pwd","git","jobs","root","exit"]
-
-# # List of segment to load in rigt prompt.
-RightSegments = ["git","jobs"]
-
-# Maximum width percentage of terminal occupied by prompt
-MaxWidthRatio = 0
-
-# Minimum width of a segment
-MaxSegmentWidth = 0
-
-# Show numeric exit status instead of description
-NumericExitCodes = false
-
-# List of absolute path that will be ignored by the git segment
-IgnoreRepos = ""
-
-# Shortens names for GKE Kube clusters
-ShortenGKENames = false
-
-# List of key=value that will be replaced in path segment
-PathAliases = ""
-
-# Number of wall-clock seconds elapsed for the previous command
-Duration = ""
-
-# Aliases
-Alias = [
-    {'some/random/path' = 'shortcut'},
-    {'Documents' = 'cheese'}
+LeftSegments = [         # List of segment to load in left prompt.
+    "user",
+    "host",
+    # "ssh",
+    # "perms",
+    "pwd",
+    "git",
+    # "jobs",
+    "nl",
+    "root",
+    "exit"
+]
+RightSegments = [        # List of segment to load in rigt prompt.
+    "git",
+    "jobs"
+]
+GitMode = "simple"       # Git segment mode. Valid are "fancy", "simple"
+CwdMode = "simple"       # Path segment mode. Valid are "fancy", "simple"
+CwdMaxDepth = 0          # Max amount of subdirectory to show in path segment
+MaxWidthRatio    = 0     # Maximum width percentage of terminal occupied by prompt
+MaxSegmentWidth  = 0     # Minimum width of a segment
+ColorizeHostname = false # Colorize the hostname with a hash of itself
+NumericExitCodes = false # Show numeric exit status instead of description
+ShortenGKENames = false  # Shortens names for GKE Kube clusters
+IgnoreRepos = ""         # List of absolute path that will be ignored by the git segment
+Duration    = ""         # Number of wall-clock seconds elapsed for the previous command
+PathAliases = [
+    {"some/random/path" = "shortcut"},
+    {"Documents" = "cheese"}
 ]
 
 
@@ -50,8 +35,8 @@ Alias = [
 Lock           = ""
 Network        = ""
 Separator      = ""
-SeparatorThin  = ""
 RSeparator     = ""
+SeparatorThin  = ""
 RSeparatorThin = ""
 GitBranch      = ""
 GitDetached    = "➦"

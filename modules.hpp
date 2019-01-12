@@ -7,32 +7,37 @@
 
 struct SegmentUser: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
 };
 
 struct SegmentRoot: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
 };
 
 struct SegmentPwd: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
 };
 
 struct SegmentHost: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
 };
 
 struct SegmentGit: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
 };
 
 struct SegmentExit: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
-    void makeSegment();
+    void make();
+};
+
+struct SegmentNewline: public ThreadedSegment{
+    using ThreadedSegment::ThreadedSegment;
+    void make();
 };
 
 

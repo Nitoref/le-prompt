@@ -4,12 +4,12 @@
 
 
 void
-SegmentUser::makeSegment()
+SegmentUser::make()
 {
     segment.content = getenv("USER");
 
     if (getuid() != 0)
-        segment.style = opt.theme.Username;
+        segment.style = opt.theme.username;
     else
-        segment.style = opt.theme.UsernameRoot;
+        segment.style = opt.theme.username_root;
 };

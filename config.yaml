@@ -6,8 +6,7 @@ args:
     ColorizeHostname : false
     Mode : ""
     Shell : bash
-    Modules : user,host,ssh,perms,pwd,git,jobs,root,exit
-    Segments : [user, host, ssh, perms, pwd, git, jobs, root, exit]
+    LeftSegments : [user, host, ssh, perms, pwd, git, jobs, root, exit]
     MaxWidthPercentage : 0
     TruncateSegmentWidth : 0
     PrevError : 0

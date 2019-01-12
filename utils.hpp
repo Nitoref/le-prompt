@@ -9,7 +9,6 @@ void  strrepl(char *str, const char *a, const char *b);
 void  prepend(char* str, const char *s);
 
 std::string exec(const char* cmd);
-char* getCommandOutput(const char* input);
 size_t strlen_utf8(const char * s_);
 
 

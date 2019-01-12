@@ -7,151 +7,164 @@
 
 
 Prompt::Prompt(PromptOpt options):
-    options(options),
-    printer(options.shell)
+    options_(options),
+    printer_(options.shell)
 {
-    segments = {
-        {"user", new SegmentUser(this->options)},
-        {"root", new SegmentRoot(this->options)},
-        {"pwd",  new SegmentPwd(this->options)},
-        {"exit", new SegmentExit(this->options)},
-        {"git",  new SegmentGit(this->options)},
-        {"host", new SegmentHost(this->options)},
+    segments_ = {
+        {"user", new SegmentUser(this->options_)},
+        {"root", new SegmentRoot(this->options_)},
+        {"pwd",  new SegmentPwd(this->options_)},
+        {"exit", new SegmentExit(this->options_)},
+        {"git",  new SegmentGit(this->options_)},
+        {"host", new SegmentHost(this->options_)},
     };
-    threads.reserve(segments.size());
+    threads_.reserve(segments_.size());
 }
+// Prompt::Prompt()
+// {
+//     segments_ = {
+//         {"user", new SegmentUser()},
+//         {"root", new SegmentRoot()},
+//         {"pwd",  new SegmentPwd()},
+//         {"exit", new SegmentExit()},
+//         {"git",  new SegmentGit()},
+//         {"host", new SegmentHost()},
+//         {"nl",   new SegmentNewline()},
+//     };
+//     threads_.reserve(segments_.size());
+// }
 
 
 ThreadedSegment*
-Prompt::getSegmentByName(std::string str)
+Prompt::get_segment_by_name(std::string str)
 {
-    auto& s = segments[str];
+    auto& s = segments_[str];
     return s ? : NULL;
 }
 
 
 void
-Prompt::parseLeftSegments(std::vector<std::string> segments)
+Prompt::parse_left_segments(std::vector<std::string> segments)
 {
-    for (auto& segment: segments)
+    for (auto& segment: options_.args.left_segments)
     {
-        if (ThreadedSegment *s = getSegmentByName(segment)){
+        if (ThreadedSegment *s = get_segment_by_name(segment)){
             s->init();
-            threads.push_back(s);
+            threads_.push_back(s);
         }
     }
 }
 
 void
-Prompt::parseRightSegments(std::vector<std::string> segments)
+Prompt::parse_right_segments(std::vector<std::string> segments)
 {
-    for (auto& segment: segments)
+    for (auto& segment: options_.args.right_segments)
     {
-        if (ThreadedSegment *s = getSegmentByName(segment)){
+        if (ThreadedSegment *s = get_segment_by_name(segment)){
             s->init();
-            rightThreads.push_back(s);
+            right_threads_.push_back(s);
         }
     }
 }
 
 void
-Prompt::parseLeftSegments()
+Prompt::parse_left_segments()
 {
-    parseLeftSegments(options.args.LeftSegments);
+    parse_left_segments(options_.args.left_segments);
 }
 void
-Prompt::parseRightSegments()
+Prompt::parse_right_segments()
 {
-    parseRightSegments(options.args.RightSegments);
+    parse_right_segments(options_.args.right_segments);
 }
 
 
 void
-Prompt::printLeft()
+Prompt::print_left()
 {
-    for (auto &thread : threads)
+    for (auto &thread : threads_)
     {
         thread->join();
         if (!thread->segment.content)
         {
             continue;
         }
-        printSegment(thread->segment);
+        print_segment(thread->segment);
     }
     reset();
 }
 
 void
-Prompt::printRight()
+Prompt::print_right()
 {
-    for (auto &thread : rightThreads)
+    for (auto &thread : right_threads_)
     {
         thread->join();
         if (!thread->segment.content)
         {
             continue;
         }
-        printRSegment(thread->segment);
+        print_r_segment(thread->segment);
     }
-    printer.resetStyle();
+    printer_.reset_style();
 }
 
 
 void
-Prompt::printSegment(Segment s)
+Prompt::print_segment(Segment s)
 {
-    if (s.style.bg == prevColor)
+    if (s.style.bg == prev_color_)
     {
-        length += strlen_utf8(options.symbols.SeparatorThin);
-        printer.setFg(s.style.fg);
-        printf("%s", options.symbols.SeparatorThin);
+        length_ += strlen_utf8(options_.symbols.separator_thin);
+        printer_.set_fg(s.style.fg);
+        printf("%s", options_.symbols.separator_thin);
     }
     else
-    if (prevColor != -1)
+    if (prev_color_ != -1)
     {
-        length += strlen_utf8(options.symbols.Separator);
-        printer.setBg(s.style.bg);
-        printer.setFg(prevColor);
-        printf("%s", options.symbols.Separator);
+        length_ += strlen_utf8(options_.symbols.separator);
+        printer_.set_bg(s.style.bg);
+        printer_.set_fg(prev_color_);
+        printf("%s", options_.symbols.separator);
     }
-    printer.setBg(s.style.bg);
-    printer.setFg(s.style.fg);
+    printer_.set_bg(s.style.bg);
+    printer_.set_fg(s.style.fg);
     printf(" %s ",s.content);
-    length += strlen_utf8(s.content) + 2;
-    prevColor = s.style.bg;
+    length_ += strlen_utf8(s.content) + 2;
+    prev_color_ = s.style.bg;
 }
 
 void
-Prompt::printRSegment(Segment s)
+Prompt::print_r_segment(Segment s)
 {
-    if (s.style.bg == prevColor)
+    if (s.style.bg == prev_color_)
     {
-        length += strlen_utf8(options.symbols.RSeparatorThin);
-        printer.setBg(s.style.fg);
-        printf("%s", options.symbols.RSeparatorThin);
+        length_ += strlen_utf8(options_.symbols.r_separator_thin);
+        printer_.set_bg(s.style.fg);
+        printf("%s", options_.symbols.r_separator_thin);
     }
     else
     {
-        length += strlen_utf8(options.symbols.RSeparator);
-        if (prevColor != -1)
-            printer.setBg(prevColor);
-        printer.setFg(s.style.bg);
-        printf("%s", options.symbols.RSeparator);
+        length_ += strlen_utf8(options_.symbols.r_separator);
+        if (prev_color_ != -1)
+            printer_.set_bg(prev_color_);
+        printer_.set_fg(s.style.bg);
+        printf("%s", options_.symbols.r_separator);
     }
-    printer.setBg(s.style.bg);
-    printer.setFg(s.style.fg);
+    printer_.set_bg(s.style.bg);
+    printer_.set_fg(s.style.fg);
     printf(" %s ",s.content);
-    length += strlen_utf8(s.content) + 2;
-    prevColor = s.style.bg;
+    length_ += strlen_utf8(s.content) + 2;
+    prev_color_ = s.style.bg;
 }
 
 
 void
 Prompt::reset(){
-    printer.resetStyle();
-    printer.setFg(prevColor);
-    printf("%s  ", options.symbols.Separator);
-    printer.resetStyle();
+    printer_.reset_style();
+    printer_.set_fg(prev_color_);
+    printf("%s  ", options_.symbols.separator);
+    printer_.reset_style();
 }
 
 

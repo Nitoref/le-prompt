@@ -27,10 +27,10 @@ static int get_name(char **branch, RepoStats *stats, git_repository *repo);
 
 
 void
-SegmentGit::makeSegment()
+SegmentGit::make()
 {
     RepoStats stats;
-    segment.style = opt.theme.RepoClean;
+    segment.style = opt.theme.repo_clean;
  
     get_git_status(&segment.content, &stats);
     if (segment.content == NULL)
@@ -45,34 +45,34 @@ SegmentGit::makeSegment()
        || stats.untracked
        || stats.conflicted)
     {
-        segment.style = opt.theme.RepoDirty;
-        if(!strcmp(opt.args.GitMode, "simple"))
+        segment.style = opt.theme.repo_dirty;
+        if(!strcmp(opt.args.git_mode, "simple"))
         {
             char *statsStr = (char*)malloc(4 * 6 + 2);
             strcpy(statsStr, " ");
             if (stats.ahead)
             {
-                strcat(statsStr, opt.symbols.GitAhead);
+                strcat(statsStr, opt.symbols.git_ahead);
             }
             if (stats.behind)
             {
-                strcat(statsStr, opt.symbols.GitBehind);
+                strcat(statsStr, opt.symbols.git_behind);
             }
             if (stats.staged)
             {
-                strcat(statsStr, opt.symbols.GitStaged);
+                strcat(statsStr, opt.symbols.git_staged);
             }
             if (stats.notStaged)
             {
-                strcat(statsStr, opt.symbols.GitNotStaged);
+                strcat(statsStr, opt.symbols.git_not_staged);
             }
             if (stats.untracked)
             {
-                strcat(statsStr, opt.symbols.GitUntracked);
+                strcat(statsStr, opt.symbols.git_untracked);
             }
             if (stats.conflicted)
             {
-                strcat(statsStr, opt.symbols.GitConflicted);
+                strcat(statsStr, opt.symbols.git_conflicted);
             }
 
             if (strlen(statsStr) > 1)

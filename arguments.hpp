@@ -9,24 +9,24 @@ struct Arguments
 {
     Arguments() = default;
     Arguments(std::shared_ptr<cpptoml::table> args);
-    void parse(std::shared_ptr<cpptoml::table> args);
-     int TermWidth        = 0;
-     int PrevError        = 0;
-     int CwdMaxDepth      = 0;
-     int CwdMaxDirSize    = 0;
-     int MaxWidthRatio    = 0;
-     int MaxSegmentWidth  = 0;
-    bool ColorizeHostname = false;
-    bool NumericExitCodes = false;
-    bool ShortenGKENames  = false;
-    const char* GitMode   = "simple";
-    const char* CwdMode   = "simple";
-    const char* Shell     = NULL;
-    const char* IgnoreRepos = NULL;
-    const char* Duration = NULL;
-    std::vector<std::string> LeftSegments = {"user","host","pwd","root","exit"};
-    std::vector<std::string> RightSegments = {"git"};
-    std::vector<std::pair<std::string, std::string>> PathAliases;
+
+     int term_width        = 0;
+     int prev_error        = 0;
+     int cwd_max_depth      = 0;
+     int cwd_max_dir_size    = 0;
+     int max_width_ratio    = 0;
+     int max_segment_width  = 0;
+    bool colorize_hostname = false;
+    bool numeric_exit_codes = false;
+    bool shorten_gke_names  = false;
+    const char* git_mode   = "simple";
+    const char* cwd_mode   = "simple";
+    const char* shell     = NULL;
+    const char* ignore_repos = NULL;
+    const char* duration = NULL;
+    std::vector<std::string> left_segments = {"user","host","pwd","root","exit"};
+    std::vector<std::string> right_segments = {"git"};
+    std::vector<std::pair<std::string, std::string>> path_aliases;
 };
 
 extern Arguments DefaultArgs;

@@ -7,31 +7,32 @@
 #include "colorutils.hpp"
 #include "modules.hpp"
 
-struct Prompt {
-
-    std::unordered_map<std::string, ThreadedSegment*> segments;
-    std::vector<ThreadedSegment*> threads;
-    std::vector<ThreadedSegment*> rightThreads;
-    
-    PromptOpt options;
-    ColorPrinter printer;
-    size_t length =  0;
-    int prevColor = -1;
-    
-
+class Prompt
+{
+public:
     Prompt(PromptOpt options);
-    void parseLeftSegments(std::vector<std::string> segments);
-    void parseRightSegments(std::vector<std::string> segments);
-    void parseLeftSegments();
-    void parseRightSegments();
+    void parse_left_segments();
+    void parse_right_segments();
+    void print_left();
+    void print_right();
+
+private:
+    std::unordered_map<std::string, ThreadedSegment*> segments_;
+    std::vector<ThreadedSegment*> threads_;
+    std::vector<ThreadedSegment*> right_threads_;
     
-    void printSegment(Segment s);
-    void printRSegment(Segment s);
-    void printLeft();
-    void printRight();
+    PromptOpt options_;
+    ColorPrinter printer_;
+    size_t length_ =  0;
+    int prev_color_ = -1;
+    
+    void parse_left_segments(std::vector<std::string> segments);
+    void parse_right_segments(std::vector<std::string> segments);
+    void print_segment(Segment s);
+    void print_r_segment(Segment s);
     void reset();
 
-    ThreadedSegment* getSegmentByName(std::string str);
+    ThreadedSegment* get_segment_by_name(std::string str);
 };
 
 #endif

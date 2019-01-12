@@ -25,33 +25,33 @@ struct ColorPrinter
     const char* escape_;
     const char* epacse_;
 
-    inline void setBg(int value){
+    inline void set_bg(int value){
         printf("%s%s%d%s",escape_, BG_256_, value, epacse_);
         // print(escape_, BG_256_, value, epacse_);
     }
 
-    inline void setFg(int value){
+    inline void set_fg(int value){
         printf("%s%s%d%s",escape_, FG_256_, value, epacse_);
         // print(escape_, FG_256_, value, epacse_);
     }
 
-    inline void resetBg(){
+    inline void reset_bg(){
         printf("%s%c%d%s",escape_, BG_STD_, DEFAULT, epacse_);
         // print(escape_, BG_STD_, DEFAULT, epacse_);
     }
 
-    inline void resetFg(){
+    inline void reset_fg(){
         printf("%s%c%d%s",escape_, FG_STD_, DEFAULT, epacse_);
         // print(escape_, FG_STD_, DEFAULT, epacse_);
     }
 
-    inline void resetStyle(){
+    inline void reset_style(){
         printf("%s%c%s",escape_, '0', epacse_);
         // print(escape_, '0', epacse_);
     }
 
 
-    inline void setFontStyle(const char* str){
+    inline void set_font_style(const char* str){
         static
         std::unordered_map<std::string, int> y =
         {

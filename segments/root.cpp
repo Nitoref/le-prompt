@@ -3,12 +3,12 @@
 
 
 void
-SegmentRoot::makeSegment()
+SegmentRoot::make()
 {
     segment.content = strdup(opt.shell.indicator_);
 
-    if (opt.args.PrevError == 0)
-        segment.style = opt.theme.CmdPassed;
+    if (opt.args.prev_error == 0)
+        segment.style = opt.theme.cmd_passed;
     else
-        segment.style = opt.theme.CmdFailed;
+        segment.style = opt.theme.cmd_failed;
 };

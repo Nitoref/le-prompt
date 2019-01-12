@@ -42,15 +42,15 @@ std::unordered_map<int, std::string> signalMap
 };
 
 void
-SegmentExit::makeSegment()
+SegmentExit::make()
 {
-    int error = opt.args.PrevError;
+    int error = opt.args.prev_error;
     if (!error)
     {
         return;
     }
 
-    if (opt.args.NumericExitCodes)
+    if (opt.args.numeric_exit_codes)
     {
         asprintf(&segment.content, "%d", error);
     }
@@ -67,5 +67,5 @@ SegmentExit::makeSegment()
             return;
         }
     }
-    segment.style = opt.theme.CmdFailed;
+    segment.style = opt.theme.cmd_failed;
 };
