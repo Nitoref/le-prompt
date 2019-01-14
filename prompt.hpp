@@ -20,6 +20,9 @@ private:
     std::unordered_map<std::string, ThreadedSegment*> segments_;
     std::vector<ThreadedSegment*> threads_;
     std::vector<ThreadedSegment*> right_threads_;
+
+    std::string left_;
+    std::string right_;
     
     PromptOpt options_;
     ColorPrinter printer_;

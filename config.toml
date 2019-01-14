@@ -7,9 +7,9 @@ LeftSegments = [         # List of segment to load in left prompt.
     "pwd",
     "git",
     # "jobs",
-    "nl",
     "root",
-    "exit"
+    "exit",
+    "nl",
 ]
 RightSegments = [        # List of segment to load in rigt prompt.
     "git",
@@ -62,7 +62,7 @@ DockerMachine     = { fg =   55, bg =  177}
 KubeCluster       = { fg =  117, bg =   26}
 KubeNamespace     = { fg =  170, bg =   17}
 DotEnv            = { fg =   15, bg =   55}
- # Aws              = { fg  = ?, bg = ?}
+# Aws               = { fg =    ?, bg = ?}
 RepoClean         = { fg =  232, bg =  230}
 RepoDirty         = { fg =  232, bg =  223}
 Jobs              = { fg =  238, bg =   39}
@@ -81,8 +81,8 @@ VirtualGo         = { fg =   35, bg =  254}
 Perlbrew          = { fg =   20, bg =   15}
 TFWs              = { fg =   15, bg =   26}
 Time              = { fg =  236, bg =  15}
-# ShellVar          = { fg =  ?, bg = ?}
-# Node              = { fg =  ?, bg = ?}
+# ShellVar          = { fg =    ?, bg = ?}
+# Node              = { fg =    ?, bg = ?}
 Load              = { fg =   15, bg =   22}
 NixShell          = { fg =   69, bg =  254}
-# Duration          = { fg =  ?, bg = ?}
+# Duration          = { fg =    ?, bg = ?}

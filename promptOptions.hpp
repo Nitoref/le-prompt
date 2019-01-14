@@ -23,7 +23,7 @@ struct PromptOpt
             theme       = Theme(config);
         }
         catch(cpptoml::parse_exception& ex) {
-            std::cerr << "Error parsing config file :\n\t" << ex.what() << std::endl;
+            std::cerr << "Error parsing config file :\n" << ex.what() << std::endl;
         }
         shell          =     Shell(argv[1]);
         args.prev_error = std::stoi(argv[2]);

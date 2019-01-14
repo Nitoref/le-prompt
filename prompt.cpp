@@ -17,23 +17,10 @@ Prompt::Prompt(PromptOpt options):
         {"exit", new SegmentExit(this->options_)},
         {"git",  new SegmentGit(this->options_)},
         {"host", new SegmentHost(this->options_)},
+        {"nl",   new SegmentNewline(this->options_)},
     };
     threads_.reserve(segments_.size());
 }
-// Prompt::Prompt()
-// {
-//     segments_ = {
-//         {"user", new SegmentUser()},
-//         {"root", new SegmentRoot()},
-//         {"pwd",  new SegmentPwd()},
-//         {"exit", new SegmentExit()},
-//         {"git",  new SegmentGit()},
-//         {"host", new SegmentHost()},
-//         {"nl",   new SegmentNewline()},
-//     };
-//     threads_.reserve(segments_.size());
-// }
-
 
 ThreadedSegment*
 Prompt::get_segment_by_name(std::string str)
@@ -41,7 +28,6 @@ Prompt::get_segment_by_name(std::string str)
     auto& s = segments_[str];
     return s ? : NULL;
 }
-
 
 void
 Prompt::parse_left_segments(std::vector<std::string> segments)
@@ -78,7 +64,6 @@ Prompt::parse_right_segments()
     parse_right_segments(options_.args.right_segments);
 }
 
-
 void
 Prompt::print_left()
 {
@@ -108,7 +93,6 @@ Prompt::print_right()
     }
     printer_.reset_style();
 }
-
 
 void
 Prompt::print_segment(Segment s)
@@ -157,7 +141,6 @@ Prompt::print_r_segment(Segment s)
     length_ += strlen_utf8(s.content) + 2;
     prev_color_ = s.style.bg;
 }
-
 
 void
 Prompt::reset(){

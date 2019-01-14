@@ -6,12 +6,10 @@
 
 struct Segment
 {
-    char* content;
+    char* content = NULL;
     Style style;
     
-    Segment(){
-        content = NULL;
-    };
+    Segment() = default;
 
     Segment(Style style):
         style(style)

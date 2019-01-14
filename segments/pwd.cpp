@@ -46,7 +46,7 @@ static
 int
 fold(char* path)
 {
-    const char *sep = "…";
+    const char *fold_symbol = "…";
     char *stop = strnrchr(path, '/', 3);
     if (stop == NULL)
     {
@@ -58,12 +58,14 @@ fold(char* path)
         return 0;
     }
     memmove(
-        start + strlen(sep) + 1,
+        start + strlen(fold_symbol) + 1,
         stop,
         path + strlen(path) - stop + 1
     );
     for (int i = 0; i < 3; i++)
-        start[i+1] = sep[i];
+    {
+        start[i+1] = fold_symbol[i];
+    }
     return 1;
 }
 
@@ -75,6 +77,14 @@ SegmentPwd::make()
         return;
     
     removeHome(&segment.content);
+
+
+    for (auto& alias: opt.args.path_aliases)
+    {
+        strrepl(segment.content, alias.first.c_str(), alias.second.c_str());
+    };
+
+
     fold(segment.content);
     segment.style = opt.theme.path;
 };
