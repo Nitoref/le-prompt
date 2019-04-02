@@ -3,6 +3,7 @@
 
 #include "theme.hpp"
 #include <iostream>
+#include <cstring>
 
 #define DEFAULT '9'
 #define BG_STD_ '4'
@@ -16,6 +17,13 @@ void print(Args&&... args) {
     (std::cout << ... << args);
 }
 
+template<typename ...Args>
+void fmt(Args&&... args) {
+    std::string s{args...};
+    // s += args;
+    // (std::cout << ... << args);
+}
+
 struct ColorPrinter
 {
     ColorPrinter(Shell shell):
@@ -27,27 +35,47 @@ struct ColorPrinter
 
     inline void set_bg(int value){
         printf("%s%s%d%s",escape_, BG_256_, value, epacse_);
-        // print(escape_, BG_256_, value, epacse_);
     }
 
     inline void set_fg(int value){
         printf("%s%s%d%s",escape_, FG_256_, value, epacse_);
-        // print(escape_, FG_256_, value, epacse_);
     }
 
     inline void reset_bg(){
         printf("%s%c%d%s",escape_, BG_STD_, DEFAULT, epacse_);
-        // print(escape_, BG_STD_, DEFAULT, epacse_);
     }
 
     inline void reset_fg(){
         printf("%s%c%d%s",escape_, FG_STD_, DEFAULT, epacse_);
-        // print(escape_, FG_STD_, DEFAULT, epacse_);
     }
 
     inline void reset_style(){
         printf("%s%c%s",escape_, '0', epacse_);
-        // print(escape_, '0', epacse_);
+    }
+
+    inline char* bg_color(int value)
+    {
+        char* out;
+        if (value >= 0)
+            asprintf(&out, "%s%s%d%s", escape_, BG_256_, value, epacse_);
+        else
+            asprintf(&out, "%s%c%d%s", escape_, BG_STD_, DEFAULT, epacse_);
+        return out;
+    }
+
+    inline char* fg_color(int value){
+        char* out;
+        if (value >= 0)
+            asprintf(&out, "%s%s%d%s", escape_, FG_256_, value, epacse_);
+        else
+            asprintf(&out, "%s%c%d%s", escape_, FG_STD_, DEFAULT, epacse_);
+        return out;
+    }
+
+    inline char* reset(){
+        char* out;
+        asprintf(&out, "%s%c%s", escape_, '0', epacse_);
+        return out;
     }
 
 

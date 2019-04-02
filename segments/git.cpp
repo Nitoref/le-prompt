@@ -109,7 +109,6 @@ get_git_status(char **branchName, RepoStats *stats)
     {
         return 1;
     }
-    
     if (get_name(branchName, stats, repo))
     {
         return 1; 
@@ -117,7 +116,7 @@ get_git_status(char **branchName, RepoStats *stats)
 
     if (git_repository_is_bare(repo))
     {
-        return 0; // cannot status on bare repo
+        return 0;
     }
 
     if (git_status_list_new(&status, repo, &statusopt))
@@ -130,7 +129,7 @@ get_git_status(char **branchName, RepoStats *stats)
         return 1;
     }
  
-    git_status_list_free(status);
+    // git_status_list_free(status);
     git_repository_free(repo);
     git_libgit2_shutdown();
     return 0;
@@ -141,8 +140,6 @@ int
 get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head)
 {
     int    error;
-    size_t ahead;
-    size_t behind;
     git_reference *upstream = NULL;
 
     error = git_branch_upstream(&upstream, head);
@@ -168,10 +165,16 @@ get_name(char **branch, RepoStats *stats, git_repository *repo)
     int error = git_repository_head(&head, repo);
     if (error)
     {
-        if (error == GIT_ENOTFOUND || error == GIT_EUNBORNBRANCH)
+        if (error == GIT_ENOTFOUND){
             *branch = strdup("HEAD (no branch)");
-        else
+        }
+        else if (error == GIT_EUNBORNBRANCH) {
+            *branch = strdup("HEAD (no commit)");
             return 1;
+        }
+        else {
+            return 1;
+        }
     }
 
     if (git_repository_head_detached(repo))

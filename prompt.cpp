@@ -100,21 +100,38 @@ Prompt::print_segment(Segment s)
     if (s.style.bg == prev_color_)
     {
         length_ += strlen_utf8(options_.symbols.separator_thin);
+        
         printer_.set_fg(s.style.fg);
         printf("%s", options_.symbols.separator_thin);
+        
+        left_ += printer_.fg_color(s.style.fg);
+        left_ += options_.symbols.separator_thin;
     }
     else
     if (prev_color_ != -1)
     {
         length_ += strlen_utf8(options_.symbols.separator);
+
         printer_.set_bg(s.style.bg);
         printer_.set_fg(prev_color_);
         printf("%s", options_.symbols.separator);
+        
+        left_ += printer_.bg_color(s.style.bg);
+        left_ += printer_.fg_color(prev_color_);
+        left_ += options_.symbols.r_separator;
     }
     printer_.set_bg(s.style.bg);
     printer_.set_fg(s.style.fg);
+
+    printer_.bg_color(s.style.bg);
+    printer_.fg_color(s.style.fg);
+    
     printf(" %s ",s.content);
-    length_ += strlen_utf8(s.content) + 2;
+    right_ += " ";
+    right_ += s.content;
+    right_ += " ";
+
+    length_ += s.length() + 2;
     prev_color_ = s.style.bg;
 }
 
@@ -123,22 +140,39 @@ Prompt::print_r_segment(Segment s)
 {
     if (s.style.bg == prev_color_)
     {
-        length_ += strlen_utf8(options_.symbols.r_separator_thin);
+        length_r_ += strlen_utf8(options_.symbols.r_separator_thin);
+
         printer_.set_bg(s.style.fg);
         printf("%s", options_.symbols.r_separator_thin);
+        
+        right_ += printer_.bg_color(s.style.fg);
+        right_ += options_.symbols.r_separator_thin;
     }
     else
     {
-        length_ += strlen_utf8(options_.symbols.r_separator);
-        if (prev_color_ != -1)
+        length_r_ += strlen_utf8(options_.symbols.r_separator);
+        if (prev_color_ != -1){
             printer_.set_bg(prev_color_);
+            right_ += printer_.bg_color(prev_color_);
+        }
         printer_.set_fg(s.style.bg);
         printf("%s", options_.symbols.r_separator);
+        
+        right_ += printer_.fg_color(s.style.bg);
+        right_ += options_.symbols.r_separator;
     }
     printer_.set_bg(s.style.bg);
     printer_.set_fg(s.style.fg);
+    
+    right_ += printer_.bg_color(s.style.bg);
+    right_ += printer_.fg_color(s.style.fg);
+
     printf(" %s ",s.content);
-    length_ += strlen_utf8(s.content) + 2;
+    right_ += " ";
+    right_ += s.content;
+    right_ += " ";
+
+    length_r_ += s.length() + 2;
     prev_color_ = s.style.bg;
 }
 
@@ -152,5 +186,5 @@ Prompt::reset(){
 
 
 
-// g++ -Oz -o build/powerline -std=c++17 *.cpp ./*/*.cpp -lgit2 -Iinclude
+// g++ -Oz -o build/powerline -std=c++2a *.cpp ./*/*.cpp -lgit2 -Iinclude
 // clang++ -std=c++2a -Wall -Werror -D_LIBCPP_DISABLE_AVAILABILITY test.cpp -I/Users/nitoref/Desktop/powerless/C++/include/

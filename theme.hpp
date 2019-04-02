@@ -20,20 +20,20 @@ struct Symbols
 {
     Symbols() = default;
     Symbols(std::shared_ptr<cpptoml::table> syms);
-    const char* lock           = "\uE0A2"; // ""
-    const char* network        = "\uE0A2"; // ""
-    const char* separator      = "\uE0B4"; // ""
-    const char* r_separator     = "\uE0B4"; // ""
-    const char* separator_thin  = "\uE0B5"; // ""
+    const char* lock             = "\uE0A2"; // ""
+    const char* network          = "\uE0A2"; // ""
+    const char* separator        = "\uE0B4"; // ""
+    const char* r_separator      = "\uE0B4"; // ""
+    const char* separator_thin   = "\uE0B5"; // ""
     const char* r_separator_thin = "\uE0B5"; // ""
-    const char* git_branch      = "\uE0A0"; // ""
-    const char* git_detached    = "\u27A6"; // "➦"
-    const char* git_ahead       = "\u2B06"; // "⬆"
-    const char* git_behind      = "\u2B07"; // "⬇"
-    const char* git_staged      = "\u2714"; // "✔"
+    const char* git_branch       = "\uE0A0"; // ""
+    const char* git_detached     = "\u27A6"; // "➦"
+    const char* git_ahead        = "\u2B06"; // "⬆"
+    const char* git_behind       = "\u2B07"; // "⬇"
+    const char* git_staged       = "\u2714"; // "✔"
     const char* git_not_staged   = "\u270E"; // "✎"
-    const char* git_conflicted  = "\u273C"; // "✼"
-    const char* git_untracked   = "\u2026"; // "…"
+    const char* git_conflicted   = "\u273C"; // "✼"
+    const char* git_untracked    = "\u2026"; // "…"
 };
 
 
@@ -60,9 +60,9 @@ struct Theme
     Style readonly       = { 254 , 124};
     Style ssh            = { 254 , 166};
     Style docker_machine = { 177 ,  55};
-    Style kubeCluster    = { 117 ,  26};
+    Style kube_cluster   = { 117 ,  26};
     Style kube_namespace = { 170 ,  17};
-    Style do_tEnv        = { 15  ,  55};
+    Style dot_env        = { 15  ,  55};
     Style aws            = { 15  ,  22};
     Style repo_clean     = { 0   , 148};
     Style repo_dirty     = { 15  , 161};

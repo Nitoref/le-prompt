@@ -26,7 +26,8 @@ private:
     
     PromptOpt options_;
     ColorPrinter printer_;
-    size_t length_ =  0;
+    size_t length_   =  0;
+    size_t length_r_ =  0;
     int prev_color_ = -1;
     
     void parse_left_segments(std::vector<std::string> segments);

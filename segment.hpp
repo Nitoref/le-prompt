@@ -2,6 +2,7 @@
 #define SEGMENT_H
 
 #include "theme.hpp"
+#include "utils.hpp"
 
 
 struct Segment
@@ -21,9 +22,14 @@ struct Segment
 
     Segment(char* content,
             Style style):
-        style(style),
-        content(content)
+        content(content),
+        style(style)
     {};
+
+    size_t length()
+    {
+        return strlen_utf8(content);
+    }
 };
 
 #endif
