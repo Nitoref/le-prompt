@@ -3,88 +3,63 @@
 #include <string.h>
 #include "../modules.hpp"
 #include "../utils.hpp"
+#include "../string.hpp"
 
 
-
-
-static
-char*
-getHome()
-{
-    char *home = getenv("HOME");
-    if (home == NULL)
-    {
-        home = getpwuid(getuid())->pw_dir;
-    }
-    if (home == NULL)
-    {
-        return NULL;
-    }
-    return home;
-}
 
 static
 int
-removeHome(char** path)
+removeHome(string& path)
 {
-    char *home = getHome();
-    if (home == NULL)
+    string home {getenv("HOME")};
+    if (home.empty())
+    {
+        home = string{getpwuid(getuid())->pw_dir};
+    }
+    if (home.empty())
     {
         return 0;
     }
-    int homeLength = strlen(home);
-    if (!homeLength || strncmp(*path, home, homeLength))
-    {
+    if (path.find(home) == std::string::npos)
+    {   
         return 0;
     }
-    *path = &((*path)[homeLength - 1]);
-    **path = '~';
+    path.replace(0, home.length(), "~");
     return 1;
 }
 
 static
 int
-fold(char* path)
+fold(string& path)
 {
-    const char *fold_symbol = "…";
-    char *stop = strnrchr(path, '/', 3);
-    if (stop == NULL)
+    string fold_symbol = "…";
+
+    size_t stop = path.rnfind('/', 3);
+    if (stop == std::string::npos)
     {
         return 0;
     }
-    char *start = strchr(path, '/');
-    if (start == NULL || start == stop)
+    size_t start = path.find('/');
+    if (start == std::string::npos || start == stop)
     {
         return 0;
     }
-    memmove(
-        start + strlen(fold_symbol) + 1,
-        stop,
-        path + strlen(path) - stop + 1
-    );
-    for (int i = 0; i < 3; i++)
-    {
-        start[i+1] = fold_symbol[i];
-    }
+    path.replace(start + 1, stop - start - 1, fold_symbol);
     return 1;
 }
 
 void
 SegmentPwd::make()
 {
-    segment.content = getenv("PWD");
-    if (segment.content == NULL)
-        return;
-    
-    removeHome(&segment.content);
-
+    string content {getenv("PWD")};
+    removeHome(content);
 
     for (auto& alias: opt.args.path_aliases)
     {
-        strrepl(segment.content, alias.first.c_str(), alias.second.c_str());
+        content.replace_all(alias.first, alias.second);
     };
 
-
-    fold(segment.content);
+    fold(content);
+    segment.content = strdup(content.data());
     segment.style = opt.theme.path;
 };

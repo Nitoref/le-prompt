@@ -7,9 +7,9 @@ LeftSegments = [         # List of segment to load in left prompt.
     "pwd",
     "git",
     # "jobs",
+    "nl",
     "root",
     "exit",
-    # "nl",
 ]
 RightSegments = [        # List of segment to load in rigt prompt.
     "git",
@@ -27,7 +27,7 @@ IgnoreRepos = ""         # List of absolute path that will be ignored by the git
 Duration    = ""         # Number of wall-clock seconds elapsed for the previous command
 PathAliases = [
     {"some/random/path" = "shortcut"},
-    {"Documents" = "cheese"}
+    {"Desktop" = "Desktaupe"}
 ]
 
 

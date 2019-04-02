@@ -2,6 +2,7 @@
 #define THEME_H
 
 #include "cpptoml.hpp"
+#include "string.hpp"
 
 
 struct Shell

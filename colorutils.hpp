@@ -56,19 +56,13 @@ struct ColorPrinter
     inline char* bg_color(int value)
     {
         char* out;
-        if (value >= 0)
-            asprintf(&out, "%s%s%d%s", escape_, BG_256_, value, epacse_);
-        else
-            asprintf(&out, "%s%c%d%s", escape_, BG_STD_, DEFAULT, epacse_);
+        asprintf(&out, "%s%s%d%s", escape_, BG_256_, value, epacse_);
         return out;
     }
 
     inline char* fg_color(int value){
         char* out;
-        if (value >= 0)
-            asprintf(&out, "%s%s%d%s", escape_, FG_256_, value, epacse_);
-        else
-            asprintf(&out, "%s%c%d%s", escape_, FG_STD_, DEFAULT, epacse_);
+        asprintf(&out, "%s%s%d%s", escape_, FG_256_, value, epacse_);
         return out;
     }
 

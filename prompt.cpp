@@ -97,7 +97,13 @@ Prompt::print_right()
 void
 Prompt::print_segment(Segment s)
 {
-    if (s.style.bg == prev_color_)
+    if (s.style.bg == -1)
+    {
+        this->reset();
+        printf("\n");
+        return;
+    }
+    else if (s.style.bg == prev_color_)
     {
         length_ += strlen_utf8(options_.symbols.separator_thin);
         
@@ -182,6 +188,8 @@ Prompt::reset(){
     printer_.set_fg(prev_color_);
     printf("%s  ", options_.symbols.separator);
     printer_.reset_style();
+    prev_color_ = -1;
+    length_ = 0;
 }
 
 

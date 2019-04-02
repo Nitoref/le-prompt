@@ -7,7 +7,7 @@ SegmentRoot::make()
 {
     segment.content = strdup(opt.shell.indicator_);
 
-    if (opt.args.prev_error == 0)
+    if (!opt.args.prev_error)
         segment.style = opt.theme.cmd_passed;
     else
         segment.style = opt.theme.cmd_failed;

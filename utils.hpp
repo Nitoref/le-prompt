@@ -10,6 +10,7 @@ void  prepend(char* str, const char *s);
 
 std::string exec(const char* cmd);
 size_t strlen_utf8(const char * s_);
+size_t strlen_utf8(std::string s);
 
 
 #endif

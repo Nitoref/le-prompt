@@ -5,63 +5,6 @@
 #include <array>
 
 
-const char*
-strnrchr(const char *s, char c, int n)
-{
-    if (s != NULL)
-        for (int i = strlen(s); i >= 0; i--)
-            if (s[i] == c)
-                if (--n == 0)
-                    return &s[i];
-    return NULL;
-}
-
-
-void
-strrepl(char *str, const char *a, const char *b)
-{
-    for (char *cursor = str; (cursor = strstr(cursor, a)) != NULL;)
-    {
-        memmove(
-            cursor + strlen(b),
-            cursor + strlen(a),
-            strlen(cursor) - strlen(a) + 1
-        );
-        for (int i = 0; b[i] != '\0'; i++)
-        {
-            cursor[i] = b[i];
-        }
-        cursor += strlen(b);
-    }
-}
-
-char*
-astrrepl(const char *str, const char *a, const char *b)
-{
-    char* strd = strdup(str);
-    for (char *cursor = strd; (cursor = strstr(cursor, a)) != NULL;)
-    {
-        memmove(
-            cursor + strlen(b),
-            cursor + strlen(a),
-            strlen(cursor) - strlen(a) + 1
-        );
-        for (int i = 0; b[i] != '\0'; i++)
-        {
-            cursor[i] = b[i];
-        }
-        cursor += strlen(b);
-    }
-    return strd;
-}
-
-void
-prepend(char* str, const char *s)
-{
-    memmove(str + strlen(s), str, strlen(str) + 1);
-    for (int i = 0; s[i] != '\0'; i++)
-       str[i] = s[i];
-}
 
 std::string
 exec(const char* cmd)
@@ -137,3 +80,8 @@ strlen_utf8(const char * s_)
     done:
     return ((s - s_) - count);
 }
+
+size_t strlen_utf8(std::string s) {
+    return strlen_utf8(s.c_str());
+}
+
