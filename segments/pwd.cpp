@@ -1,8 +1,6 @@
 #include <pwd.h>
 #include <unistd.h>
-#include <string.h>
 #include "../modules.hpp"
-#include "../utils.hpp"
 #include "../string.hpp"
 
 
@@ -11,7 +9,7 @@ static
 int
 removeHome(string& path)
 {
-    string home {getenv("HOME")};
+    string home {std::getenv("HOME")};
     if (home.empty())
     {
         home = string{getpwuid(getuid())->pw_dir};

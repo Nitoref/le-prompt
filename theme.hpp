@@ -1,7 +1,6 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include <json.hpp>
 #include "string.hpp"
 
 
@@ -9,12 +8,12 @@ struct Shell
 {
     Shell() = default;
     Shell(std::string sh);
-    string escape_    ;
-    string epacse_    ;
-    string indicator_ ;
-    string backslash_ ;
-    string backtick_  ;
-    string dollar_    ;
+    string escape_    = "\e[";
+    string epacse_    = "m";
+    string indicator_ = "$";
+    string backslash_ = "\\";
+    string backtick_  = "`";
+    string dollar_    = "$";
 };
 
 struct Symbols

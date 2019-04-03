@@ -1,7 +1,7 @@
 {
     "args" : {
         "segments" : {
-            "left": ["user", "host", "pwd", "root", "exit"],
+            "left": ["user", "host", "pwd", "root", "exit", "git"],
             "right": []
         },
         "git_mode" : "simple",

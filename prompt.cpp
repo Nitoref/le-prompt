@@ -15,7 +15,7 @@ Prompt::Prompt(PromptOpt options):
         {"root", new SegmentRoot(this->options_)},
         {"pwd",  new SegmentPwd(this->options_)},
         {"exit", new SegmentExit(this->options_)},
-        // {"git",  new SegmentGit(this->options_)},
+        {"git",  new SegmentGit(this->options_)},
         {"host", new SegmentHost(this->options_)},
         {"nl",   new SegmentNewline(this->options_)},
     };

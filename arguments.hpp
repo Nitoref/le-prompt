@@ -21,8 +21,8 @@ struct Arguments
     string ignore_repos       = "";
     string shell              = "";
     string duration           = "";
-    std::vector<std::string> left_segments  = {"user","host","pwd","root","exit"};
-    std::vector<std::string> right_segments = {"git"};
+    std::vector<std::string> left_segments  = {"user","host","root"};
+    std::vector<std::string> right_segments;
     std::map<std::string, std::string> path_aliases;
     
     Arguments() = default;
