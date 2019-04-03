@@ -4,6 +4,6 @@
 void
 SegmentNewline::make()
 {
-    segment.content = strdup("");
-    segment.style   = Style(-1, -1);
+    segment.content = " ";
+    segment.style   = {-1, -1};
 }

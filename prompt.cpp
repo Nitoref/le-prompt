@@ -15,7 +15,7 @@ Prompt::Prompt(PromptOpt options):
         {"root", new SegmentRoot(this->options_)},
         {"pwd",  new SegmentPwd(this->options_)},
         {"exit", new SegmentExit(this->options_)},
-        {"git",  new SegmentGit(this->options_)},
+        // {"git",  new SegmentGit(this->options_)},
         {"host", new SegmentHost(this->options_)},
         {"nl",   new SegmentNewline(this->options_)},
     };
@@ -70,11 +70,10 @@ Prompt::print_left()
     for (auto &thread : threads_)
     {
         thread->join();
-        if (!thread->segment.content)
+        if (!thread->segment.content.empty())
         {
-            continue;
+            print_segment(thread->segment);
         }
-        print_segment(thread->segment);
     }
     reset();
 }
@@ -85,11 +84,10 @@ Prompt::print_right()
     for (auto &thread : right_threads_)
     {
         thread->join();
-        if (!thread->segment.content)
+        if (!thread->segment.content.empty())
         {
-            continue;
+            print_r_segment(thread->segment);
         }
-        print_r_segment(thread->segment);
     }
     printer_.reset_style();
 }
@@ -100,7 +98,7 @@ Prompt::print_segment(Segment s)
     if (s.style.bg == -1)
     {
         this->reset();
-        printf("\n");
+        print("\n");
         return;
     }
     else if (s.style.bg == prev_color_)
@@ -108,7 +106,7 @@ Prompt::print_segment(Segment s)
         length_ += strlen_utf8(options_.symbols.separator_thin);
         
         printer_.set_fg(s.style.fg);
-        printf("%s", options_.symbols.separator_thin);
+        print(options_.symbols.separator_thin);
         
         left_ += printer_.fg_color(s.style.fg);
         left_ += options_.symbols.separator_thin;
@@ -120,7 +118,7 @@ Prompt::print_segment(Segment s)
 
         printer_.set_bg(s.style.bg);
         printer_.set_fg(prev_color_);
-        printf("%s", options_.symbols.separator);
+        print(options_.symbols.separator);
         
         left_ += printer_.bg_color(s.style.bg);
         left_ += printer_.fg_color(prev_color_);
@@ -132,7 +130,7 @@ Prompt::print_segment(Segment s)
     printer_.bg_color(s.style.bg);
     printer_.fg_color(s.style.fg);
     
-    printf(" %s ",s.content);
+    print(' ', s.content, ' ');
     right_ += " ";
     right_ += s.content;
     right_ += " ";
@@ -149,7 +147,7 @@ Prompt::print_r_segment(Segment s)
         length_r_ += strlen_utf8(options_.symbols.r_separator_thin);
 
         printer_.set_bg(s.style.fg);
-        printf("%s", options_.symbols.r_separator_thin);
+        print(options_.symbols.r_separator_thin);
         
         right_ += printer_.bg_color(s.style.fg);
         right_ += options_.symbols.r_separator_thin;
@@ -162,7 +160,7 @@ Prompt::print_r_segment(Segment s)
             right_ += printer_.bg_color(prev_color_);
         }
         printer_.set_fg(s.style.bg);
-        printf("%s", options_.symbols.r_separator);
+        print(options_.symbols.r_separator);
         
         right_ += printer_.fg_color(s.style.bg);
         right_ += options_.symbols.r_separator;
@@ -173,7 +171,7 @@ Prompt::print_r_segment(Segment s)
     right_ += printer_.bg_color(s.style.bg);
     right_ += printer_.fg_color(s.style.fg);
 
-    printf(" %s ",s.content);
+    print(' ', s.content, ' ');
     right_ += " ";
     right_ += s.content;
     right_ += " ";
@@ -186,7 +184,7 @@ void
 Prompt::reset(){
     printer_.reset_style();
     printer_.set_fg(prev_color_);
-    printf("%s  ", options_.symbols.separator);
+    print(options_.symbols.separator, "  ");
     printer_.reset_style();
     prev_color_ = -1;
     length_ = 0;

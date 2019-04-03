@@ -4,7 +4,7 @@
 #include <thread>
 
 #include "segment.hpp"
-#include "promptOptions.hpp"
+#include "prompt_options.hpp"
 
 
 struct ThreadedSegment
@@ -14,18 +14,15 @@ struct ThreadedSegment
     std::thread thread;
 
     // Initialize with prompt options
-    ThreadedSegment(PromptOpt &opt):
-    opt(opt){};
-
-    // Get content and style
-    virtual
-    void
-    make()
+    ThreadedSegment(PromptOpt &opt):opt(opt)
     {};
 
-    // Spawn thread with create()
-    void
-    init()
+    // Get content and style
+    virtual void make()
+    {};
+
+    // Spawn thread
+    void init()
     {
         if (!thread.joinable()){
             thread = std::thread([&]{
@@ -34,9 +31,8 @@ struct ThreadedSegment
         }
     }
 
-    // Join thread if joinable
-    void
-    join()
+    // Join thread
+    void join()
     {
         if (thread.joinable())
             thread.join();

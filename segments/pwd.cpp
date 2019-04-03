@@ -51,15 +51,14 @@ fold(string& path)
 void
 SegmentPwd::make()
 {
-    string content {getenv("PWD")};
-    removeHome(content);
+    segment.content = string {getenv("PWD")};
+    removeHome(segment.content);
 
     for (auto& alias: opt.args.path_aliases)
     {
-        content.replace_all(alias.first, alias.second);
+        segment.content.replace_all(alias.first, alias.second);
     };
 
-    fold(content);
-    segment.content = strdup(content.data());
+    fold(segment.content);
     segment.style = opt.theme.path;
 };

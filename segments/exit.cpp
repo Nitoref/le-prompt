@@ -45,7 +45,6 @@ void
 SegmentExit::make()
 {
     int error = opt.args.prev_error;
-    std::string content;
     if (!error)
     {
         return;
@@ -53,13 +52,12 @@ SegmentExit::make()
 
     if (opt.args.numeric_exit_codes)
     {
-        content = std::to_string(error);
+        segment.content.assign(std::to_string(error));
     }
     else
     if (auto signal = signalMap.find(error); signal != signalMap.end())
     {
-        content = signal->second;
+        segment.content.assign(signal->second);
     }
-    segment.content = strdup(content.data());
     segment.style = opt.theme.cmd_failed;
 };

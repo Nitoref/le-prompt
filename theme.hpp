@@ -1,47 +1,45 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include "cpptoml.hpp"
+#include <json.hpp>
 #include "string.hpp"
 
 
 struct Shell
 {
     Shell() = default;
-    Shell(const char *sh);
-    const char* escape_    ;//= "\\[\\e[";
-    const char* epacse_    ;//= "m\\]";
-    const char* indicator_ ;//= "\\$";
-    const char* backslash_ ;//= "\\\\";
-    const char* backtick_  ;//= "\\`";
-    const char* dollar_    ;//= "\\$";
+    Shell(std::string sh);
+    string escape_    ;
+    string epacse_    ;
+    string indicator_ ;
+    string backslash_ ;
+    string backtick_  ;
+    string dollar_    ;
 };
 
 struct Symbols
 {
     Symbols() = default;
-    Symbols(std::shared_ptr<cpptoml::table> syms);
-    const char* lock             = "\uE0A2"; // ""
-    const char* network          = "\uE0A2"; // ""
-    const char* separator        = "\uE0B4"; // ""
-    const char* r_separator      = "\uE0B4"; // ""
-    const char* separator_thin   = "\uE0B5"; // ""
-    const char* r_separator_thin = "\uE0B5"; // ""
-    const char* git_branch       = "\uE0A0"; // ""
-    const char* git_detached     = "\u27A6"; // "➦"
-    const char* git_ahead        = "\u2B06"; // "⬆"
-    const char* git_behind       = "\u2B07"; // "⬇"
-    const char* git_staged       = "\u2714"; // "✔"
-    const char* git_not_staged   = "\u270E"; // "✎"
-    const char* git_conflicted   = "\u273C"; // "✼"
-    const char* git_untracked    = "\u2026"; // "…"
+    string lock             = "\uE0A2"; // ""
+    string network          = "\uE0A2"; // ""
+    string separator        = "\uE0B4"; // ""
+    string r_separator      = "\uE0B4"; // ""
+    string separator_thin   = "\uE0B5"; // ""
+    string r_separator_thin = "\uE0B5"; // ""
+    string git_branch       = "\uE0A0"; // ""
+    string git_detached     = "\u27A6"; // "➦"
+    string git_ahead        = "\u2B06"; // "⬆"
+    string git_behind       = "\u2B07"; // "⬇"
+    string git_staged       = "\u2714"; // "✔"
+    string git_not_staged   = "\u270E"; // "✎"
+    string git_conflicted   = "\u273C"; // "✼"
+    string git_untracked    = "\u2026"; // "…"
 };
 
 
 struct Style
 {
     Style() = default;
-    Style(int fg, int bg):fg(fg),bg(bg){};
     int   fg;
     int   bg;
 };
@@ -50,7 +48,6 @@ struct Style
 struct Theme
 {
     Theme() = default;
-    Theme(std::shared_ptr<cpptoml::table> conf);
     Style separator      = { 15  ,   0};
     Style username       = { 250 , 240};
     Style username_root  = { 250 , 124};
@@ -89,5 +86,6 @@ struct Theme
     Style nix_shell      = { 0   ,  69};
     Style duration       = { 250 , 237};
 };
+
 
 #endif

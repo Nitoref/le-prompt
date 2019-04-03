@@ -1,13 +1,14 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
+#include "string.hpp"
 #include "theme.hpp"
 #include "utils.hpp"
 
 
 struct Segment
 {
-    char* content = NULL;
+    string content;
     Style style;
     
     Segment() = default;

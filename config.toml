@@ -5,9 +5,9 @@ LeftSegments = [         # List of segment to load in left prompt.
     # "ssh",
     # "perms",
     "pwd",
-    "git",
+    # "git",
     # "jobs",
-    "nl",
+    # "nl",
     "root",
     "exit",
 ]
@@ -26,7 +26,6 @@ ShortenGKENames = false  # Shortens names for GKE Kube clusters
 IgnoreRepos = ""         # List of absolute path that will be ignored by the git segment
 Duration    = ""         # Number of wall-clock seconds elapsed for the previous command
 PathAliases = [
-    {"some/random/path" = "shortcut"},
     {"Desktop" = "Desktaupe"}
 ]
 

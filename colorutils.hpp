@@ -1,6 +1,7 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
 
+#include "string.hpp"
 #include "theme.hpp"
 #include <iostream>
 #include <cstring>
@@ -30,46 +31,40 @@ struct ColorPrinter
         escape_(shell.escape_),
         epacse_(shell.epacse_)
     {};
-    const char* escape_;
-    const char* epacse_;
+    string escape_;
+    string epacse_;
 
     inline void set_bg(int value){
-        printf("%s%s%d%s",escape_, BG_256_, value, epacse_);
+        print(escape_, BG_256_, value, epacse_);
     }
 
     inline void set_fg(int value){
-        printf("%s%s%d%s",escape_, FG_256_, value, epacse_);
+        print(escape_, FG_256_, value, epacse_);
     }
 
     inline void reset_bg(){
-        printf("%s%c%d%s",escape_, BG_STD_, DEFAULT, epacse_);
+        print(escape_, BG_STD_, DEFAULT, epacse_);
     }
 
     inline void reset_fg(){
-        printf("%s%c%d%s",escape_, FG_STD_, DEFAULT, epacse_);
+        print(escape_, FG_STD_, DEFAULT, epacse_);
     }
 
     inline void reset_style(){
-        printf("%s%c%s",escape_, '0', epacse_);
+        print(escape_, '0', epacse_);
     }
 
-    inline char* bg_color(int value)
+    inline string bg_color(int value)
     {
-        char* out;
-        asprintf(&out, "%s%s%d%s", escape_, BG_256_, value, epacse_);
-        return out;
+        return string {escape_ + BG_256_ + std::to_string(value) + epacse_};
     }
 
-    inline char* fg_color(int value){
-        char* out;
-        asprintf(&out, "%s%s%d%s", escape_, FG_256_, value, epacse_);
-        return out;
+    inline string fg_color(int value){
+        return string {escape_ + FG_256_ + std::to_string(value) + epacse_};
     }
 
-    inline char* reset(){
-        char* out;
-        asprintf(&out, "%s%c%s", escape_, '0', epacse_);
-        return out;
+    inline string reset(){
+        return string {escape_ + '0' + epacse_};
     }
 
 
@@ -89,7 +84,7 @@ struct ColorPrinter
             {"overlined",   53}
         };
         if (y.count(str))
-            printf("%s%dm%s",escape_, y[str], epacse_);
+            print(escape_, y[str], epacse_);
     }
 };
 

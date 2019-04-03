@@ -3,11 +3,13 @@
 
 #include <string>
 #include <cstring>
+#include "utils.hpp"
 
 
 class string: public std::string {
 public:
 	using std::string::string;
+	using std::string::operator =;
 	
 	string(const char* s)
 	{
@@ -18,7 +20,8 @@ public:
 	void replace_all(const std::string& from, const std::string& to)
 	{
 	    size_t cursor = 0;
-	    while((cursor = this->find(from, cursor)) != std::string::npos) {
+	    while((cursor = this->find(from, cursor)) != std::string::npos)
+	    {
 	        this->replace(cursor, from.length(), to);
 	        cursor += to.length();
 	    }
@@ -32,6 +35,11 @@ public:
 	                if (--n == 0)
 	                    return i;
 	    return std::string::npos;
+	}
+
+	size_t length_UTF8()
+	{
+		return strlen_utf8(this->data());
 	}
 };
 

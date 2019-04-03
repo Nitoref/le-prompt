@@ -10,12 +10,9 @@
 void
 SegmentHost::make()
 {
-    segment.content = (char*)malloc(HOSTNAME_MAX);
-    gethostname(segment.content, HOSTNAME_MAX);
-
-    char *delimiter = strchr(segment.content, '.');
-    if (delimiter != NULL)
-        *delimiter = '\0';
-
+    char* hostname = (char*)malloc(HOSTNAME_MAX);
+    gethostname(hostname, HOSTNAME_MAX);
+    segment.content = hostname;
+    segment.content.erase(segment.content.find('.'));
     segment.style = opt.theme.hostname;
 };
