@@ -2,7 +2,7 @@
 #define COLORUTILS_H
 
 #include "string.hpp"
-#include "theme.hpp"
+#include "shell_info.hpp"
 #include <iostream>
 #include <cstring>
 
@@ -16,13 +16,6 @@
 template<typename ...Args>
 void print(Args&&... args) {
     (std::cout << ... << args);
-}
-
-template<typename ...Args>
-void fmt(Args&&... args) {
-    std::string s{args...};
-    // s += args;
-    // (std::cout << ... << args);
 }
 
 struct ColorPrinter

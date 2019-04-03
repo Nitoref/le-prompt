@@ -1,7 +1,7 @@
 {
     "args" : {
         "segments" : {
-            "left": ["user", "host", "pwd", "root", "exit", "git"],
+            "left": ["user", "host", "pwd", "git", "root", "exit"],
             "right": []
         },
         "git_mode" : "simple",
@@ -24,15 +24,15 @@
         "lock" :           "\uE0A2",
         "network" :        "\uE0A2",
         "separator" :      "\uE0B0",
-        "separator_thin" :  "\uE0B1",
-        "git_branch" :      "\uE0A0",
-        "git_detached" :    "\u27A6",
-        "git_ahead" :       "\u2B06",
-        "git_behind" :      "\u2B07",
-        "git_staged" :      "\u2714",
-        "git_not_staged" :   "\u270E",
-        "git_conflicted" :  "\u273C",
-        "git_untracked" :   "\u2026"
+        "separator_thin" : "\uE0B1",
+        "git_branch" :     "\uE0A0",
+        "git_detached" :   "\u27A6",
+        "git_ahead" :      "\u2B06",
+        "git_behind" :     "\u2B07",
+        "git_staged" :     "\u2714",
+        "git_not_staged" : "\u270E",
+        "git_conflicted" : "\u273C",
+        "git_untracked" :  "\u2026"
     },
     "theme" : {
         "separator"         : { "fg" :   15 },

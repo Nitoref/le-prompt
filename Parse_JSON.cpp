@@ -2,89 +2,89 @@
 
 void from_json(const nlohmann::json& j, Style& s)
 {
-    if ( auto i = j.find("fg"); i != j.end()) {s.fg = i->get<int>();};
-    if ( auto i = j.find("bg"); i != j.end()) {s.bg = i->get<int>();};
+    if ( auto k = j.find("fg"); k != j.end()) {s.fg = k->get<int>();};
+    if ( auto k = j.find("bg"); k != j.end()) {s.bg = k->get<int>();};
 }
 
 void from_json(const nlohmann::json& j, Theme& t)
 {
-  if (auto i = j.find("separator")      ; i != j.end()) {t.separator      = i->get<Style>(); };
-  if (auto i = j.find("username")       ; i != j.end()) {t.username       = i->get<Style>(); };
-  if (auto i = j.find("username_root")  ; i != j.end()) {t.username_root  = i->get<Style>(); };
-  if (auto i = j.find("hostname")       ; i != j.end()) {t.hostname       = i->get<Style>(); };
-  if (auto i = j.find("home")           ; i != j.end()) {t.home           = i->get<Style>(); };
-  if (auto i = j.find("path")           ; i != j.end()) {t.path           = i->get<Style>(); };
-  if (auto i = j.find("cwd")            ; i != j.end()) {t.cwd            = i->get<Style>(); };
-  if (auto i = j.find("readonly")       ; i != j.end()) {t.readonly       = i->get<Style>(); };
-  if (auto i = j.find("ssh")            ; i != j.end()) {t.ssh            = i->get<Style>(); };
-  if (auto i = j.find("docker_machine") ; i != j.end()) {t.docker_machine = i->get<Style>(); };
-  if (auto i = j.find("kube_cluster")   ; i != j.end()) {t.kube_cluster   = i->get<Style>(); };
-  if (auto i = j.find("kube_namespace") ; i != j.end()) {t.kube_namespace = i->get<Style>(); };
-  if (auto i = j.find("dot_env")        ; i != j.end()) {t.dot_env        = i->get<Style>(); };
-  if (auto i = j.find("aws")            ; i != j.end()) {t.aws            = i->get<Style>(); };
-  if (auto i = j.find("repo_clean")     ; i != j.end()) {t.repo_clean     = i->get<Style>(); };
-  if (auto i = j.find("repo_dirty")     ; i != j.end()) {t.repo_dirty     = i->get<Style>(); };
-  if (auto i = j.find("jobs")           ; i != j.end()) {t.jobs           = i->get<Style>(); };
-  if (auto i = j.find("cmd_passed")     ; i != j.end()) {t.cmd_passed     = i->get<Style>(); };
-  if (auto i = j.find("cmd_failed")     ; i != j.end()) {t.cmd_failed     = i->get<Style>(); };
-  if (auto i = j.find("svn_changes")    ; i != j.end()) {t.svn_changes    = i->get<Style>(); };
-  if (auto i = j.find("git_ahead")      ; i != j.end()) {t.git_ahead      = i->get<Style>(); };
-  if (auto i = j.find("git_behind")     ; i != j.end()) {t.git_behind     = i->get<Style>(); };
-  if (auto i = j.find("git_staged")     ; i != j.end()) {t.git_staged     = i->get<Style>(); };
-  if (auto i = j.find("git_not_staged") ; i != j.end()) {t.git_not_staged = i->get<Style>(); };
-  if (auto i = j.find("git_untracked")  ; i != j.end()) {t.git_untracked  = i->get<Style>(); };
-  if (auto i = j.find("git_conflicted") ; i != j.end()) {t.git_conflicted = i->get<Style>(); };
-  if (auto i = j.find("git_stashed")    ; i != j.end()) {t.git_stashed    = i->get<Style>(); };
-  if (auto i = j.find("virtual_env")    ; i != j.end()) {t.virtual_env    = i->get<Style>(); };
-  if (auto i = j.find("virtual_go")     ; i != j.end()) {t.virtual_go     = i->get<Style>(); };
-  if (auto i = j.find("perlbrew")       ; i != j.end()) {t.perlbrew       = i->get<Style>(); };
-  if (auto i = j.find("TFWs")           ; i != j.end()) {t.TFWs           = i->get<Style>(); };
-  if (auto i = j.find("time")           ; i != j.end()) {t.time           = i->get<Style>(); };
-  if (auto i = j.find("shell_var")      ; i != j.end()) {t.shell_var      = i->get<Style>(); };
-  if (auto i = j.find("node")           ; i != j.end()) {t.node           = i->get<Style>(); };
-  if (auto i = j.find("load")           ; i != j.end()) {t.load           = i->get<Style>(); };
-  if (auto i = j.find("nix_shell")      ; i != j.end()) {t.nix_shell      = i->get<Style>(); };
-  if (auto i = j.find("duration")       ; i != j.end()) {t.duration       = i->get<Style>(); };
+  if (auto k = j.find("separator")      ; k != j.end()) {t.separator      = k->get<Style>(); };
+  if (auto k = j.find("username")       ; k != j.end()) {t.username       = k->get<Style>(); };
+  if (auto k = j.find("username_root")  ; k != j.end()) {t.username_root  = k->get<Style>(); };
+  if (auto k = j.find("hostname")       ; k != j.end()) {t.hostname       = k->get<Style>(); };
+  if (auto k = j.find("home")           ; k != j.end()) {t.home           = k->get<Style>(); };
+  if (auto k = j.find("path")           ; k != j.end()) {t.path           = k->get<Style>(); };
+  if (auto k = j.find("cwd")            ; k != j.end()) {t.cwd            = k->get<Style>(); };
+  if (auto k = j.find("readonly")       ; k != j.end()) {t.readonly       = k->get<Style>(); };
+  if (auto k = j.find("ssh")            ; k != j.end()) {t.ssh            = k->get<Style>(); };
+  if (auto k = j.find("docker_machine") ; k != j.end()) {t.docker_machine = k->get<Style>(); };
+  if (auto k = j.find("kube_cluster")   ; k != j.end()) {t.kube_cluster   = k->get<Style>(); };
+  if (auto k = j.find("kube_namespace") ; k != j.end()) {t.kube_namespace = k->get<Style>(); };
+  if (auto k = j.find("dot_env")        ; k != j.end()) {t.dot_env        = k->get<Style>(); };
+  if (auto k = j.find("aws")            ; k != j.end()) {t.aws            = k->get<Style>(); };
+  if (auto k = j.find("repo_clean")     ; k != j.end()) {t.repo_clean     = k->get<Style>(); };
+  if (auto k = j.find("repo_dirty")     ; k != j.end()) {t.repo_dirty     = k->get<Style>(); };
+  if (auto k = j.find("jobs")           ; k != j.end()) {t.jobs           = k->get<Style>(); };
+  if (auto k = j.find("cmd_passed")     ; k != j.end()) {t.cmd_passed     = k->get<Style>(); };
+  if (auto k = j.find("cmd_failed")     ; k != j.end()) {t.cmd_failed     = k->get<Style>(); };
+  if (auto k = j.find("svn_changes")    ; k != j.end()) {t.svn_changes    = k->get<Style>(); };
+  if (auto k = j.find("git_ahead")      ; k != j.end()) {t.git_ahead      = k->get<Style>(); };
+  if (auto k = j.find("git_behind")     ; k != j.end()) {t.git_behind     = k->get<Style>(); };
+  if (auto k = j.find("git_staged")     ; k != j.end()) {t.git_staged     = k->get<Style>(); };
+  if (auto k = j.find("git_not_staged") ; k != j.end()) {t.git_not_staged = k->get<Style>(); };
+  if (auto k = j.find("git_untracked")  ; k != j.end()) {t.git_untracked  = k->get<Style>(); };
+  if (auto k = j.find("git_conflicted") ; k != j.end()) {t.git_conflicted = k->get<Style>(); };
+  if (auto k = j.find("git_stashed")    ; k != j.end()) {t.git_stashed    = k->get<Style>(); };
+  if (auto k = j.find("virtual_env")    ; k != j.end()) {t.virtual_env    = k->get<Style>(); };
+  if (auto k = j.find("virtual_go")     ; k != j.end()) {t.virtual_go     = k->get<Style>(); };
+  if (auto k = j.find("perlbrew")       ; k != j.end()) {t.perlbrew       = k->get<Style>(); };
+  if (auto k = j.find("TFWs")           ; k != j.end()) {t.TFWs           = k->get<Style>(); };
+  if (auto k = j.find("time")           ; k != j.end()) {t.time           = k->get<Style>(); };
+  if (auto k = j.find("shell_var")      ; k != j.end()) {t.shell_var      = k->get<Style>(); };
+  if (auto k = j.find("node")           ; k != j.end()) {t.node           = k->get<Style>(); };
+  if (auto k = j.find("load")           ; k != j.end()) {t.load           = k->get<Style>(); };
+  if (auto k = j.find("nix_shell")      ; k != j.end()) {t.nix_shell      = k->get<Style>(); };
+  if (auto k = j.find("duration")       ; k != j.end()) {t.duration       = k->get<Style>(); };
 }
 
 void from_json(const nlohmann::json& j, Symbols& s)
 {
-  if (auto i = j.find("lock")             ; i != j.end()) { s.lock             = i->get<std::string>(); };
-  if (auto i = j.find("network")          ; i != j.end()) { s.network          = i->get<std::string>(); };
-  if (auto i = j.find("separator")        ; i != j.end()) { s.separator        = i->get<std::string>(); };
-  if (auto i = j.find("separator")        ; i != j.end()) { s.separator        = i->get<std::string>(); };
-  if (auto i = j.find("separator_thin")   ; i != j.end()) { s.separator_thin   = i->get<std::string>(); };
-  if (auto i = j.find("r_separator")      ; i != j.end()) { s.r_separator      = i->get<std::string>(); };
-  if (auto i = j.find("r_separator_thin") ; i != j.end()) { s.r_separator_thin = i->get<std::string>(); };
-  if (auto i = j.find("git_branch")       ; i != j.end()) { s.git_branch       = i->get<std::string>(); };
-  if (auto i = j.find("git_detached")     ; i != j.end()) { s.git_detached     = i->get<std::string>(); };
-  if (auto i = j.find("git_ahead")        ; i != j.end()) { s.git_ahead        = i->get<std::string>(); };
-  if (auto i = j.find("git_behind")       ; i != j.end()) { s.git_behind       = i->get<std::string>(); };
-  if (auto i = j.find("git_staged")       ; i != j.end()) { s.git_staged       = i->get<std::string>(); };
-  if (auto i = j.find("git_not_staged")   ; i != j.end()) { s.git_not_staged   = i->get<std::string>(); };
-  if (auto i = j.find("git_conflicted")   ; i != j.end()) { s.git_conflicted   = i->get<std::string>(); };
-  if (auto i = j.find("git_untracked")    ; i != j.end()) { s.git_untracked    = i->get<std::string>(); };
+  if (auto k = j.find("lock")             ; k != j.end()) { s.lock             = k->get<std::string>(); };
+  if (auto k = j.find("network")          ; k != j.end()) { s.network          = k->get<std::string>(); };
+  if (auto k = j.find("separator")        ; k != j.end()) { s.separator        = k->get<std::string>(); };
+  if (auto k = j.find("separator")        ; k != j.end()) { s.separator        = k->get<std::string>(); };
+  if (auto k = j.find("separator_thin")   ; k != j.end()) { s.separator_thin   = k->get<std::string>(); };
+  if (auto k = j.find("r_separator")      ; k != j.end()) { s.r_separator      = k->get<std::string>(); };
+  if (auto k = j.find("r_separator_thin") ; k != j.end()) { s.r_separator_thin = k->get<std::string>(); };
+  if (auto k = j.find("git_branch")       ; k != j.end()) { s.git_branch       = k->get<std::string>(); };
+  if (auto k = j.find("git_detached")     ; k != j.end()) { s.git_detached     = k->get<std::string>(); };
+  if (auto k = j.find("git_ahead")        ; k != j.end()) { s.git_ahead        = k->get<std::string>(); };
+  if (auto k = j.find("git_behind")       ; k != j.end()) { s.git_behind       = k->get<std::string>(); };
+  if (auto k = j.find("git_staged")       ; k != j.end()) { s.git_staged       = k->get<std::string>(); };
+  if (auto k = j.find("git_not_staged")   ; k != j.end()) { s.git_not_staged   = k->get<std::string>(); };
+  if (auto k = j.find("git_conflicted")   ; k != j.end()) { s.git_conflicted   = k->get<std::string>(); };
+  if (auto k = j.find("git_untracked")    ; k != j.end()) { s.git_untracked    = k->get<std::string>(); };
 };
 
 
 void from_json(const nlohmann::json& j, Arguments& a)
 {
-    if ( auto i = j.find("term_width");          i != j.end()) { a.term_width         = i->get<int>();};
-    if ( auto i = j.find("cwd_max_depth");       i != j.end()) { a.cwd_max_depth      = i->get<int>();};
-    if ( auto i = j.find("cwd_max_dir_size");    i != j.end()) { a.cwd_max_dir_size   = i->get<int>();};
-    if ( auto i = j.find("max_width_ratio");     i != j.end()) { a.max_width_ratio    = i->get<int>();};
-    if ( auto i = j.find("max_segment_width");   i != j.end()) { a.max_segment_width  = i->get<int>();};
-    if ( auto b = j.find("colorize_hostname");   b != j.end()) { a.colorize_hostname  = b->get<bool>();};
-    if ( auto b = j.find("numeric_exit_codes");  b != j.end()) { a.numeric_exit_codes = b->get<bool>();};
-    if ( auto b = j.find("shorten_g_k_e_names"); b != j.end()) { a.shorten_gke_names  = b->get<bool>();};
-    if ( auto s = j.find("git_mode");            s != j.end()) { a.git_mode     = s->get<std::string>();};
-    if ( auto s = j.find("cwd_mode");            s != j.end()) { a.cwd_mode     = s->get<std::string>();};
-    if ( auto s = j.find("shell");               s != j.end()) { a.shell        = s->get<std::string>();};
-    if ( auto s = j.find("ignore_repos");        s != j.end()) { a.ignore_repos = s->get<std::string>();};
-    if ( auto s = j.find("duration");            s != j.end()) { a.duration     = s->get<std::string>();};
-    if ( auto v = j.find("path_aliases");        v != j.end()) { a.path_aliases = v->get<std::map<std::string, std::string>>();};
+    if ( auto k = j.find("term_width");          k != j.end()) { a.term_width         = k->get<int>();};
+    if ( auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
+    if ( auto k = j.find("cwd_max_dir_size");    k != j.end()) { a.cwd_max_dir_size   = k->get<int>();};
+    if ( auto k = j.find("max_width_ratio");     k != j.end()) { a.max_width_ratio    = k->get<int>();};
+    if ( auto k = j.find("max_segment_width");   k != j.end()) { a.max_segment_width  = k->get<int>();};
+    if ( auto k = j.find("colorize_hostname");   k != j.end()) { a.colorize_hostname  = k->get<bool>();};
+    if ( auto k = j.find("numeric_exit_codes");  k != j.end()) { a.numeric_exit_codes = k->get<bool>();};
+    if ( auto k = j.find("shorten_g_k_e_names"); k != j.end()) { a.shorten_gke_names  = k->get<bool>();};
+    if ( auto k = j.find("git_mode");            k != j.end()) { a.git_mode     = k->get<std::string>();};
+    if ( auto k = j.find("cwd_mode");            k != j.end()) { a.cwd_mode     = k->get<std::string>();};
+    if ( auto k = j.find("shell");               k != j.end()) { a.shell        = k->get<std::string>();};
+    if ( auto k = j.find("ignore_repos");        k != j.end()) { a.ignore_repos = k->get<std::string>();};
+    if ( auto k = j.find("duration");            k != j.end()) { a.duration     = k->get<std::string>();};
+    if ( auto k = j.find("path_aliases");        k != j.end()) { a.path_aliases = k->get<std::map<std::string, std::string>>();};
     if ( auto o = j.find("segments"); o != j.end()){
-      if ( auto v = o->find("left");  v != o->end()) { a.left_segments  = v->get<std::vector<std::string>>();};
-      if ( auto v = o->find("right"); v != o->end()) { a.right_segments = v->get<std::vector<std::string>>();};
+      if ( auto k = o->find("left");  k != o->end()) { a.left_segments  = k->get<std::vector<std::string>>();};
+      if ( auto k = o->find("right"); k != o->end()) { a.right_segments = k->get<std::vector<std::string>>();};
     }
 }

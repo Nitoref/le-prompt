@@ -6,7 +6,7 @@
 #include <sstream>
 
 
-Prompt::Prompt(PromptOpt options):
+Prompt::Prompt(PromptConfig options):
     options_(options),
     printer_(options.shell)
 {

@@ -10,7 +10,7 @@
 class Prompt
 {
 public:
-    Prompt(PromptOpt options);
+    Prompt(PromptConfig options);
     void parse_left_segments();
     void parse_right_segments();
     void print_left();
@@ -24,7 +24,7 @@ private:
     std::string left_;
     std::string right_;
     
-    PromptOpt options_;
+    PromptConfig options_;
     ColorPrinter printer_;
     size_t length_   =  0;
     size_t length_r_ =  0;

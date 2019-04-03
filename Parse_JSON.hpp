@@ -3,8 +3,11 @@
 
 #include <json.hpp>
 #include "string.hpp"
+
 #include "arguments.hpp"
 #include "theme.hpp"
+#include "symbols.hpp"
+#include "shell_info.hpp"
 
 
 void from_json(const nlohmann::json& j, Style& s);

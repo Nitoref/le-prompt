@@ -1,48 +1,12 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include "string.hpp"
-
-
-struct Shell
-{
-    Shell() = default;
-    Shell(std::string sh);
-    string escape_    = "\e[";
-    string epacse_    = "m";
-    string indicator_ = "$";
-    string backslash_ = "\\";
-    string backtick_  = "`";
-    string dollar_    = "$";
-};
-
-struct Symbols
-{
-    Symbols() = default;
-    string lock             = "\uE0A2"; // ""
-    string network          = "\uE0A2"; // ""
-    string separator        = "\uE0B4"; // ""
-    string r_separator      = "\uE0B4"; // ""
-    string separator_thin   = "\uE0B5"; // ""
-    string r_separator_thin = "\uE0B5"; // ""
-    string git_branch       = "\uE0A0"; // ""
-    string git_detached     = "\u27A6"; // "➦"
-    string git_ahead        = "\u2B06"; // "⬆"
-    string git_behind       = "\u2B07"; // "⬇"
-    string git_staged       = "\u2714"; // "✔"
-    string git_not_staged   = "\u270E"; // "✎"
-    string git_conflicted   = "\u273C"; // "✼"
-    string git_untracked    = "\u2026"; // "…"
-};
-
-
 struct Style
 {
     Style() = default;
     int   fg;
     int   bg;
 };
-
 
 struct Theme
 {

@@ -5,21 +5,25 @@
 #include <fstream>
 
 #include "Parse_JSON.hpp"
+
 #include "arguments.hpp"
 #include "theme.hpp"
+#include "symbols.hpp"
+#include "shell_info.hpp"
 
-struct PromptOpt
+struct PromptConfig
 {
     Arguments args;
     Symbols   symbols;
     Theme     theme;
     Shell     shell;
 
-    PromptOpt(char const *argv[])
+    PromptConfig(char const *argv[])
     {
         std::ifstream i(argv[4]);
         nlohmann::json j;
         i >> j;
+
         if (auto k = j.find("args"); k != j.end())
             args = k->get<Arguments>();
         if (auto k = j.find("theme"); k != j.end())

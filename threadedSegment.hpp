@@ -4,17 +4,17 @@
 #include <thread>
 
 #include "segment.hpp"
-#include "prompt_options.hpp"
+#include "prompt_config.hpp"
 
 
 struct ThreadedSegment
 {
-    PromptOpt   &opt;
+    PromptConfig   &opt;
     Segment     segment;
     std::thread thread;
 
     // Initialize with prompt options
-    ThreadedSegment(PromptOpt &opt):opt(opt)
+    ThreadedSegment(PromptConfig &opt):opt(opt)
     {};
 
     // Get content and style
