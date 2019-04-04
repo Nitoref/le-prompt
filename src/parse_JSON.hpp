@@ -1,7 +1,7 @@
 #ifndef JSON_PARSER_H
 #define JSON_PARSER_H
 
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include "string.hpp"
 
 #include "arguments.hpp"
