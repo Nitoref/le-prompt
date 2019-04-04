@@ -13,15 +13,12 @@ struct ThreadedSegment
     Segment     segment;
     std::thread thread;
 
-    // Initialize with prompt options
     ThreadedSegment(PromptConfig &opt):opt(opt)
     {};
 
-    // Get content and style
     virtual void make()
     {};
 
-    // Spawn thread
     void init()
     {
         if (!thread.joinable()){
@@ -31,7 +28,6 @@ struct ThreadedSegment
         }
     }
 
-    // Join thread
     void join()
     {
         if (thread.joinable())

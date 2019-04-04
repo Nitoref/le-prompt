@@ -4,8 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "Parse_JSON.hpp"
-
+#include "parse_JSON.hpp"
 #include "arguments.hpp"
 #include "theme.hpp"
 #include "symbols.hpp"

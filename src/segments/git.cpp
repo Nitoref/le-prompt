@@ -10,11 +10,11 @@
 
 struct RepoStats
 {
-    size_t ahead = 0;
+    size_t ahead  = 0;
     size_t behind = 0;
     size_t staged = 0;
-    size_t notStaged = 0;
-    size_t untracked = 0;
+    size_t notStaged  = 0;
+    size_t untracked  = 0;
     size_t conflicted = 0;
 };
 
