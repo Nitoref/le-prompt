@@ -10,187 +10,152 @@ Prompt::Prompt(PromptConfig options):
     options_(options),
     printer_(options.shell)
 {
-    segments_ = {
+    segments_map_ = {
         {"user", new SegmentUser(this->options_)},
         {"root", new SegmentRoot(this->options_)},
         {"pwd",  new SegmentPwd(this->options_)},
         {"exit", new SegmentExit(this->options_)},
-        {"git",  new SegmentGit(this->options_)},
         {"host", new SegmentHost(this->options_)},
-        {"nl",   new SegmentNewline(this->options_)},
+        {"jobs", new SegmentJobs(this->options_)},
+        {"git",  new SegmentGit(this->options_)},
+        {"time", new SegmentTime(this->options_)},
     };
-    threads_.reserve(segments_.size());
 }
 
 ThreadedSegment*
 Prompt::get_segment_by_name(std::string str)
 {
-    auto& s = segments_[str];
+    auto& s = segments_map_[str];
     return s ? : NULL;
 }
 
+
 void
-Prompt::parse_left_segments(std::vector<std::string> segments)
+Prompt::parse_segments(std::vector<std::string> list, std::vector<ThreadedSegment*>& threads)
 {
-    for (auto& segment: options_.args.left_segments)
+    for (auto& segment: list)
     {
-        if (ThreadedSegment *s = get_segment_by_name(segment)){
+        if (ThreadedSegment *s = get_segment_by_name(segment))
+        {
             s->init();
-            threads_.push_back(s);
+            threads.push_back(s);
         }
     }
 }
 
 void
-Prompt::parse_right_segments(std::vector<std::string> segments)
+Prompt::parse_segments()
 {
-    for (auto& segment: options_.args.right_segments)
-    {
-        if (ThreadedSegment *s = get_segment_by_name(segment)){
-            s->init();
-            right_threads_.push_back(s);
-        }
-    }
+    parse_segments(options_.args.left_segments, l_segments_);
+    parse_segments(options_.args.right_segments, r_segments_);
 }
 
-void
-Prompt::parse_left_segments()
-{
-    parse_left_segments(options_.args.left_segments);
-}
-void
-Prompt::parse_right_segments()
-{
-    parse_right_segments(options_.args.right_segments);
-}
 
-void
-Prompt::print_left()
+std::string
+Prompt::merge_segments(std::vector<ThreadedSegment*>& threads, std::string(Prompt::*f)(Segment))
 {
-    for (auto &thread : threads_)
+    std::string output;
+    for (auto &thread : threads)
     {
         thread->join();
         if (!thread->segment.content.empty())
         {
-            print_segment(thread->segment);
+            output += (this->*f)(thread->segment);
         }
     }
-    reset();
+    return output;
 }
 
-void
-Prompt::print_right()
+std::string
+Prompt::print_left_segments()
 {
-    for (auto &thread : right_threads_)
-    {
-        thread->join();
-        if (!thread->segment.content.empty())
-        {
-            print_r_segment(thread->segment);
-        }
-    }
-    printer_.reset_style();
+    std::string output;
+    output += merge_segments(l_segments_, &Prompt::print_left_segment);
+    output += printer_.reset();
+    output += printer_.fg(prev_color_);
+    output += options_.symbols.separator;
+    output += printer_.reset();
+    prev_color_ = -1;
+    return output;
 }
 
-void
-Prompt::print_segment(Segment s)
+std::string
+Prompt::print_right_segments()
 {
-    if (s.style.bg == -1)
+    std::string output;
+    output += merge_segments(r_segments_, &Prompt::print_right_segment);
+    output += printer_.reset();
+    prev_color_ = -1;
+    return output;
+}
+
+std::string
+Prompt::print_left_segment(Segment s)
+{
+    std::string output;
+    if (s.style.bg == prev_color_)
     {
-        this->reset();
-        print("\n");
-        return;
-    }
-    else if (s.style.bg == prev_color_)
-    {
-        length_ += strlen_utf8(options_.symbols.separator_thin);
-        
-        printer_.set_fg(s.style.fg);
-        print(options_.symbols.separator_thin);
-        
-        left_ += printer_.fg_color(s.style.fg);
-        left_ += options_.symbols.separator_thin;
+        output += printer_.fg(s.style.fg);
+        output += options_.symbols.separator_thin;
     }
     else
     if (prev_color_ != -1)
     {
-        length_ += strlen_utf8(options_.symbols.separator);
-
-        printer_.set_bg(s.style.bg);
-        printer_.set_fg(prev_color_);
-        print(options_.symbols.separator);
-        
-        left_ += printer_.bg_color(s.style.bg);
-        left_ += printer_.fg_color(prev_color_);
-        left_ += options_.symbols.r_separator;
+        output += printer_.bg(s.style.bg);
+        output += printer_.fg(prev_color_);
+        output += options_.symbols.separator;
     }
-    printer_.set_bg(s.style.bg);
-    printer_.set_fg(s.style.fg);
-
-    printer_.bg_color(s.style.bg);
-    printer_.fg_color(s.style.fg);
-    
-    print(' ', s.content, ' ');
-    right_ += " ";
-    right_ += s.content;
-    right_ += " ";
-
-    length_ += s.length() + 2;
+    output += printer_.bg(s.style.bg);
+    output += printer_.fg(s.style.fg);
+    output += ' ';
+    output += s.content;
+    output += ' ';
     prev_color_ = s.style.bg;
+    return output;
 }
 
-void
-Prompt::print_r_segment(Segment s)
+std::string
+Prompt::print_right_segment(Segment s)
 {
+    std::string output;
     if (s.style.bg == prev_color_)
     {
-        length_r_ += strlen_utf8(options_.symbols.r_separator_thin);
-
-        printer_.set_bg(s.style.fg);
-        print(options_.symbols.r_separator_thin);
-        
-        right_ += printer_.bg_color(s.style.fg);
-        right_ += options_.symbols.r_separator_thin;
+        output += printer_.fg(s.style.fg);
+        output += options_.symbols.r_separator_thin;
     }
     else
     {
-        length_r_ += strlen_utf8(options_.symbols.r_separator);
         if (prev_color_ != -1){
-            printer_.set_bg(prev_color_);
-            right_ += printer_.bg_color(prev_color_);
+            output += printer_.bg(prev_color_);
         }
-        printer_.set_fg(s.style.bg);
-        print(options_.symbols.r_separator);
-        
-        right_ += printer_.fg_color(s.style.bg);
-        right_ += options_.symbols.r_separator;
+        output += printer_.fg(s.style.bg);
+        output += options_.symbols.r_separator;
     }
-    printer_.set_bg(s.style.bg);
-    printer_.set_fg(s.style.fg);
-    
-    right_ += printer_.bg_color(s.style.bg);
-    right_ += printer_.fg_color(s.style.fg);
-
-    print(' ', s.content, ' ');
-    right_ += " ";
-    right_ += s.content;
-    right_ += " ";
-
-    length_r_ += s.length() + 2;
+    output += printer_.bg(s.style.bg);
+    output += printer_.fg(s.style.fg);
+    output += ' ';
+    output += s.content;
+    output += ' ';
     prev_color_ = s.style.bg;
-}
-
-void
-Prompt::reset(){
-    printer_.reset_style();
-    printer_.set_fg(prev_color_);
-    print(options_.symbols.separator, "  ");
-    printer_.reset_style();
-    prev_color_ = -1;
-    length_ = 0;
+    return output;
 }
 
 
-
-// g++ -Oz -o build/powerline -std=c++2a *.cpp ./*/*.cpp -lgit2 -Iinclude
-// clang++ -std=c++2a -Wall -Werror -D_LIBCPP_DISABLE_AVAILABILITY test.cpp -I/Users/nitoref/Desktop/powerless/C++/include/
+size_t
+Prompt::right_length()
+{
+    size_t length = 0;
+    for (auto& thread: r_segments_)
+        if (!thread->segment.content.empty())
+            length += 3 + utils::string::length(thread->segment.content);
+    return length + 1;
+}
+size_t
+Prompt::left_length()
+{
+    size_t length = 0;
+    for (auto& thread: l_segments_)
+        if (!thread->segment.content.empty())
+            length += 3 + utils::string::length(thread->segment.content);
+    return length + 1;
+}

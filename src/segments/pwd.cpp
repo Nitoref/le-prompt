@@ -1,18 +1,18 @@
 #include <pwd.h>
 #include <unistd.h>
+#include <string>
 #include "../modules.hpp"
-#include "../string.hpp"
+#include "../utils.hpp"
 
 
 
-static
 int
-removeHome(string& path)
+removeHome(std::string& path)
 {
-    string home {std::getenv("HOME")};
+    std::string home = utils::string::safe(std::getenv("HOME"));
     if (home.empty())
     {
-        home = string{getpwuid(getuid())->pw_dir};
+        home = utils::string::safe(getpwuid(getuid())->pw_dir);
     }
     if (home.empty())
     {
@@ -26,13 +26,12 @@ removeHome(string& path)
     return 1;
 }
 
-static
 int
-fold(string& path)
+fold(std::string& path, int max_depth)
 {
-    string fold_symbol = "…";
+    std::string fold_symbol = "…";
 
-    size_t stop = path.rnfind('/', 3);
+    size_t stop = utils::string::rnfind(path, '/', max_depth);
     if (stop == std::string::npos)
     {
         return 0;
@@ -49,14 +48,14 @@ fold(string& path)
 void
 SegmentPwd::make()
 {
-    segment.content = string {getenv("PWD")};
+    segment.content = utils::string::safe(getenv("PWD"));
     removeHome(segment.content);
 
     for (auto& alias: opt.args.path_aliases)
     {
-        segment.content.replace_all(alias.first, alias.second);
+        utils::string::replace_all(segment.content, alias.first, alias.second);
     };
 
-    fold(segment.content);
+    fold(segment.content, opt.args.cwd_max_depth);
     segment.style = opt.theme.path;
 };

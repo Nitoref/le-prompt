@@ -1,10 +1,10 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
 
-#include "string.hpp"
 #include "shell_info.hpp"
 #include <iostream>
 #include <cstring>
+#include <string>
 
 #define DEFAULT '9'
 #define BG_STD_ '4'
@@ -24,44 +24,23 @@ struct ColorPrinter
         escape_(shell.escape_),
         epacse_(shell.epacse_)
     {};
-    string escape_;
-    string epacse_;
+    std::string escape_;
+    std::string epacse_;
 
-    inline void set_bg(int value){
-        print(escape_, BG_256_, value, epacse_);
-    }
-
-    inline void set_fg(int value){
-        print(escape_, FG_256_, value, epacse_);
-    }
-
-    inline void reset_bg(){
-        print(escape_, BG_STD_, DEFAULT, epacse_);
-    }
-
-    inline void reset_fg(){
-        print(escape_, FG_STD_, DEFAULT, epacse_);
-    }
-
-    inline void reset_style(){
-        print(escape_, '0', epacse_);
-    }
-
-    inline string bg_color(int value)
+    inline std::string bg(int value)
     {
-        return string {escape_ + BG_256_ + std::to_string(value) + epacse_};
+        return escape_ + BG_256_ + std::to_string(value) + epacse_;
     }
 
-    inline string fg_color(int value){
-        return string {escape_ + FG_256_ + std::to_string(value) + epacse_};
+    inline std::string fg(int value){
+        return escape_ + FG_256_ + std::to_string(value) + epacse_;
     }
 
-    inline string reset(){
-        return string {escape_ + '0' + epacse_};
+    inline std::string reset(){
+        return escape_ + '0' + epacse_;
     }
 
-
-    inline void set_font_style(const char* str){
+    inline std::string font_style(const char* str){
         static
         std::unordered_map<std::string, int> y =
         {
@@ -76,8 +55,9 @@ struct ColorPrinter
             {"encircled",   52},
             {"overlined",   53}
         };
-        if (y.count(str))
-            print(escape_, y[str], epacse_);
+        if (auto code = y.find(str); code != y.end())
+            return escape_ + std::to_string(code->second) + epacse_;
+        return "";
     }
 };
 

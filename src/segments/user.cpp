@@ -1,13 +1,13 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include "../modules.hpp"
-#include "../string.hpp"
+#include "../utils.hpp"
 
 
 void
 SegmentUser::make()
 {
-    segment.content = string {getenv("USER")};
+    segment.content = utils::string::safe(getenv("USER"));
 
     if (getuid() != 0)
         segment.style = opt.theme.username;

@@ -1,35 +1,79 @@
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 #include <string>
 #include <cstring>
 #include <array>
+#include <sys/ioctl.h>
+#include <stdio.h>
+#include "utils.hpp"
 
 
 
-std::string
-exec(const char* cmd)
+namespace utils
+{
+
+int term_width ()
+{
+    struct winsize w;
+    ioctl(0, TIOCGWINSZ, &w);
+    return w.ws_col;
+}
+
+
+std::list<std::string>
+exec(const std::string& cmd)
 {
     std::array<char, 1024> buffer;
-    std::string result;
-    std::unique_ptr<FILE,decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe)
+    std::list<std::string> result;
+    std::unique_ptr<FILE,decltype(&pclose)> pipe(popen(cmd.data(), "r"), pclose);
+    if (pipe)
     {
-        throw std::runtime_error("popen() failed!");
+        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+        {
+            result.emplace_back(buffer.data());
+        }
     }
-
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-    {
-        result += buffer.data();
-    }
-
     return result;
+}
+
+
+namespace string
+{
+
+std::string
+safe(const char* s)
+{
+    if (s == NULL)
+        return "";
+    return s;
+}
+void
+replace_all(std::string& in, const std::string& from, const std::string& to)
+{
+    size_t cursor = 0;
+    while((cursor = in.find(from, cursor)) != std::string::npos)
+    {
+        in.replace(cursor, from.length(), to);
+        cursor += to.length();
+    }
+}
+size_t
+rnfind (std::string& s, char c, size_t n)
+{
+    if (n != 0  && !s.empty())
+        for (int i = s.length() - 1; i >= 0; --i)
+            if (s.at(i) == c)
+                if (--n == 0)
+                    return i;
+    return std::string::npos;
 }
 
 
 // Props to http://www.daemonology.net/blog/2008-06-05-faster-utf8-strlen.html
 #define ONEMASK ((size_t)(-1) / 0xFF)
 size_t 
-strlen_utf8(const char * s_)
+length(const char * s_)
 {
     const char * s;
     size_t count = 0;
@@ -81,7 +125,13 @@ strlen_utf8(const char * s_)
     return ((s - s_) - count);
 }
 
-size_t strlen_utf8(std::string s) {
-    return strlen_utf8(s.c_str());
+size_t length(std::string s) {
+    return length(s.c_str());
 }
 
+
+
+}
+
+
+}

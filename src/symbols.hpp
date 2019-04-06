@@ -1,23 +1,25 @@
 #ifndef SYMBOLS_H
 #define SYMBOLS_H
 
+#include <string>
+
 struct Symbols
 {
     Symbols() = default;
-    string lock             = "\uE0A2"; // ""
-    string network          = "\uE0A2"; // ""
-    string separator        = "\uE0B4"; // ""
-    string r_separator      = "\uE0B4"; // ""
-    string separator_thin   = "\uE0B5"; // ""
-    string r_separator_thin = "\uE0B5"; // ""
-    string git_branch       = "\uE0A0"; // ""
-    string git_detached     = "\u27A6"; // "➦"
-    string git_ahead        = "\u2B06"; // "⬆"
-    string git_behind       = "\u2B07"; // "⬇"
-    string git_staged       = "\u2714"; // "✔"
-    string git_not_staged   = "\u270E"; // "✎"
-    string git_conflicted   = "\u273C"; // "✼"
-    string git_untracked    = "\u2026"; // "…"
+    std::string lock             = "\uE0A2"; // ""
+    std::string network          = "\uE0A2"; // ""
+    std::string separator        = "\uE0B0"; // ""
+    std::string separator_thin   = "\uE0B1"; // ""
+    std::string r_separator      = "\uE0B2"; // ""
+    std::string r_separator_thin = "\uE0B3"; // ""
+    std::string git_branch       = "\uE0A0"; // ""
+    std::string git_detached     = "\u27A6"; // "➦"
+    std::string git_ahead        = "\u2B06"; // "⬆"
+    std::string git_behind       = "\u2B07"; // "⬇"
+    std::string git_staged       = "\u2714"; // "✔"
+    std::string git_not_staged   = "\u270E"; // "✎"
+    std::string git_conflicted   = "\u273C"; // "✼"
+    std::string git_untracked    = "\u2026"; // "…"
 };
 
 #endif

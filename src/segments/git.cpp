@@ -7,135 +7,223 @@
 # include <unistd.h>
 #endif
 #include "../modules.hpp"
+#include <mutex>
 
-struct RepoStats
+
+struct GitStatus
 {
+    std::string name;
     size_t ahead  = 0;
     size_t behind = 0;
     size_t staged = 0;
-    size_t notStaged  = 0;
+    size_t not_staged  = 0;
     size_t untracked  = 0;
     size_t conflicted = 0;
 };
 
-static int get_git_status(char **branchName, RepoStats *stats);
-static int get_stats(RepoStats *stats, git_status_list *status);
-static int get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head);
-static int get_name(char **branch, RepoStats *stats, git_repository *repo);
+int get_git_status(GitStatus& status);
+int get_stats(GitStatus& status, git_status_list *status_list);
+int get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head);
+int get_name(GitStatus& status, git_repository *repo);
 
 
+// void SegmentGitName::make()
+// {
+//     GitStatus& status = git_status__;
+//     get_git_status_threadsafe(status);
+//     if (status.name.empty())
+//         return;
+
+//     segment.content = opt.symbols.git_branch;
+//     segment.content += ' ';
+//     segment.content += status.name;
+//     if (  status.ahead     || status.behind
+//        || status.staged    || status.not_staged
+//        || status.untracked || status.conflicted
+//     )
+//         segment.style = opt.theme.repo_dirty;
+//     else
+//         segment.style = opt.theme.repo_clean;
+// };
+
+// void
+// SegmentGitAhead::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.ahead)
+//     {
+//         segment.style   =  opt.theme.git_ahead;
+//         segment.content =  std::to_string(status.ahead);
+//         segment.content += opt.symbols.git_ahead;
+//     }
+// };
+// void
+// SegmentGitBehind::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.behind)
+//     {
+//         segment.style   =  opt.theme.git_behind;
+//         segment.content =  std::to_string(status.behind);
+//         segment.content += opt.symbols.git_behind;
+//     }
+// };
+// void
+// SegmentGitStaged::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.staged)
+//     {
+//         segment.style   =  opt.theme.git_staged;
+//         segment.content =  std::to_string(status.staged);
+//         segment.content += opt.symbols.git_staged;
+//     }
+// };
+// void
+// SegmentGitNotStaged::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.not_staged)
+//     {
+//         segment.style   =  opt.theme.git_not_staged;
+//         segment.content =  std::to_string(status.not_staged);
+//         segment.content += opt.symbols.git_not_staged;
+//     }
+// };
+// void
+// SegmentGitUntracked::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.untracked)
+//     {
+//         segment.style   =  opt.theme.git_untracked;
+//         segment.content =  std::to_string(status.untracked);
+//         segment.content += opt.symbols.git_untracked;
+//     }
+// };
+// void
+// SegmentGitConflicted::make()
+// {
+//     GitStatus& status = git_status__;
+//     if (status.conflicted)
+//     {
+//         segment.style   =  opt.theme.git_conflicted;
+//         segment.content =  std::to_string(status.conflicted);
+//         segment.content += opt.symbols.git_conflicted;
+//     }
+// };
 
 
 void
 SegmentGit::make()
 {
-    RepoStats stats;
-    char* branch_name = NULL;
+    GitStatus status;
     segment.style = opt.theme.repo_clean;
  
-    get_git_status(&branch_name, &stats);
-    if (branch_name == NULL)
+    get_git_status(status);
+    if (status.name.empty())
     {
         return;
     }
+
     segment.content = opt.symbols.git_branch;
     segment.content += ' ';
-    segment.content += branch_name;
-    // segment.content = std::move(content);
+    segment.content += status.name;
 
-    if (  stats.ahead     || stats.behind
-       || stats.staged    || stats.notStaged
-       || stats.untracked || stats.conflicted
+    if (  status.ahead     || status.behind
+       || status.staged    || status.not_staged
+       || status.untracked || status.conflicted
     ){
         segment.style = opt.theme.repo_dirty;
         if (opt.args.git_mode != "simple")
-        	return;
+         return;
 
         
-        if (stats.ahead){
+        if (status.ahead){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.ahead);
+         segment.content += std::to_string(status.ahead);
             segment.content += opt.symbols.git_ahead;
         }
-        if (stats.behind){
+        if (status.behind){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.behind);
+         segment.content += std::to_string(status.behind);
             segment.content += opt.symbols.git_behind;
         }
-        if (stats.staged){
+        if (status.staged){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.staged);
+         segment.content += std::to_string(status.staged);
             segment.content += opt.symbols.git_staged;
         }
-        if (stats.notStaged){
+        if (status.not_staged){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.notStaged);
+         segment.content += std::to_string(status.not_staged);
             segment.content += opt.symbols.git_not_staged;
         }
-        if (stats.untracked){
+        if (status.untracked){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.untracked);
+         segment.content += std::to_string(status.untracked);
             segment.content += opt.symbols.git_untracked;
         }
-        if (stats.conflicted){
+        if (status.conflicted){
             segment.content += ' ';
-        	segment.content += std::to_string(stats.conflicted);
+         segment.content += std::to_string(status.conflicted);
             segment.content += opt.symbols.git_conflicted;
         }
     }
 };
 
-static
+
 int
-get_git_status(char **branchName, RepoStats *stats)
+get_git_status(GitStatus& status)
 {
-    git_repository  *repo    = NULL;
-    git_status_list *status;
-    git_status_options statusopt = GIT_STATUS_OPTIONS_INIT;
+    git_repository     *repository = NULL;
+    git_status_options status_opt  = GIT_STATUS_OPTIONS_INIT;
+    git_status_list    *status_list;
  
     git_libgit2_init();
+    git_libgit2_opts(GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION, 0);
 
-    statusopt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+    status_opt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 
-    statusopt.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED 
+    status_opt.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED 
                     | GIT_STATUS_OPT_RENAMES_INDEX_TO_WORKDIR
                     | GIT_STATUS_OPT_EXCLUDE_SUBMODULES
                     | GIT_STATUS_OPT_NO_REFRESH
                     | GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
 
-    if (git_repository_open_ext(&repo, ".", 0, NULL))
+    if (git_repository_open_ext(&repository, ".", 0, NULL))
     {
         return 1;
     }
-    if (get_name(branchName, stats, repo))
+    if (get_name(status, repository))
     {
         return 1; 
     }
 
-    if (git_repository_is_bare(repo))
+    if (git_repository_is_bare(repository))
     {
         return 0;
     }
 
-    if (git_status_list_new(&status, repo, &statusopt))
+    if (git_status_list_new(&status_list, repository, &status_opt))
     {
         return 1;
     }
 
-    if (get_stats(stats, status))
+    if (get_stats(status, status_list))
     {
         return 1;
     }
  
-    git_status_list_free(status);
-    git_repository_free(repo);
+    git_status_list_free(status_list);
+    git_repository_free(repository);
     git_libgit2_shutdown();
     return 0;
 }
 
-static 
-int 
-get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head)
+
+int
+get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head)
 {
     int    error;
     git_reference *upstream = NULL;
@@ -145,7 +233,7 @@ get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head)
         return error;
 
     git_graph_ahead_behind(
-        &(stats -> ahead), &(stats -> behind),
+        &status.ahead, &status.behind,
         repo,
         git_reference_target(head),
         git_reference_target(upstream)
@@ -154,9 +242,9 @@ get_ahead_behind(RepoStats *stats, git_repository *repo, git_reference *head)
 }
 
 
-static
+
 int
-get_name(char **branch, RepoStats *stats, git_repository *repo)
+get_name(GitStatus& status, git_repository *repo)
 {
     git_reference *head     = NULL;
 
@@ -164,10 +252,10 @@ get_name(char **branch, RepoStats *stats, git_repository *repo)
     if (error)
     {
         if (error == GIT_ENOTFOUND){
-            *branch = strdup("HEAD (no branch)");
+            status.name = "HEAD (no branch)";
         }
         else if (error == GIT_EUNBORNBRANCH) {
-            *branch = strdup("HEAD (no commit)");
+            status.name = "HEAD (no commit)";
             return 1;
         }
         else {
@@ -177,32 +265,34 @@ get_name(char **branch, RepoStats *stats, git_repository *repo)
 
     if (git_repository_head_detached(repo))
     {
-        *branch = (char*)malloc(8*sizeof(char));
-        git_oid_tostr(*branch, sizeof(*branch), git_reference_target(head));
+        char *branch_cstr = (char*)malloc(8*sizeof(char));
+        git_oid_tostr(
+            branch_cstr, sizeof(branch_cstr), git_reference_target(head)
+        );
+        status.name = branch_cstr;
     }
     else
     {
-        *branch = strdup(git_reference_shorthand(head));
+        status.name = git_reference_shorthand(head);
     }
 
     // printf("%s\n", git_repository_workdir(repo));
-    get_ahead_behind(stats, repo, head);
+    get_ahead_behind(status, repo, head);
     git_reference_free(head);
     return 0;
 }
 
 
 
-static
 int
-get_stats(RepoStats *stats, git_status_list *status)
+get_stats(GitStatus& status, git_status_list *status_list)
 {
-    size_t entrycount = git_status_list_entrycount(status);
+    size_t entrycount = git_status_list_entrycount(status_list);
     const git_status_entry *s;
 
     for (size_t i = 0; i < entrycount; ++i)
     {
-        s = git_status_byindex(status, i);
+        s = git_status_byindex(status_list, i);
 
          if (s->status & GIT_STATUS_IGNORED)
          {
@@ -214,12 +304,12 @@ get_stats(RepoStats *stats, git_status_list *status)
          else
          if (s->status & GIT_STATUS_CONFLICTED)
          {
-             stats -> conflicted ++;
+             status.conflicted ++;
          }
          else
          if (s->status & GIT_STATUS_WT_NEW)
          {
-             stats -> untracked++;
+             status.untracked++;
          }
          else
          {
@@ -229,14 +319,14 @@ get_stats(RepoStats *stats, git_status_list *status)
                             | GIT_STATUS_INDEX_MODIFIED 
                             | GIT_STATUS_INDEX_TYPECHANGE))
             {
-                stats -> staged++;
+                status.staged++;
             }
             if (s->status & ( GIT_STATUS_WT_RENAMED
                             | GIT_STATUS_WT_DELETED
                             | GIT_STATUS_WT_MODIFIED
                             | GIT_STATUS_WT_TYPECHANGE))
             {
-                stats -> notStaged++;
+                status.not_staged++;
             }
          }
     }

@@ -1,8 +1,8 @@
 #define HOSTNAME_MAX 256
 
-#include <string.h>
+#include <string>
+#include <cstdlib>
 #include <unistd.h>
-#include <stdlib.h>
 #include "../modules.hpp"
 
 

@@ -2,7 +2,6 @@
 #define JSON_PARSER_H
 
 #include <nlohmann/json.hpp>
-#include "string.hpp"
 
 #include "arguments.hpp"
 #include "theme.hpp"

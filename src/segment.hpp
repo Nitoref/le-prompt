@@ -1,14 +1,14 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include "string.hpp"
+#include <string>
 #include "theme.hpp"
 #include "utils.hpp"
 
 
 struct Segment
 {
-    string content;
+    std::string content;
     Style style;
     
     Segment() = default;
@@ -26,11 +26,6 @@ struct Segment
         content(content),
         style(style)
     {};
-
-    size_t length()
-    {
-        return strlen_utf8(content);
-    }
 };
 
 #endif

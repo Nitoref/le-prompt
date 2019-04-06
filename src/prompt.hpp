@@ -11,30 +11,27 @@ class Prompt
 {
 public:
     Prompt(PromptConfig options);
-    void parse_left_segments();
-    void parse_right_segments();
-    void print_left();
-    void print_right();
+    void parse_segments();
+    std::string print_left_segments();
+    std::string print_right_segments();
 
-private:
-    std::unordered_map<std::string, ThreadedSegment*> segments_;
-    std::vector<ThreadedSegment*> threads_;
-    std::vector<ThreadedSegment*> right_threads_;
-
-    std::string left_;
-    std::string right_;
-    
+    size_t left_length();
+    size_t right_length();
     PromptConfig options_;
-    ColorPrinter printer_;
-    size_t length_   =  0;
-    size_t length_r_ =  0;
+
     int prev_color_  = -1;
+private:
+    std::unordered_map<std::string, ThreadedSegment*> segments_map_;
+
+    std::vector<ThreadedSegment*> l_segments_;
+    std::vector<ThreadedSegment*> r_segments_;
+
+    ColorPrinter printer_;
     
-    void parse_left_segments(std::vector<std::string> segments);
-    void parse_right_segments(std::vector<std::string> segments);
-    void print_segment(Segment s);
-    void print_r_segment(Segment s);
-    void reset();
+    void        parse_segments(std::vector<std::string> list, std::vector<ThreadedSegment*>& threads);
+    std::string merge_segments(std::vector<ThreadedSegment*>& threads, std::string(Prompt::*f)(Segment));
+    std::string print_left_segment(Segment s);
+    std::string print_right_segment(Segment s);
 
     ThreadedSegment* get_segment_by_name(std::string str);
 };

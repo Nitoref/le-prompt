@@ -4,7 +4,7 @@
 
 
 static const
-std::unordered_map<int, std::string> signalMap
+std::unordered_map<int, std::string> signal_map
 {
     {   1      ,     "ERROR"},
     {   2      ,     "USAGE"},
@@ -44,18 +44,17 @@ std::unordered_map<int, std::string> signalMap
 void
 SegmentExit::make()
 {
-    int error = opt.args.prev_error;
+    int error = opt.shell.prev_error_;
     if (!error)
     {
         return;
     }
-
     if (opt.args.numeric_exit_codes)
     {
-        segment.content.assign(std::to_string(error));
+        segment.content = std::to_string(error);
     }
     else
-    if (auto signal = signalMap.find(error); signal != signalMap.end())
+    if (auto signal = signal_map.find(error); signal != signal_map.end())
     {
         segment.content.assign(signal->second);
     }
