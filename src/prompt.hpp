@@ -21,7 +21,7 @@ public:
 
     int prev_color_  = -1;
 private:
-    std::unordered_map<std::string, ThreadedSegment*> segments_map_;
+    std::unordered_map<std::string, std::function<ThreadedSegment*()>> segments_map_;
 
     std::vector<ThreadedSegment*> l_segments_;
     std::vector<ThreadedSegment*> r_segments_;
@@ -30,6 +30,7 @@ private:
     
     void        parse_segments(std::vector<std::string> list, std::vector<ThreadedSegment*>& threads);
     std::string merge_segments(std::vector<ThreadedSegment*>& threads, std::string(Prompt::*f)(Segment));
+    std::string print_segment(Segment s);
     std::string print_left_segment(Segment s);
     std::string print_right_segment(Segment s);
 

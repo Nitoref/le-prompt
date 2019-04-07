@@ -49,34 +49,34 @@ struct SegmentGit: public ThreadedSegment{
     using ThreadedSegment::ThreadedSegment;
     void make();
 };
-struct SegmentGitName: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitAhead: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitBehind: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitStaged: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitNotStaged: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitUntracked: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
-struct SegmentGitConflicted: public ThreadedSegment{
-    using ThreadedSegment::ThreadedSegment;
-    void make();
-};
+// struct SegmentGitName: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitAhead: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitBehind: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitStaged: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitNotStaged: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitUntracked: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
+// struct SegmentGitConflicted: public ThreadedSegment{
+//     using ThreadedSegment::ThreadedSegment;
+//     void make();
+// };
 
 
 #endif

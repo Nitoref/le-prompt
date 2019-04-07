@@ -11,14 +11,14 @@ Prompt::Prompt(PromptConfig options):
     printer_(options.shell)
 {
     segments_map_ = {
-        {"user", new SegmentUser(this->options_)},
-        {"root", new SegmentRoot(this->options_)},
-        {"pwd",  new SegmentPwd(this->options_)},
-        {"exit", new SegmentExit(this->options_)},
-        {"host", new SegmentHost(this->options_)},
-        {"jobs", new SegmentJobs(this->options_)},
-        {"git",  new SegmentGit(this->options_)},
-        {"time", new SegmentTime(this->options_)},
+        {"user", [this]() -> ThreadedSegment* {return new SegmentUser(this->options_);}},
+        {"root", [this]() -> ThreadedSegment* {return new SegmentRoot(this->options_);}},
+        {"pwd",  [this]() -> ThreadedSegment* {return new SegmentPwd(this->options_);}},
+        {"exit", [this]() -> ThreadedSegment* {return new SegmentExit(this->options_);}},
+        {"host", [this]() -> ThreadedSegment* {return new SegmentHost(this->options_);}},
+        {"jobs", [this]() -> ThreadedSegment* {return new SegmentJobs(this->options_);}},
+        {"git",  [this]() -> ThreadedSegment* {return new SegmentGit(this->options_);}},
+        {"time", [this]() -> ThreadedSegment* {return new SegmentTime(this->options_);}},
     };
 }
 
@@ -26,7 +26,7 @@ ThreadedSegment*
 Prompt::get_segment_by_name(std::string str)
 {
     if (auto s = segments_map_.find(str); s != segments_map_.end())
-        return s->second;
+        return (s->second)();
     return nullptr;
 }
 
@@ -91,6 +91,19 @@ Prompt::print_right_segments()
 }
 
 std::string
+Prompt::print_segment(Segment s) 
+{
+    std::string output;
+    output += printer_.bg(s.style.bg);
+    output += printer_.fg(s.style.fg);
+    output += ' ';
+    output += s.content;
+    output += ' ';
+    prev_color_ = s.style.bg;
+    return output;
+}
+
+std::string
 Prompt::print_left_segment(Segment s)
 {
     std::string output;
@@ -106,12 +119,7 @@ Prompt::print_left_segment(Segment s)
         output += printer_.fg(prev_color_);
         output += options_.symbols.separator;
     }
-    output += printer_.bg(s.style.bg);
-    output += printer_.fg(s.style.fg);
-    output += ' ';
-    output += s.content;
-    output += ' ';
-    prev_color_ = s.style.bg;
+    output += print_segment(s);
     return output;
 }
 
@@ -132,12 +140,7 @@ Prompt::print_right_segment(Segment s)
         output += printer_.fg(s.style.bg);
         output += options_.symbols.r_separator;
     }
-    output += printer_.bg(s.style.bg);
-    output += printer_.fg(s.style.fg);
-    output += ' ';
-    output += s.content;
-    output += ' ';
-    prev_color_ = s.style.bg;
+    output += print_segment(s);
     return output;
 }
 
