@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 project(powerline)
 
 set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -Wall -Wextra -pedantic -fno-rtti -lgit2")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -Wall -Wextra -fno-rtti -lgit2")
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 include_directories( ${PROJECT_SOURCE_DIR}/src/ )
 

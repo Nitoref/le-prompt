@@ -20,7 +20,6 @@
         "max_width_ratio"   : 0,
         "max_segment_width" : 0,
         "colorize_hostname" : false,
-        "truncate_segment_width" : 0,
         "numeric_exit_codes" : true,
         "shorten_g_k_e_names" : false,
         "duration" : "",
