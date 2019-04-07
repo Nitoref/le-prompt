@@ -1,6 +1,7 @@
 #include "prompt.hpp"
 #include "utils.hpp"
 
+#include <functional>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -47,46 +48,31 @@ Prompt::parse_segments(std::vector<std::string> list, std::vector<ThreadedSegmen
 void
 Prompt::parse_segments()
 {
-    parse_segments(options_.args.left_segments, l_segments_);
-    parse_segments(options_.args.right_segments, r_segments_);
+    parse_segments(options_.args.left_segments, left_threads_);
+    parse_segments(options_.args.right_segments, right_threads_);
 }
 
 
+
 std::string
-Prompt::merge_segments(std::vector<ThreadedSegment*>& threads, std::string(Prompt::*f)(Segment))
+Prompt::make_separator(Segment s, bool left)
 {
     std::string output;
-    for (auto &thread : threads)
+    std::string separator  = left ? "" : "";
+    std::string separatort = left ? "" : "";
+    if (s.style.bg == prev_color_)
     {
-        thread->join();
-        if (!thread->segment.content.empty())
-        {
-            output += (this->*f)(thread->segment);
-        }
+        output += printer_.fg(s.style.fg);
+        output += separatort;
     }
-    return output;
-}
-
-std::string
-Prompt::print_left_segments()
-{
-    std::string output;
-    output += merge_segments(l_segments_, &Prompt::print_left_segment);
-    output += printer_.reset();
-    output += printer_.fg(prev_color_);
-    output += options_.symbols.separator;
-    output += printer_.reset();
-    prev_color_ = -1;
-    return output;
-}
-
-std::string
-Prompt::print_right_segments()
-{
-    std::string output;
-    output += merge_segments(r_segments_, &Prompt::print_right_segment);
-    output += printer_.reset();
-    prev_color_ = -1;
+    else
+    if (prev_color_ != -1)
+    {
+        output += printer_.bg(s.style.bg);
+        output += printer_.fg(prev_color_);
+        output += separator;
+    }
+    prev_color_ = s.style.bg;
     return output;
 }
 
@@ -99,57 +85,65 @@ Prompt::print_segment(Segment s)
     output += ' ';
     output += s.content;
     output += ' ';
-    prev_color_ = s.style.bg;
     return output;
 }
 
-std::string
-Prompt::print_left_segment(Segment s)
-{
-    std::string output;
-    if (s.style.bg == prev_color_)
-    {
-        output += printer_.fg(s.style.fg);
-        output += options_.symbols.separator_thin;
-    }
-    else
-    if (prev_color_ != -1)
-    {
-        output += printer_.bg(s.style.bg);
-        output += printer_.fg(prev_color_);
-        output += options_.symbols.separator;
-    }
-    output += print_segment(s);
-    return output;
-}
 
 std::string
-Prompt::print_right_segment(Segment s)
+Prompt::print_left_segments()
 {
     std::string output;
-    if (s.style.bg == prev_color_)
-    {
-        output += printer_.fg(s.style.fg);
-        output += options_.symbols.r_separator_thin;
-    }
-    else
-    {
-        if (prev_color_ != -1){
-            output += printer_.bg(prev_color_);
+    for (auto &thread : left_threads_) {
+        thread->join();
+        if (!thread->segment.content.empty()) {
+            output += make_separator(thread->segment, 1);
+            output += print_segment(thread->segment);
+            // output += print_left_segment(thread->segment);
         }
-        output += printer_.fg(s.style.bg);
-        output += options_.symbols.r_separator;
     }
-    output += print_segment(s);
+    output += printer_.reset();
+    output += printer_.fg(prev_color_);
+    output += options_.symbols.separator;
+    
+    prev_color_ = -1;
     return output;
 }
+
+std::string
+Prompt::print_right_segments()
+{
+    std::string output;
+    for (auto &thread : right_threads_) {
+        thread->join();
+        if (!thread->segment.content.empty()) {
+            output.insert(0, make_separator(thread->segment, 0));
+            output.insert(0, print_segment(thread->segment));
+            // output.insert(0, print_right_segment(thread->segment));
+        }
+    }
+    output.insert(0, options_.symbols.r_separator);
+    output.insert(0, printer_.fg(prev_color_));
+    
+    output += printer_.reset();
+    prev_color_ = -1;
+    return output;
+}
+
+
+
+
+
+
+
+
+
 
 
 size_t
 Prompt::right_length()
 {
     size_t length = 0;
-    for (auto& thread: r_segments_)
+    for (auto& thread: right_threads_)
         if (!thread->segment.content.empty())
             length += 3 + utils::string::length(thread->segment.content);
     return length + 1;
@@ -158,7 +152,7 @@ size_t
 Prompt::left_length()
 {
     size_t length = 0;
-    for (auto& thread: l_segments_)
+    for (auto& thread: left_threads_)
         if (!thread->segment.content.empty())
             length += 3 + utils::string::length(thread->segment.content);
     return length + 1;

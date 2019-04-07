@@ -8,9 +8,9 @@
                 "exit"
             ],
             "right": [
-                "jobs",
+                "time",
                 "git",
-                "time"
+                "jobs"
             ]
         },
         "time_format" : "%H:%M",

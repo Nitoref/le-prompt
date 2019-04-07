@@ -23,8 +23,8 @@ public:
 private:
     std::unordered_map<std::string, std::function<ThreadedSegment*()>> segments_map_;
 
-    std::vector<ThreadedSegment*> l_segments_;
-    std::vector<ThreadedSegment*> r_segments_;
+    std::vector<ThreadedSegment*> left_threads_;
+    std::vector<ThreadedSegment*> right_threads_;
 
     ColorPrinter printer_;
     
@@ -33,8 +33,10 @@ private:
     std::string print_segment(Segment s);
     std::string print_left_segment(Segment s);
     std::string print_right_segment(Segment s);
+    std::string make_separator(Segment s, bool left);
 
     ThreadedSegment* get_segment_by_name(std::string str);
+
 };
 
 #endif

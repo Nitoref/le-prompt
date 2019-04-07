@@ -41,6 +41,15 @@ exec(const std::string& cmd)
 namespace string
 {
 
+void prepend(std::string& where, std::string what)
+{
+    where.insert(0, what);
+}
+void append(std::string& where, std::string what)
+{
+    where.append(what);
+}
+
 std::string
 safe(const char* s)
 {
