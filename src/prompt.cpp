@@ -25,9 +25,7 @@ Prompt::Prompt(PromptConfig options):
 ThreadedSegment*
 Prompt::get_segment_by_name(std::string str)
 {
-    // auto s = segments_map_[str];
-    // return s ? : nullptr;
-    if (auto& s = segments_map_.find(str); s != segments_map_.end())
+    if (auto s = segments_map_.find(str); s != segments_map_.end())
         return s->second;
     return nullptr;
 }
