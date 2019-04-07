@@ -11,34 +11,37 @@ Prompt::Prompt(PromptConfig options):
     printer_(options.shell)
 {
     segments_map_ = {
-        {"user", new SegmentUser(this->options_)},
-        {"root", new SegmentRoot(this->options_)},
-        {"pwd",  new SegmentPwd(this->options_)},
-        {"exit", new SegmentExit(this->options_)},
-        {"host", new SegmentHost(this->options_)},
-        {"jobs", new SegmentJobs(this->options_)},
-        {"git",  new SegmentGit(this->options_)},
-        {"time", new SegmentTime(this->options_)},
+        {"user", SegmentUser},
+        {"root", SegmentRoot},
+        {"pwd",  SegmentPwd},
+        {"exit", SegmentExit},
+        {"host", SegmentHost},
+        {"jobs", SegmentJobs},
+        {"git",  SegmentGit},
+        {"time", SegmentTime},
     };
+    l_segments_.reserve(segments_map_.size());
+    r_segments_.reserve(segments_map_.size());
 }
 
-ThreadedSegment*
+std::function<Segment(PromptConfig&)>*
 Prompt::get_segment_by_name(std::string str)
 {
-    auto& s = segments_map_[str];
-    return s ? : NULL;
+    // if (auto s = segments_map_.find(str); s != segments_map_.end())
+    //     return &s;
+    return &segments_map_[str];
+    return nullptr;
 }
 
 
 void
-Prompt::parse_segments(std::vector<std::string> list, std::vector<ThreadedSegment*>& threads)
+Prompt::parse_segments(std::vector<std::string> list, std::vector<Segment>& segments)
 {
     for (auto& segment: list)
     {
-        if (ThreadedSegment *s = get_segment_by_name(segment))
+        if (auto *function = get_segment_by_name(segment))
         {
-            s->init();
-            threads.push_back(s);
+            segments.push_back((*function)(options_));
         }
     }
 }
@@ -52,15 +55,14 @@ Prompt::parse_segments()
 
 
 std::string
-Prompt::merge_segments(std::vector<ThreadedSegment*>& threads, std::string(Prompt::*f)(Segment))
+Prompt::merge_segments(std::vector<Segment>& segments, std::string(Prompt::*format)(Segment))
 {
     std::string output;
-    for (auto &thread : threads)
+    for (auto &segment : segments)
     {
-        thread->join();
-        if (!thread->segment.content.empty())
+        if (!segment.content.empty())
         {
-            output += (this->*f)(thread->segment);
+            output += (this->*format)(segment);
         }
     }
     return output;
@@ -145,17 +147,17 @@ size_t
 Prompt::right_length()
 {
     size_t length = 0;
-    for (auto& thread: r_segments_)
-        if (!thread->segment.content.empty())
-            length += 3 + utils::string::length(thread->segment.content);
+    for (auto& segment: r_segments_)
+        if (!segment.content.empty())
+            length += 3 + utils::string::length(segment.content);
     return length + 1;
 }
 size_t
 Prompt::left_length()
 {
     size_t length = 0;
-    for (auto& thread: l_segments_)
-        if (!thread->segment.content.empty())
-            length += 3 + utils::string::length(thread->segment.content);
+    for (auto& segment: l_segments_)
+        if (!segment.content.empty())
+            length += 3 + utils::string::length(segment.content);
     return length + 1;
 }

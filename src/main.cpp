@@ -18,11 +18,16 @@ int main(int argc, char const *argv[])
     {
     	int right_length = prompt.right_length();
     	int left_length  = prompt.left_length();
-    	int offset = prompt.options_.shell.width_ - right_length - left_length + 2;
-    	if (offset > 0) {
-    		output += std::string(offset, ' ');
-    		output += prompt.print_right_segments();
-    	}
+    	int offset = prompt.options_.shell.width_ - right_length - left_length;
+    	output+= std::to_string(prompt.options_.shell.width_);
+    	output+=", ";
+    	output+= std::to_string(right_length);
+    	output+=", ";
+    	output+= std::to_string(left_length);
+    	// if (offset > 0) {
+    	// 	output += std::string(offset, ' ');
+    	// 	output += prompt.print_right_segments();
+    	// }
     	output += "\\e[G";
     	output += '\n';
     	output += std::to_string(left_length + 2);

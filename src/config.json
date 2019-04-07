@@ -4,11 +4,11 @@
             "left": [
                 "host",
                 "pwd",
-                "jobs",
                 "root",
                 "exit"
             ],
             "right": [
+                "jobs",
                 "git",
                 "time"
             ]
