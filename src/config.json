@@ -2,7 +2,7 @@
     "args" : {
         "segments" : {
             "left": [
-                "host",
+                "user",
                 "pwd",
                 "root",
                 "exit"
