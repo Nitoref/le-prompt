@@ -16,9 +16,10 @@ struct GitStatus
     size_t ahead  = 0;
     size_t behind = 0;
     size_t staged = 0;
-    size_t not_staged  = 0;
+    size_t not_staged = 0;
     size_t untracked  = 0;
     size_t conflicted = 0;
+    size_t stashed = 0;
 };
 
 int get_git_status(GitStatus& status);
@@ -122,8 +123,7 @@ SegmentGit(PromptConfig p)
     segment.style = p.theme.repo_clean;
  
     get_git_status(status);
-    if (status.name.empty())
-    {
+    if (status.name.empty()) {
         return segment;
     }
 
@@ -134,46 +134,57 @@ SegmentGit(PromptConfig p)
     if (  status.ahead     || status.behind
        || status.staged    || status.not_staged
        || status.untracked || status.conflicted
-    ){
+    ){ 
         segment.style = p.theme.repo_dirty;
         if (p.args.git_mode != "simple")
          return segment;
 
-        
-        if (status.ahead){
+        if (status.ahead) {
             segment.content += ' ';
-         segment.content += std::to_string(status.ahead);
+            segment.content += std::to_string(status.ahead);
             segment.content += p.symbols.git_ahead;
         }
-        if (status.behind){
+        if (status.behind) {
             segment.content += ' ';
-         segment.content += std::to_string(status.behind);
+            segment.content += std::to_string(status.behind);
             segment.content += p.symbols.git_behind;
         }
-        if (status.staged){
+        if (status.staged) {
             segment.content += ' ';
-         segment.content += std::to_string(status.staged);
+            segment.content += std::to_string(status.staged);
             segment.content += p.symbols.git_staged;
         }
-        if (status.not_staged){
+        if (status.not_staged) {
             segment.content += ' ';
-         segment.content += std::to_string(status.not_staged);
+            segment.content += std::to_string(status.not_staged);
             segment.content += p.symbols.git_not_staged;
         }
-        if (status.untracked){
+        if (status.untracked) {
             segment.content += ' ';
-         segment.content += std::to_string(status.untracked);
+            segment.content += std::to_string(status.untracked);
             segment.content += p.symbols.git_untracked;
         }
-        if (status.conflicted){
+        if (status.conflicted) {
             segment.content += ' ';
-         segment.content += std::to_string(status.conflicted);
+            segment.content += std::to_string(status.conflicted);
             segment.content += p.symbols.git_conflicted;
         }
+    }
+    if (status.stashed) {
+        segment.content += ' ';
+        segment.content += std::to_string(status.stashed);
+        segment.content += p.symbols.git_stashed;
     }
     return segment;
 };
 
+
+int
+get_stashed(size_t index, const char *message, const git_oid *stash_id, void *status)
+{
+    ((GitStatus*)status)->stashed ++;
+    return 0;
+}
 
 int
 get_git_status(GitStatus& status)
@@ -216,7 +227,8 @@ get_git_status(GitStatus& status)
     {
         return 1;
     }
- 
+    git_stash_foreach(repository, &get_stashed, (void*)&status);
+
     git_status_list_free(status_list);
     git_repository_free(repository);
     git_libgit2_shutdown();

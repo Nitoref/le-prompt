@@ -50,6 +50,7 @@
         "git_not_staged" : "\u270E",
         "git_conflicted" : "\u273C",
         "git_untracked" :  "\u2026",
+        "git_stashed" :    "\u2691",
         "cwd_wrap" :       "\u2026"
     },
     "theme" : {
