@@ -6,6 +6,7 @@
 #include <cstring>
 #include <string>
 
+#define ESCAPE "\u001b["
 #define DEFAULT '9'
 #define BG_STD_ '4'
 #define FG_STD_ '3'
@@ -13,29 +14,24 @@
 #define FG_256_ "38;5;"
 
 
-template<typename ...Args>
-void print(Args&&... args) {
-    (std::cout << ... << args);
-}
 
-struct ColorPrinter
+struct Printer
 {
-    ColorPrinter(Shell shell):
+    Printer(Shell shell):
         wrap(shell.wrap),
-        unwrap(shell.unwrap),
-        escape(shell.escape)
+        unwrap(shell.unwrap)
     {
         wrap_mode(1);
     };
+    Printer() = default;
     std::string init;
     std::string stop;
     std::string wrap;
     std::string unwrap;
-    std::string escape;
 
     void wrap_mode(bool yes)
     {
-        init = escape;
+        init = ESCAPE;
         stop = "";
         if (yes) {
             init.insert(0, wrap);

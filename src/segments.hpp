@@ -21,10 +21,4 @@ Segment SegmentAws  (PromptConfig p);
 Segment SegmentVirtualEnv(PromptConfig p);
 
 
-
-using segment_constructor_t = std::function<Segment(PromptConfig)>;
-
-segment_constructor_t*
-get_segment_by_name(std::string str);
-
 #endif

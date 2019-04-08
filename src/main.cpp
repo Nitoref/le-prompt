@@ -1,6 +1,5 @@
-#include <ios>
 #include "prompt.hpp"
-
+#include <ios>
 #include <string>
 #include <iostream>
 
@@ -9,7 +8,7 @@
 int main(int argc, char const *argv[])
 {
     std::ios_base::sync_with_stdio(false);
-    Prompt prompt { PromptConfig { argc, argv }};
+    Prompt prompt { argc, argv };
 
     prompt.make_segments();
     std::string output;

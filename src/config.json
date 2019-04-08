@@ -92,13 +92,9 @@
         "nix_shell":      { "fg":   0, "bg" :   4},
         "duration":       { "fg": -10, "bg" : -10}
     },
-    "custom" : {
-        "yo" : {
-            "command" : "echo WESH",
-            "style" : {"bg":155, "fg": 210}
-        },
+    "extension" : {
         "trkl" : {
-            "command" : "echo BIEN ?",
+            "command" : "printf WESH",
             "style" : {"bg":155, "fg": 210}
         }
     }

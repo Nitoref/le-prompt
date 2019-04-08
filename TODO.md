@@ -6,22 +6,22 @@
 
 > Default modules
 
-👌  Cwd
+✅  Cwd
 👌  Exitcode
-👌  Git
+✅  Git
 👌  Hostname
 ❌  Hg
 👌  Jobs
 👌  Readonly
-✅  Root
+👌  Root
 👌  Ssh
 👌  Username
 👌  VirtualEnv
+👌  Aws
 
 
 > Other modules
 
-✅  Aws
 ❌  Docker
 ❌  Dotenv
 ❌  Duration

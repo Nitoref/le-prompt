@@ -3,28 +3,36 @@
 #include <string>
 
 
-void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<Segment()>>& m)
+void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<Segment(PromptConfig)>>& m)
 {
 	std::string command;
 	Style style;
 
-	if (!j.is_object()) {
-		return;
-	}
+	if (j.is_object())
+	{
+		for (auto& [name, segment]: j.items())
+		{
+			if (auto l = segment.find("command"); l != segment.end())
+			{
+				command = l->get<std::string>();
+			}
+			else continue;
 
-	for (auto& [name, segment]: j) {
-		
-		if (auto l = segment.find("command"); l != segment.end()) {
-			command = l->get<std::string>();
-		} else continue;
-		if (auto l = segment.find("style"); l != segment.end()) {
-			style = l->get<Style>();
-		} else continue;
+			if (auto l = segment.find("style"); l != segment.end())
+			{
+				style = l->get<Style>();
+			}
+			else continue;
 
-		m.emplace ( name, [=]() -> Segment {
-			auto result = utils::exec(command);
-			return Segment {result.empty() ? "" : result.front(), style};
-		});
+			m.emplace ( name, [=](PromptConfig p) -> Segment {
+				auto result = utils::exec(command);
+				if (!result.empty()) {
+					utils::string::replace_all(result[0], "\n", "");
+					return Segment {result[0], style};
+				}
+				return Segment{};
+			});
+		}
 	}
 }
 

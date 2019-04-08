@@ -18,12 +18,12 @@ struct Arguments
     std::string default_user       = "";
     std::string default_host       = "";
     std::string time_format        = "%T";
-    std::string git_mode           = "simple";
-    std::string cwd_mode           = "simple";
+    std::string git_mode           = "";
+    std::string cwd_mode           = "";
     std::string shell              = "";
     std::string duration           = "";
     std::vector<std::string> ignore_repos   = {};
-    std::vector<std::string> left_segments  = {"user","host","root"};
+    std::vector<std::string> left_segments  = {"user","host","pwd","root"};
     std::vector<std::string> right_segments = {};
     std::map<std::string, std::string> path_aliases;
 };

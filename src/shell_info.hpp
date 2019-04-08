@@ -23,10 +23,12 @@ struct Shell
 
 	Shell(std::string sh)
 	{
-		if (size_t i = sh.find('-'); i != std::string::npos) {
+		if (size_t i = sh.find('-'); i != std::string::npos)
+		{
 			sh.erase(0, i+1);
 		}
-		if (size_t i = sh.rfind('/'); i != std::string::npos) {
+		if (size_t i = sh.rfind('/'); i != std::string::npos)
+		{
 			sh.erase(0, i+1);
 		}
 		name_ = sh;
@@ -34,7 +36,6 @@ struct Shell
 		if (sh == "bash") {
 			wrap       = "\\[";
 			unwrap     = "\\]";
-			escape     = "\u001b[";
 
 			indicator  = "\\$";
 			backslash  = "\\\\";
@@ -45,7 +46,6 @@ struct Shell
 		if (sh == "zsh") {
 			wrap       = "%{";
 			unwrap     = "%}";
-			escape     = "\u001b[";
 			
 			indicator  = "%#";
 			backslash  = "\\";
@@ -56,13 +56,11 @@ struct Shell
 		if (sh == "tcsh" || sh == "csh") {
 			wrap       = "%{";
 			unwrap     = "%}";
-			escape     = "\u001b[";
 			indicator  = "%#";
 		}
 		else {
 		    wrap       = "";
 		    unwrap     = "";
-		    escape     = "\u001b[";
 
 		    indicator  = "$";
 		    backslash  = "\\";

@@ -21,11 +21,12 @@ int term_width ()
 }
 
 
-std::list<std::string>
+std::vector<std::string>
 exec(const std::string& cmd)
 {
     std::array<char, 1024> buffer;
-    std::list<std::string> result;
+    std::vector<std::string> result;
+
     std::unique_ptr<FILE,decltype(&pclose)> pipe(popen(cmd.data(), "r"), pclose);
     if (pipe)
     {
@@ -53,9 +54,7 @@ void append(std::string& where, std::string what)
 std::string
 safe(const char* s)
 {
-    if (s == NULL)
-        return "";
-    return s;
+    return s ?: "";
 }
 void
 replace_all(std::string& in, const std::string& from, const std::string& to)
@@ -89,55 +88,40 @@ length(const char * s_)
     size_t u;
     unsigned char b;
 
-    /* Handle any initial misaligned bytes. */
-    for (s = s_; (uintptr_t)(s) & (sizeof(size_t) - 1); s++) {
+    for (s = s_; (uintptr_t)(s) & (sizeof(size_t) - 1); s++)
+    {
         b = *s;
-
-        /* Exit if we hit a zero byte. */
         if (b == '\0')
             goto done;
 
-        /* Is this byte NOT the first byte of a character? */
         count += (b >> 7) & ((~b) >> 6);
     }
-
-    /* Handle complete blocks. */
-    for (; ; s += sizeof(size_t)) {
-        /* Prefetch 256 bytes ahead. */
+    for (; ; s += sizeof(size_t))
+    {
         __builtin_prefetch(&s[256], 0, 0);
-
-        /* Grab 4 or 8 bytes of UTF-8 data. */
         u = *(size_t *)(s);
-
-        /* Exit the loop if there are any zero bytes. */
-        if ((u - ONEMASK) & (~u) & (ONEMASK * 0x80))
+        if ((u - ONEMASK) & (~u) & (ONEMASK * 0x80)) {
             break;
-
-        /* Count bytes which are NOT the first byte of a character. */
+        }
         u = ((u & (ONEMASK * 0x80)) >> 7) & ((~u) >> 6);
         count += (u * ONEMASK) >> ((sizeof(size_t) - 1) * 8);
     }
 
-    /* Take care of any left-over bytes. */
-    for (; ; s++) {
+    for (; ; s++)
+    {
         b = *s;
-
-        /* Exit if we hit a zero byte. */
-        if (b == '\0')
+        if (b == '\0') {
             break;
-
-        /* Is this byte NOT the first byte of a character? */
+        }
         count += (b >> 7) & ((~b) >> 6);
     }
-
-    done:
+done:
     return ((s - s_) - count);
 }
 
 size_t length(std::string s) {
     return length(s.c_str());
 }
-
 
 
 }

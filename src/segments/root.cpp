@@ -8,10 +8,12 @@ SegmentRoot(PromptConfig p)
 	Segment segment;
     segment.content = p.shell.indicator;
 
-    if (!p.shell.prev_error_) {
+    if (!p.shell.prev_error_)
+    {
         segment.style = p.theme.cmd_passed;
     }
-    else {
+    else
+    {
         segment.style = p.theme.cmd_failed;
     }
 

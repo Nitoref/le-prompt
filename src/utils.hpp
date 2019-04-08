@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <list>
+#include <vector>
 #include <string>
 
 namespace utils
@@ -20,7 +20,7 @@ size_t length(const char * s_);
 size_t length(std::string s);
 }
 
-std::list<std::string> exec(const std::string& cmd);
+std::vector<std::string> exec(const std::string& cmd);
 int term_width();
 
 }
