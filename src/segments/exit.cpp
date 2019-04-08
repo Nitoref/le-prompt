@@ -1,5 +1,5 @@
 #include <unordered_map> 
-#include "../modules.hpp"
+#include "../segments.hpp"
 
 
 
@@ -41,15 +41,16 @@ std::unordered_map<int, std::string> signal_map
     { 128 + 29 ,   "SIGINFO"},
 };
 
-void
-SegmentExit::make()
+Segment
+SegmentExit(PromptConfig p)
 {
-    int error = opt.shell.prev_error_;
+    Segment segment;
+    int error = p.shell.prev_error_;
     if (!error)
     {
-        return;
+        return segment;
     }
-    if (opt.args.numeric_exit_codes)
+    if (p.args.numeric_exit_codes)
     {
         segment.content = std::to_string(error);
     }
@@ -58,5 +59,6 @@ SegmentExit::make()
     {
         segment.content.assign(signal->second);
     }
-    segment.style = opt.theme.cmd_failed;
+    segment.style = p.theme.cmd_failed;
+    return segment;
 };

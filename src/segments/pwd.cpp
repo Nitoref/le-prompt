@@ -1,13 +1,13 @@
 #include <pwd.h>
 #include <unistd.h>
 #include <string>
-#include "../modules.hpp"
+#include "../segments.hpp"
 #include "../utils.hpp"
 
 
 
 int
-removeHome(std::string& path)
+removeHome(std::string path)
 {
     std::string home = utils::string::safe(std::getenv("HOME"));
     if (home.empty())
@@ -45,17 +45,20 @@ fold(std::string& path, int max_depth)
     return 1;
 }
 
-void
-SegmentPwd::make()
+Segment
+SegmentPwd(PromptConfig p)
 {
+    Segment segment;
     segment.content = utils::string::safe(getenv("PWD"));
     removeHome(segment.content);
 
-    for (auto& alias: opt.args.path_aliases)
+    for (auto& alias: p.args.path_aliases)
     {
         utils::string::replace_all(segment.content, alias.first, alias.second);
     };
 
-    fold(segment.content, opt.args.cwd_max_depth);
-    segment.style = opt.theme.path;
+    fold(segment.content, p.args.cwd_max_depth);
+    segment.style = p.theme.path;
+
+    return segment;
 };

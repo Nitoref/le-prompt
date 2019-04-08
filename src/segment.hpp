@@ -26,6 +26,10 @@ struct Segment
         content(content),
         style(style)
     {};
+
+    operator bool() {
+        return !content.empty();
+    }
 };
 
 #endif

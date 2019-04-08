@@ -3,16 +3,18 @@
 #include <string>
 #include <cstdlib>
 #include <unistd.h>
-#include "../modules.hpp"
+#include "../segments.hpp"
 
 
 
-void
-SegmentHost::make()
+Segment
+SegmentHost(PromptConfig p)
 {
+	Segment segment;
     char* hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
     segment.content = hostname;
     segment.content.erase(segment.content.find('.'));
-    segment.style = opt.theme.hostname;
+    segment.style = p.theme.hostname;
+	return segment;
 };

@@ -1,12 +1,16 @@
-#include "modules.hpp"
+#include "segments.hpp"
 #include <unistd.h>
 #include "utils.hpp"
 
-void
-SegmentJobs::make()
+Segment
+SegmentJobs(PromptConfig p)
 {
+	Segment segment;
+	
 	std::string ppid = std::to_string(getppid());
 	int jobs = utils::exec("ps -a -oppid= | grep " + ppid).size() - 1;
 	segment.content = jobs ? std::to_string(jobs) : "";
-	segment.style = opt.theme.jobs;
+	segment.style = p.theme.jobs;
+
+	return segment;
 }

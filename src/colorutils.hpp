@@ -29,15 +29,15 @@ struct ColorPrinter
 
     inline std::string bg(int value)
     {
-        return escape_ + BG_256_ + std::to_string(value) + epacse_;
+        return escape_ + BG_256_ + std::to_string(value) + 'm' + epacse_;
     }
 
     inline std::string fg(int value){
-        return escape_ + FG_256_ + std::to_string(value) + epacse_;
+        return escape_ + FG_256_ + std::to_string(value) + 'm' + epacse_;
     }
 
     inline std::string reset(){
-        return escape_ + '0' + epacse_;
+        return escape_ + "0m" + epacse_;
     }
 
     inline std::string font_style(const char* str){
@@ -56,9 +56,30 @@ struct ColorPrinter
             {"overlined",   53}
         };
         if (auto code = y.find(str); code != y.end())
-            return escape_ + std::to_string(code->second) + epacse_;
+            return escape_ + std::to_string(code->second) + 'm' + epacse_;
         return "";
     }
 };
+
+
+namespace ansi
+{
+
+
+inline std::string bg(int value)
+{
+    return BG_256_ + std::to_string(value) + 'm';
+}
+inline std::string fg(int value){
+    return FG_256_ + std::to_string(value) + 'm';
+}
+inline std::string reset(){
+    return "0m";
+}
+
+
+
+}
+
 
 #endif

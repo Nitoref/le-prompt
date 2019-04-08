@@ -1,44 +1,41 @@
 #include <ios>
 #include "prompt.hpp"
 
+#include <string>
+#include <iostream>
 
 
 
 int main(int argc, char const *argv[])
 {
     std::ios_base::sync_with_stdio(false);
-    Prompt prompt { PromptConfig { argv }};
+    Prompt prompt { PromptConfig { argc, argv }};
 
-    prompt.parse_segments();
-
+    prompt.make_segments();
     std::string output;
-    output += prompt.print_left_segments();
 
-    if (prompt.options_.shell.name_ == "bash")
+
+    if (prompt.options_.shell.name_ == "bash" || prompt.options_.shell.name_ == "tcsh")
     {
-    	
-    	std::string x = prompt.print_right_segments();
-    	
     	int right_length = prompt.right_length();
     	int left_length  = prompt.left_length();
-    	int offset = prompt.options_.shell.width_ - right_length - left_length + 2;
+    	int offset = prompt.options_.shell.width_ - right_length;
 
     	if (offset > 0) {
+    		// output += "\\[";
     		output += std::string(offset, ' ');
-    		output += x;
+    		output += prompt.format_right_segments();
+    		// output += "\\e[G";
+    		// output += "\\]";
     	}
-    	
-    	output.insert(0, "\\[");
-    	output += "\\e[G";
-    	output += "\\]";
-    	output += "\\e[";
-    	output += std::to_string(left_length + 2);
-    	output += "C";
+    	output += prompt.options_.shell.escape_ + 'G' + prompt.options_.shell.escape_;
+    	output += prompt.format_left_segments();
     }
     else
     {
+    	output += prompt.format_left_segments();
     	output += '\n';
-	    output += prompt.print_right_segments();
+	    output += prompt.format_right_segments();
     }
     std::cout << output;
 }

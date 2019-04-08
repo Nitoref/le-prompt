@@ -9,14 +9,12 @@ namespace utils
 
 namespace string
 {
-std::string
-safe(const char* s);
+std::string safe(const char* s);
+void replace_all(std::string& in, const std::string& from, const std::string& to);
+void prepend(std::string& where, std::string what);
+void append(std::string& where, std::string what);
 
-void
-replace_all(std::string& in, const std::string& from, const std::string& to);
-
-size_t
-rnfind (std::string& s, char c, size_t n);
+size_t rnfind (std::string& s, char c, size_t n);
 
 size_t length(const char * s_);
 size_t length(std::string s);

@@ -1,14 +1,17 @@
 #include <stdlib.h>
-#include "../modules.hpp"
+#include "../segments.hpp"
 
 
-void
-SegmentRoot::make()
+Segment
+SegmentRoot(PromptConfig p)
 {
-    segment.content = opt.shell.indicator_;
+	Segment segment;
+    segment.content = p.shell.indicator_;
 
-    if (!opt.shell.prev_error_)
-        segment.style = opt.theme.cmd_passed;
+    if (!p.shell.prev_error_)
+        segment.style = p.theme.cmd_passed;
     else
-        segment.style = opt.theme.cmd_failed;
+        segment.style = p.theme.cmd_failed;
+
+    return segment;
 };

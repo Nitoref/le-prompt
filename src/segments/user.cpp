@@ -1,16 +1,19 @@
 #include <cstdlib>
 #include <unistd.h>
-#include "../modules.hpp"
+#include "../segments.hpp"
 #include "../utils.hpp"
 
 
-void
-SegmentUser::make()
+Segment
+SegmentUser(PromptConfig p)
 {
+	Segment segment;
     segment.content = utils::string::safe(getenv("USER"));
 
     if (getuid() != 0)
-        segment.style = opt.theme.username;
+        segment.style = p.theme.username;
     else
-        segment.style = opt.theme.username_root;
+        segment.style = p.theme.username_root;
+
+    return segment;
 };

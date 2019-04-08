@@ -1,83 +1,74 @@
 #include "prompt.hpp"
 #include "utils.hpp"
 
-#include <functional>
-#include <iostream>
+#include <future>
 #include <string>
-#include <sstream>
 
 
 Prompt::Prompt(PromptConfig options):
     options_(options),
     printer_(options.shell)
-{
-    segments_map_ = {
-        {"user", [this]() -> ThreadedSegment* {return new SegmentUser(this->options_);}},
-        {"root", [this]() -> ThreadedSegment* {return new SegmentRoot(this->options_);}},
-        {"pwd",  [this]() -> ThreadedSegment* {return new SegmentPwd(this->options_);}},
-        {"exit", [this]() -> ThreadedSegment* {return new SegmentExit(this->options_);}},
-        {"host", [this]() -> ThreadedSegment* {return new SegmentHost(this->options_);}},
-        {"jobs", [this]() -> ThreadedSegment* {return new SegmentJobs(this->options_);}},
-        {"git",  [this]() -> ThreadedSegment* {return new SegmentGit(this->options_);}},
-        {"time", [this]() -> ThreadedSegment* {return new SegmentTime(this->options_);}},
-    };
-}
-
-ThreadedSegment*
-Prompt::get_segment_by_name(std::string str)
-{
-    if (auto s = segments_map_.find(str); s != segments_map_.end())
-        return (s->second)();
-    return nullptr;
-}
+{}
 
 
 void
-Prompt::parse_segments(std::vector<std::string> list, std::vector<ThreadedSegment*>& threads)
+Prompt::make_segments()
 {
-    for (auto& segment: list)
-    {
-        if (ThreadedSegment *s = get_segment_by_name(segment))
-        {
-            s->init();
-            threads.push_back(s);
+    std::vector<std::future<Segment>> left_futures;
+    std::vector<std::future<Segment>> right_futures;
+
+    for (auto str: options_.args.left_segments) {
+        if (auto fun = get_segment_by_name(str)) {
+            left_futures.push_back( std::async(
+                std::launch::async,
+                [=](){ return (*fun)(options_);})
+            );
+        }
+    }
+
+    for (auto str: options_.args.right_segments) {
+        if (auto fun = get_segment_by_name(str)) {
+            right_futures.push_back( std::async(
+                std::launch::async,
+                [=](){ return (*fun)(options_);})
+            );
+        }
+    }
+
+    for (auto& future: left_futures) {
+        if (future.wait(); Segment segment = future.get()) {
+            left_segments_.push_back(segment);
+        }
+    }
+    for (auto& future: right_futures) {
+        if (future.wait(); Segment segment = future.get()) {
+            right_segments_.push_back(segment);
         }
     }
 }
 
-void
-Prompt::parse_segments()
-{
-    parse_segments(options_.args.left_segments, left_threads_);
-    parse_segments(options_.args.right_segments, right_threads_);
-}
-
-
-
 std::string
-Prompt::make_separator(Segment s, bool left)
+Prompt::make_separator(Segment s, std::string regular, std::string thin)
 {
     std::string output;
-    std::string separator  = left ? "" : "";
-    std::string separatort = left ? "" : "";
     if (s.style.bg == prev_color_)
     {
         output += printer_.fg(s.style.fg);
-        output += separatort;
+        output += thin;
     }
     else
     if (prev_color_ != -1)
     {
         output += printer_.bg(s.style.bg);
         output += printer_.fg(prev_color_);
-        output += separator;
+        output += regular;
     }
     prev_color_ = s.style.bg;
     return output;
 }
 
 std::string
-Prompt::print_segment(Segment s) 
+Prompt::format_segment(Segment s) 
 {
     std::string output;
     output += printer_.bg(s.style.bg);
@@ -88,72 +79,72 @@ Prompt::print_segment(Segment s)
     return output;
 }
 
-
 std::string
-Prompt::print_left_segments()
+Prompt::end_segment(std::string separator) 
 {
     std::string output;
-    for (auto &thread : left_threads_) {
-        thread->join();
-        if (!thread->segment.content.empty()) {
-            output += make_separator(thread->segment, 1);
-            output += print_segment(thread->segment);
-            // output += print_left_segment(thread->segment);
-        }
-    }
     output += printer_.reset();
     output += printer_.fg(prev_color_);
-    output += options_.symbols.separator;
-    
+    output += separator;
     prev_color_ = -1;
     return output;
 }
 
 std::string
-Prompt::print_right_segments()
+Prompt::format_segments(
+    std::vector<Segment> segments, 
+    std::function<void(std::string&, std::string)> add,
+    std::string regular, std::string thin)
 {
     std::string output;
-    for (auto &thread : right_threads_) {
-        thread->join();
-        if (!thread->segment.content.empty()) {
-            output.insert(0, make_separator(thread->segment, 0));
-            output.insert(0, print_segment(thread->segment));
-            // output.insert(0, print_right_segment(thread->segment));
-        }
+    for (auto &segment : segments) {
+        add(output, make_separator(segment, regular, thin));
+        add(output, format_segment(segment));
     }
-    output.insert(0, options_.symbols.r_separator);
-    output.insert(0, printer_.fg(prev_color_));
-    
-    output += printer_.reset();
-    prev_color_ = -1;
+    if (!output.empty()){
+        add(output, end_segment(regular));
+        output += printer_.reset();
+    }
     return output;
 }
 
-
-
-
-
-
-
-
-
-
-
-size_t
-Prompt::right_length()
+std::string
+Prompt::format_left_segments()
 {
-    size_t length = 0;
-    for (auto& thread: right_threads_)
-        if (!thread->segment.content.empty())
-            length += 3 + utils::string::length(thread->segment.content);
-    return length + 1;
+    return format_segments(
+        left_segments_, utils::string::append,
+        options_.symbols.separator, options_.symbols.separator_thin
+    );
 }
+
+std::string
+Prompt::format_right_segments()
+{
+    return format_segments(
+        right_segments_, utils::string::prepend,
+        options_.symbols.r_separator, options_.symbols.r_separator_thin
+    );
+}
+
+
+
 size_t
 Prompt::left_length()
 {
     size_t length = 0;
-    for (auto& thread: left_threads_)
-        if (!thread->segment.content.empty())
-            length += 3 + utils::string::length(thread->segment.content);
+    for (auto& segment: left_segments_) {
+        length += 2 + utils::string::length(segment.content);
+        length += utils::string::length(options_.symbols.separator);
+    }
+    return length + 1;
+}
+size_t
+Prompt::right_length()
+{
+    size_t length = 0;
+    for (auto& segment: right_segments_) {
+        length += 2 + utils::string::length(segment.content);
+        length += utils::string::length(options_.symbols.r_separator);
+    }
     return length + 1;
 }

@@ -32,12 +32,12 @@ struct Shell
 
 		if (sh == "bash")
 		{
-			// escape_    = "\\[\\e[";
-			// epacse_    = "m\\]";
-			// indicator_ = "\\$";
-			escape_    = "\\e[";
-			epacse_    = "m";
-			indicator_ = "$";
+			// escape_    = "\\e[";
+			// epacse_    = "";
+			// indicator_ = "$";
+			escape_    = "\\[\\e[";
+			epacse_    = "\\]";
+			indicator_ = "\\$";
 			backslash_ = "\\\\";
 			backtick_  = "\\`";
 			dollar_    = "\\$";
@@ -46,7 +46,7 @@ struct Shell
 		if (sh == "zsh")
 		{
 			escape_    = "%{\e[";
-			epacse_    = "m%}";
+			epacse_    = "%}";
 			indicator_ = "%#";
 			backslash_ = "\\";
 			backtick_  = "\\`";
@@ -56,13 +56,13 @@ struct Shell
 		if (sh == "tcsh")
 		{
 			escape_    = "%{\\e[";
-			epacse_    = "m%}";
+			epacse_    = "%}";
 			indicator_ = "%#";
 		}
 		else
 		{
 		    escape_    = "\e[";
-		    epacse_    = "m";
+		    epacse_    = "";
 		    indicator_ = "$";
 		    backslash_ = "\\";
 		    backtick_  = "`";
