@@ -12,6 +12,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include <functional>
 #include <unordered_map>
 
@@ -46,11 +47,11 @@ Prompt::Prompt(int argc, char const *argv[])
         {
             options.symbols = k->get<Symbols>();
         }
-        if (auto k = j.find("extension"); k != j.end())
-        {
-            auto extensions = k->get<std::unordered_map<std::string, segment_constructor_t>>();
-            segments_map_.insert(extensions.begin(), extensions.end());
-        }
+        // if (auto k = j.find("extension"); k != j.end())
+        // {
+        //     auto extensions = k->get<std::unordered_map<std::string, segment_constructor_t>>();
+        //     segments_map_.insert(extensions.begin(), extensions.end());
+        // }
     }
     catch (nlohmann::json::parse_error e) {
         std::cout << "Error parsing config file: Wrong syntax\n" << e.what();
@@ -79,8 +80,8 @@ Prompt::get_segment_by_name(std::string str)
 void
 Prompt::make_segments()
 {
-    std::vector<std::future<Segment>> left_futures;
-    std::vector<std::future<Segment>> right_futures;
+    std::vector<std::future<MultiSegment>> left_futures;
+    std::vector<std::future<MultiSegment>> right_futures;
     
     left_futures.reserve(options.args.left_segments.size());
     right_futures.reserve(options.args.left_segments.size());
@@ -117,7 +118,10 @@ Prompt::make_segments()
         else
         if (auto segment = future.get())
         {
-            left_segments_.push_back(segment);
+            for (auto&& s: segment)
+            {
+                s && left_segments_.emplace_back(std::move(s));
+            }
         }
     }
     for (auto& future: right_futures) {
@@ -129,7 +133,10 @@ Prompt::make_segments()
         else
         if (auto segment = future.get())
         {
-            right_segments_.push_back(segment);
+            for (auto&& s: segment)
+            {
+                s && right_segments_.emplace_back(std::move(s));
+            }
         }
     }
 }

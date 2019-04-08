@@ -3,7 +3,7 @@
 #include "utils.hpp"
 
 
-Segment SegmentVirtualEnv(PromptConfig p)
+MultiSegment SegmentVirtualEnv(PromptConfig p)
 {
     Segment segment;
     
@@ -16,5 +16,5 @@ Segment SegmentVirtualEnv(PromptConfig p)
     }
     segment.style = p.theme.virtual_env;
     
-    return segment;
+    return {segment};
 }

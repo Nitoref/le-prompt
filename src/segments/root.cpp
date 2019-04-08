@@ -2,7 +2,7 @@
 #include "../segments.hpp"
 
 
-Segment
+MultiSegment
 SegmentRoot(PromptConfig p)
 {
 	Segment segment;
@@ -17,5 +17,5 @@ SegmentRoot(PromptConfig p)
         segment.style = p.theme.cmd_failed;
     }
 
-    return segment;
+    return {segment};
 };

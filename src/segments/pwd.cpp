@@ -39,7 +39,7 @@ fold(std::string& path, int max_depth, std::string symbol)
     return;
 }
 
-Segment
+MultiSegment
 SegmentPwd(PromptConfig p)
 {
     Segment segment;
@@ -53,5 +53,5 @@ SegmentPwd(PromptConfig p)
     // fold(segment.content, p.args.cwd_max_depth, p.symbols.cwd_wrap);
     segment.style = p.theme.path;
 
-    return segment;
+    return {segment};
 };

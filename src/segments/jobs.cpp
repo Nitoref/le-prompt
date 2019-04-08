@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "utils.hpp"
 
-Segment
+MultiSegment
 SegmentJobs(PromptConfig p)
 {
 	Segment segment;
@@ -12,5 +12,5 @@ SegmentJobs(PromptConfig p)
 	segment.content = jobs ? std::to_string(jobs) : "";
 	segment.style = p.theme.jobs;
 
-	return segment;
+	return {segment};
 }

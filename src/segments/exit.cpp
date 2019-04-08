@@ -41,14 +41,14 @@ std::unordered_map<int, std::string> signal_map
     { 128 + 29 ,   "SIGINFO"},
 };
 
-Segment
+MultiSegment
 SegmentExit(PromptConfig p)
 {
     Segment segment;
     int error = p.shell.prev_error_;
     
     if (!error) {
-        return segment;
+        return {segment};
     }
     if (p.args.numeric_exit_codes) {
         segment.content = std::to_string(error);
@@ -62,5 +62,5 @@ SegmentExit(PromptConfig p)
     }
     
     segment.style = p.theme.cmd_failed;
-    return segment;
+    return {segment};
 };

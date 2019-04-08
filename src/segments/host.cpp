@@ -7,7 +7,7 @@
 
 
 
-Segment
+MultiSegment
 SegmentHost(PromptConfig p)
 {
 	Segment segment;
@@ -16,11 +16,11 @@ SegmentHost(PromptConfig p)
     gethostname(hostname, HOSTNAME_MAX);
 
     if (hostname == p.args.default_host) {
-    	return segment;
+    	return {segment};
     }
     segment.content = hostname;
     segment.content.erase(segment.content.find('.'));
     segment.style = p.theme.hostname;
 	
-	return segment;
+	return {segment};
 };

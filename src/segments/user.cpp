@@ -4,14 +4,14 @@
 #include "../utils.hpp"
 
 
-Segment
+MultiSegment
 SegmentUser(PromptConfig p)
 {
 	Segment segment;
     segment.content = utils::string::safe(getenv("USER"));
 
     if(segment.content == p.args.default_user) {
-    	return Segment{};
+    	return {Segment{}};
     }
 
     if (getuid() != 0) {
@@ -20,5 +20,5 @@ SegmentUser(PromptConfig p)
     else {
         segment.style = p.theme.username_root;
     }
-    return segment;
+    return {segment};
 };

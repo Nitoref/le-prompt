@@ -8,7 +8,7 @@
 #include "colorutils.hpp"
 #include "segments.hpp"
 
-using segment_constructor_t = std::function<Segment(PromptConfig)>;
+using segment_constructor_t = std::function<MultiSegment(PromptConfig)>;
 
 
 class Prompt

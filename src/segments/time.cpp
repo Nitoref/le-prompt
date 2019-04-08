@@ -4,7 +4,7 @@
 #include <sstream>
 
 
-Segment
+MultiSegment
 SegmentTime(PromptConfig p)
 {
 	Segment segment;
@@ -14,5 +14,5 @@ SegmentTime(PromptConfig p)
     s << std::put_time(std::localtime(&ctime), p.args.time_format.data());
     segment.content = s.str();
 	segment.style = p.theme.time;
-	return segment;
+	return {segment};
 }

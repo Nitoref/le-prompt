@@ -11,7 +11,7 @@
 #include <nlohmann/json.hpp>
 
 
-void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<Segment(PromptConfig)>>& m);
+// void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<Segment(PromptConfig)>>& m);
 void from_json(const nlohmann::json& j, Style& s);
 void from_json(const nlohmann::json& j, Theme& t);
 void from_json(const nlohmann::json& j, Symbols& s);

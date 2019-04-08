@@ -115,7 +115,7 @@ int get_name(GitStatus& status, git_repository *repo);
 // };
 
 
-Segment
+MultiSegment
 SegmentGit(PromptConfig p)
 {
     Segment segment;
@@ -124,7 +124,7 @@ SegmentGit(PromptConfig p)
  
     get_git_status(status);
     if (status.name.empty()) {
-        return segment;
+        return {segment};
     }
 
     segment.content = p.symbols.git_branch;
@@ -137,7 +137,7 @@ SegmentGit(PromptConfig p)
     ){ 
         segment.style = p.theme.repo_dirty;
         if (p.args.git_mode != "simple")
-         return segment;
+         return {segment};
 
         if (status.ahead) {
             segment.content += ' ';
@@ -175,7 +175,7 @@ SegmentGit(PromptConfig p)
         segment.content += std::to_string(status.stashed);
         segment.content += p.symbols.git_stashed;
     }
-    return segment;
+    return {segment};
 };
 
 

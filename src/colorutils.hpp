@@ -64,15 +64,15 @@ struct Printer
         static
         std::unordered_map<std::string, int> y =
         {
-            {"bold",         1},
-            {"faint",        2},
-            {"italic",       3},
-            {"underline",    4},
-            {"blink",        5},
-            {"rblink",       6},
-            {"reversed",       7},
-            {"conceal",  8},
-            {"crossed",  9},
+            {"bold",      1},
+            {"faint",     2},
+            {"italic",    3},
+            {"underline", 4},
+            {"blink",     5},
+            {"rblink",    6},
+            {"reversed",  7},
+            {"conceal",   8},
+            {"crossed",   9},
         };
         if (auto code = y.find(str); code != y.end())
             return init + std::to_string(code->second) + 'm' + stop;
