@@ -20,6 +20,5 @@ SegmentUser(PromptConfig p)
     else {
         segment.style = p.theme.username_root;
     }
-
     return segment;
 };

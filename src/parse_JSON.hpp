@@ -3,12 +3,14 @@
 
 #include <nlohmann/json.hpp>
 
+#include "segment.hpp"
 #include "arguments.hpp"
 #include "theme.hpp"
 #include "symbols.hpp"
 #include "shell_info.hpp"
 
 
+void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<Segment()>>& m);
 void from_json(const nlohmann::json& j, Style& s);
 void from_json(const nlohmann::json& j, Theme& t);
 void from_json(const nlohmann::json& j, Symbols& s);

@@ -2,12 +2,13 @@
 #include "utils.hpp"
 
 #include <future>
+#include <chrono>
 #include <string>
 
 
 Prompt::Prompt(PromptConfig options):
-    options_(options),
-    printer_(options.shell)
+    options(options),
+    printer(options.shell)
 {}
 
 
@@ -17,31 +18,39 @@ Prompt::make_segments()
     std::vector<std::future<Segment>> left_futures;
     std::vector<std::future<Segment>> right_futures;
 
-    for (auto str: options_.args.left_segments) {
+    for (auto str: options.args.left_segments) {
         if (auto fun = get_segment_by_name(str)) {
             left_futures.push_back( std::async(
                 std::launch::async,
-                [=](){ return (*fun)(options_);})
+                [=](){ return (*fun)(options);})
             );
         }
     }
 
-    for (auto str: options_.args.right_segments) {
+    for (auto str: options.args.right_segments) {
         if (auto fun = get_segment_by_name(str)) {
             right_futures.push_back( std::async(
                 std::launch::async,
-                [=](){ return (*fun)(options_);})
+                [=](){ return (*fun)(options);})
             );
         }
     }
 
     for (auto& future: left_futures) {
-        if (future.wait(); Segment segment = future.get()) {
+        auto status = future.wait_for(std::chrono::seconds(1));
+        if (status == std::future_status::timeout) {
+            left_segments_.push_back(Segment{"408", {5, 12}});
+        }
+        if (auto segment = future.get()) {
             left_segments_.push_back(segment);
         }
     }
     for (auto& future: right_futures) {
-        if (future.wait(); Segment segment = future.get()) {
+        auto status = future.wait_for(std::chrono::seconds(1)) ;
+        if (status== std::future_status::timeout) {
+            right_segments_.push_back(Segment{"408", {5, 12}});
+        }
+        if (auto segment = future.get()) {
             right_segments_.push_back(segment);
         }
     }
@@ -52,13 +61,13 @@ Prompt::make_separator(Segment s, std::string regular, std::string thin)
 {
     std::string output;
     if (s.style.bg == prev_color_) {
-        output += printer_.fg(options_.theme.separator.fg);
+        output += printer.fg(options.theme.separator.fg);
         output += thin;
     }
     else
     if (prev_color_ != -1) {
-        output += printer_.bg(s.style.bg);
-        output += printer_.fg(prev_color_);
+        output += printer.bg(s.style.bg);
+        output += printer.fg(prev_color_);
         output += regular;
     }
     prev_color_ = s.style.bg;
@@ -69,8 +78,8 @@ std::string
 Prompt::format_segment(Segment s) 
 {
     std::string output;
-    output += printer_.bg(s.style.bg);
-    output += printer_.fg(s.style.fg);
+    output += printer.bg(s.style.bg);
+    output += printer.fg(s.style.fg);
     output += ' ';
     output += s.content;
     output += ' ';
@@ -81,8 +90,8 @@ std::string
 Prompt::end_prompt(std::string separator) 
 {
     std::string output;
-    output += printer_.reset();
-    output += printer_.fg(prev_color_);
+    output += printer.reset();
+    output += printer.fg(prev_color_);
     output += separator;
     prev_color_ = -1;
     return output;
@@ -101,7 +110,7 @@ Prompt::format_segments(
     }
     if (!output.empty()){
         add(output, end_prompt(regular));
-        output += printer_.reset();
+        output += printer.reset();
     }
     return output;
 }
@@ -111,7 +120,7 @@ Prompt::format_left_segments()
 {
     return format_segments(
         left_segments_, utils::string::append,
-        options_.symbols.separator, options_.symbols.separator_thin
+        options.symbols.separator, options.symbols.separator_thin
     );
 }
 
@@ -120,29 +129,36 @@ Prompt::format_right_segments()
 {
     return format_segments(
         right_segments_, utils::string::prepend,
-        options_.symbols.r_separator, options_.symbols.r_separator_thin
+        options.symbols.r_separator, options.symbols.r_separator_thin
     );
 }
 
 
 
 size_t
-Prompt::left_length()
+Prompt::length(std::vector<Segment> segments)
 {
     size_t length = 0;
-    for (auto& segment: left_segments_) {
+    int color = -1;
+    for (auto& segment: segments) {
+        if (segment.style.bg == color) {
+            length += utils::string::length(options.symbols.separator);
+        } 
+        else {
+            length += utils::string::length(options.symbols.separator_thin);
+        }
         length += 2 + utils::string::length(segment.content);
-        length += utils::string::length(options_.symbols.separator);
+        color = segment.style.bg;
     }
     return length + 1;
 }
 size_t
 Prompt::right_length()
 {
-    size_t length = 0;
-    for (auto& segment: right_segments_) {
-        length += 2 + utils::string::length(segment.content);
-        length += utils::string::length(options_.symbols.r_separator);
-    }
-    return length + 1;
+    return length (right_segments_);
+}
+size_t
+Prompt::left_length()
+{
+    return length (left_segments_);
 }

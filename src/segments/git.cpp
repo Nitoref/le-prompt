@@ -27,8 +27,8 @@ int get_stats(GitStatus& status, git_status_list *status_list);
 int get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head);
 int get_name(GitStatus& status, git_repository *repo);
 
-
-// void SegmentGitName::make()
+// Segment
+// SegmentGitName()
 // {
 //     GitStatus& status = git_status__;
 //     get_git_status_threadsafe(status);
@@ -47,8 +47,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.style = p.theme.repo_clean;
 // };
 
-// void
-// SegmentGitAhead::make()
+// Segment
+// SegmentGitAhead()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.ahead)
@@ -58,8 +58,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.content += p.symbols.git_ahead;
 //     }
 // };
-// void
-// SegmentGitBehind::make()
+// Segment
+// SegmentGitBehind()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.behind)
@@ -69,8 +69,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.content += p.symbols.git_behind;
 //     }
 // };
-// void
-// SegmentGitStaged::make()
+// Segment
+// SegmentGitStaged()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.staged)
@@ -80,8 +80,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.content += p.symbols.git_staged;
 //     }
 // };
-// void
-// SegmentGitNotStaged::make()
+// Segment
+// SegmentGitNotStaged()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.not_staged)
@@ -91,8 +91,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.content += p.symbols.git_not_staged;
 //     }
 // };
-// void
-// SegmentGitUntracked::make()
+// Segment
+// SegmentGitUntracked()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.untracked)
@@ -102,8 +102,8 @@ int get_name(GitStatus& status, git_repository *repo);
 //         segment.content += p.symbols.git_untracked;
 //     }
 // };
-// void
-// SegmentGitConflicted::make()
+// Segment
+// SegmentGitConflicted()
 // {
 //     GitStatus& status = git_status__;
 //     if (status.conflicted)
@@ -308,25 +308,20 @@ get_stats(GitStatus& status, git_status_list *status_list)
     {
         s = git_status_byindex(status_list, i);
 
-         if (s->status & GIT_STATUS_IGNORED)
-         {
+         if (s->status & GIT_STATUS_IGNORED) {
          }
          else
-         if (s->status == GIT_STATUS_CURRENT)
-         {
+         if (s->status == GIT_STATUS_CURRENT) {
          }
          else
-         if (s->status & GIT_STATUS_CONFLICTED)
-         {
+         if (s->status & GIT_STATUS_CONFLICTED) {
              status.conflicted ++;
          }
          else
-         if (s->status & GIT_STATUS_WT_NEW)
-         {
+         if (s->status & GIT_STATUS_WT_NEW) {
              status.untracked++;
          }
-         else
-         {
+         else {
             if (s->status & ( GIT_STATUS_INDEX_NEW      
                             | GIT_STATUS_INDEX_DELETED  
                             | GIT_STATUS_INDEX_RENAMED   

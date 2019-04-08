@@ -15,6 +15,8 @@ struct Shell
     std::string backtick;
     std::string dollar;
 
+    enum {bash, tcsh, zsh, other};
+
     std::string name_;
 	int prev_error_;
     int width_;

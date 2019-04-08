@@ -18,8 +18,8 @@
         "time_format" : "%H:%M",
         "git_mode" : "simple",
 
-        "default_user" : "vnitoref",
-        "default_host" : "vLe-MacBook",
+        "default_user" : "nitoref",
+        "default_host" : "Le-MacBook",
 
         "cwd_mode" : "simple",
         "cwd_max_depth" : 3,
@@ -91,5 +91,15 @@
         "load":           { "fg":  15, "bg" :   2},
         "nix_shell":      { "fg":   0, "bg" :   4},
         "duration":       { "fg": -10, "bg" : -10}
+    },
+    "custom" : {
+        "yo" : {
+            "command" : "echo WESH",
+            "style" : {"bg":155, "fg": 210}
+        },
+        "trkl" : {
+            "command" : "echo BIEN ?",
+            "style" : {"bg":155, "fg": 210}
+        }
     }
 }
