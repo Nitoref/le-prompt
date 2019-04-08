@@ -4,25 +4,34 @@
             "left": [
                 "user",
                 "pwd",
+                "perms",
                 "root",
                 "exit"
             ],
             "right": [
                 "time",
+                "host",
                 "git",
                 "jobs"
             ]
         },
         "time_format" : "%H:%M",
         "git_mode" : "simple",
+
+        "default_user" : "vnitoref",
+        "default_host" : "vLe-MacBook",
+
         "cwd_mode" : "simple",
         "cwd_max_depth" : 3,
+        
         "max_width_ratio"   : 0,
         "max_segment_width" : 0,
+        
         "colorize_hostname" : false,
         "numeric_exit_codes" : true,
         "shorten_g_k_e_names" : false,
         "duration" : "",
+        
         "path_aliases" : {
             "Desktop" : "Desktaupe",
             "Movies" : "Cheese"
@@ -40,10 +49,11 @@
         "git_staged" :     "\u2714",
         "git_not_staged" : "\u270E",
         "git_conflicted" : "\u273C",
-        "git_untracked" :  "\u2026"
+        "git_untracked" :  "\u2026",
+        "cwd_wrap" :       "\u2026"
     },
     "theme" : {
-        "separator":      { "fg":  15 },
+        "separator":      { "fg":  14 },
         "username":       { "fg":  15, "bg" :   4},
         "username_root":  { "fg":  15, "bg" :   1},
         "hostname":       { "fg":  15, "bg" :   0},

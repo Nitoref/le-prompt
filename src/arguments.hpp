@@ -15,6 +15,8 @@ struct Arguments
            bool colorize_hostname  = false;
            bool numeric_exit_codes = false;
            bool shorten_gke_names  = false;
+    std::string default_user       = "";
+    std::string default_host       = "";
     std::string time_format        = "%T";
     std::string git_mode           = "simple";
     std::string cwd_mode           = "simple";

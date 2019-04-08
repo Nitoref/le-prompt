@@ -21,26 +21,50 @@ void print(Args&&... args) {
 struct ColorPrinter
 {
     ColorPrinter(Shell shell):
-        escape_(shell.escape_),
-        epacse_(shell.epacse_)
-    {};
-    std::string escape_;
-    std::string epacse_;
+        wrap(shell.wrap),
+        unwrap(shell.unwrap),
+        escape(shell.escape)
+    {
+        wrap_mode(1);
+    };
+    std::string init;
+    std::string stop;
+    std::string wrap;
+    std::string unwrap;
+    std::string escape;
+
+    void wrap_mode(bool yes)
+    {
+        init = escape;
+        stop = "";
+        if (yes) {
+            init.insert(0, wrap);
+            stop = unwrap;
+        }
+    }
 
     inline std::string bg(int value)
     {
-        return escape_ + BG_256_ + std::to_string(value) + 'm' + epacse_;
+        return init + BG_256_ + std::to_string(value) + 'm' + stop;
     }
 
-    inline std::string fg(int value){
-        return escape_ + FG_256_ + std::to_string(value) + 'm' + epacse_;
+    inline std::string fg(int value)
+    {
+        return init + FG_256_ + std::to_string(value) + 'm' + stop;
     }
 
-    inline std::string reset(){
-        return escape_ + "0m" + epacse_;
+    inline std::string reset()
+    {
+        return init + "0m" + stop;
     }
 
-    inline std::string font_style(const char* str){
+    inline std::string cup(size_t i)
+    {
+        return init +(i ? std::to_string(i) : "") + 'G' + stop;
+    }
+
+    inline std::string font_style(const char* str)
+    {
         static
         std::unordered_map<std::string, int> y =
         {
@@ -56,30 +80,28 @@ struct ColorPrinter
             {"overlined",   53}
         };
         if (auto code = y.find(str); code != y.end())
-            return escape_ + std::to_string(code->second) + 'm' + epacse_;
+            return init + std::to_string(code->second) + 'm' + stop;
         return "";
     }
 };
 
 
-namespace ansi
-{
+// namespace ansi
+// {
 
 
-inline std::string bg(int value)
-{
-    return BG_256_ + std::to_string(value) + 'm';
-}
-inline std::string fg(int value){
-    return FG_256_ + std::to_string(value) + 'm';
-}
-inline std::string reset(){
-    return "0m";
-}
+// inline std::string bg(int value)
+// {
+//     return BG_256_ + std::to_string(value) + 'm';
+// }
+// inline std::string fg(int value){
+//     return FG_256_ + std::to_string(value) + 'm';
+// }
+// inline std::string reset(){
+//     return "0m";
+// }
 
-
-
-}
+// }
 
 
 #endif

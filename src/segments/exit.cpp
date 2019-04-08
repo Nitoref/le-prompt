@@ -46,19 +46,21 @@ SegmentExit(PromptConfig p)
 {
     Segment segment;
     int error = p.shell.prev_error_;
-    if (!error)
-    {
+    
+    if (!error) {
         return segment;
     }
-    if (p.args.numeric_exit_codes)
-    {
+    if (p.args.numeric_exit_codes) {
         segment.content = std::to_string(error);
     }
     else
-    if (auto signal = signal_map.find(error); signal != signal_map.end())
-    {
-        segment.content.assign(signal->second);
+    if (auto signal = signal_map.find(error); signal != signal_map.end()) {
+        segment.content = signal->second;
     }
+    else {
+        segment.content = std::to_string(error);
+    }
+    
     segment.style = p.theme.cmd_failed;
     return segment;
 };

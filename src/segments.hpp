@@ -15,6 +15,10 @@ Segment SegmentExit (PromptConfig p);
 Segment SegmentJobs (PromptConfig p);
 Segment SegmentTime (PromptConfig p);
 Segment SegmentGit  (PromptConfig p);
+Segment SegmentPerms(PromptConfig p);
+Segment SegmentSsh  (PromptConfig p);
+Segment SegmentAws  (PromptConfig p);
+Segment SegmentVirtualEnv(PromptConfig p);
 
 
 

@@ -51,14 +51,12 @@ std::string
 Prompt::make_separator(Segment s, std::string regular, std::string thin)
 {
     std::string output;
-    if (s.style.bg == prev_color_)
-    {
-        output += printer_.fg(s.style.fg);
+    if (s.style.bg == prev_color_) {
+        output += printer_.fg(options_.theme.separator.fg);
         output += thin;
     }
     else
-    if (prev_color_ != -1)
-    {
+    if (prev_color_ != -1) {
         output += printer_.bg(s.style.bg);
         output += printer_.fg(prev_color_);
         output += regular;
@@ -80,7 +78,7 @@ Prompt::format_segment(Segment s)
 }
 
 std::string
-Prompt::end_segment(std::string separator) 
+Prompt::end_prompt(std::string separator) 
 {
     std::string output;
     output += printer_.reset();
@@ -102,7 +100,7 @@ Prompt::format_segments(
         add(output, format_segment(segment));
     }
     if (!output.empty()){
-        add(output, end_segment(regular));
+        add(output, end_prompt(regular));
         output += printer_.reset();
     }
     return output;

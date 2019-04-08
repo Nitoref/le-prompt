@@ -64,28 +64,32 @@ void from_json(const nlohmann::json& j, Symbols& s)
   if (auto k = j.find("git_staged")       ; k != j.end()) { s.git_staged       = k->get<std::string>(); };
   if (auto k = j.find("git_not_staged")   ; k != j.end()) { s.git_not_staged   = k->get<std::string>(); };
   if (auto k = j.find("git_conflicted")   ; k != j.end()) { s.git_conflicted   = k->get<std::string>(); };
+  if (auto k = j.find("cwd_wrap")         ; k != j.end()) { s.cwd_wrap         = k->get<std::string>();};
   if (auto k = j.find("git_untracked")    ; k != j.end()) { s.git_untracked    = k->get<std::string>(); };
 };
 
 
 void from_json(const nlohmann::json& j, Arguments& a)
 {
-    if ( auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
-    if ( auto k = j.find("cwd_max_dir_size");    k != j.end()) { a.cwd_max_dir_size   = k->get<int>();};
-    if ( auto k = j.find("max_width_ratio");     k != j.end()) { a.max_width_ratio    = k->get<int>();};
-    if ( auto k = j.find("max_segment_width");   k != j.end()) { a.max_segment_width  = k->get<int>();};
-    if ( auto k = j.find("colorize_hostname");   k != j.end()) { a.colorize_hostname  = k->get<bool>();};
-    if ( auto k = j.find("numeric_exit_codes");  k != j.end()) { a.numeric_exit_codes = k->get<bool>();};
-    if ( auto k = j.find("shorten_g_k_e_names"); k != j.end()) { a.shorten_gke_names  = k->get<bool>();};
-    if ( auto k = j.find("time_format");         k != j.end()) { a.time_format  = k->get<std::string>();};
-    if ( auto k = j.find("git_mode");            k != j.end()) { a.git_mode     = k->get<std::string>();};
-    if ( auto k = j.find("cwd_mode");            k != j.end()) { a.cwd_mode     = k->get<std::string>();};
-    if ( auto k = j.find("shell");               k != j.end()) { a.shell        = k->get<std::string>();};
-    if ( auto k = j.find("duration");            k != j.end()) { a.duration     = k->get<std::string>();};
-    if ( auto k = j.find("path_aliases");        k != j.end()) { a.path_aliases = k->get<std::map<std::string, std::string>>();};
-    if ( auto k = j.find("ignore_repos");        k != j.end()) { a.ignore_repos = k->get<std::vector<std::string>>();};
-    if ( auto o = j.find("segments"); o != j.end()){
-      if ( auto k = o->find("left");  k != o->end()) { a.left_segments  = k->get<std::vector<std::string>>();};
+    if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
+    if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
+    if (auto k = j.find("cwd_max_dir_size");    k != j.end()) { a.cwd_max_dir_size   = k->get<int>();};
+    if (auto k = j.find("max_width_ratio");     k != j.end()) { a.max_width_ratio    = k->get<int>();};
+    if (auto k = j.find("max_segment_width");   k != j.end()) { a.max_segment_width  = k->get<int>();};
+    if (auto k = j.find("colorize_hostname");   k != j.end()) { a.colorize_hostname  = k->get<bool>();};
+    if (auto k = j.find("numeric_exit_codes");  k != j.end()) { a.numeric_exit_codes = k->get<bool>();};
+    if (auto k = j.find("shorten_g_k_e_names"); k != j.end()) { a.shorten_gke_names  = k->get<bool>();};
+    if (auto k = j.find("default_user");        k != j.end()) { a.default_user = k->get<std::string>();};
+    if (auto k = j.find("default_host");        k != j.end()) { a.default_host = k->get<std::string>();};
+    if (auto k = j.find("time_format");         k != j.end()) { a.time_format  = k->get<std::string>();};
+    if (auto k = j.find("git_mode");            k != j.end()) { a.git_mode     = k->get<std::string>();};
+    if (auto k = j.find("cwd_mode");            k != j.end()) { a.cwd_mode     = k->get<std::string>();};
+    if (auto k = j.find("shell");               k != j.end()) { a.shell        = k->get<std::string>();};
+    if (auto k = j.find("duration");            k != j.end()) { a.duration     = k->get<std::string>();};
+    if (auto k = j.find("path_aliases");        k != j.end()) { a.path_aliases = k->get<std::map<std::string, std::string>>();};
+    if (auto k = j.find("ignore_repos");        k != j.end()) { a.ignore_repos = k->get<std::vector<std::string>>();};
+    if (auto o = j.find("segments"); o != j.end()){
+      if (auto k = o->find("left");  k != o->end()) { a.left_segments  = k->get<std::vector<std::string>>();};
       if ( auto k = o->find("right"); k != o->end()) { a.right_segments = k->get<std::vector<std::string>>();};
     }
 }

@@ -20,6 +20,7 @@ struct Symbols
     std::string git_not_staged   = "\u270E"; // "✎"
     std::string git_conflicted   = "\u273C"; // "✼"
     std::string git_untracked    = "\u2026"; // "…"
+    std::string cwd_wrap         = "\u2026"; // "…"
 };
 
 #endif
