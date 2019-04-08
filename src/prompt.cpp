@@ -90,7 +90,7 @@ Prompt::make_segments()
         if (auto fun = get_segment_by_name(str))
         {
             left_futures.push_back( std::async( 
-                std::launch::async, [=](){ return (*fun)(options);}
+                std::launch::async, [&, fun](){ return (*fun)(options);}
             ));
         }
     }
@@ -100,8 +100,7 @@ Prompt::make_segments()
         if (auto fun = get_segment_by_name(str))
         {
             right_futures.push_back( std::async(
-                std::launch::async,
-                [=](){ return (*fun)(options);})
+                std::launch::async, [&, fun](){ return (*fun)(options);})
             );
         }
     }

@@ -59,7 +59,7 @@ struct Printer
         return init +(i ? std::to_string(i) : "") + 'G' + stop;
     }
 
-    inline std::string font_style(const char* str)
+    inline std::string font(const char* str)
     {
         static
         std::unordered_map<std::string, int> y =
@@ -68,12 +68,11 @@ struct Printer
             {"faint",        2},
             {"italic",       3},
             {"underline",    4},
-            {"blink_slow",   5},
-            {"blink_fast",   6},
-            {"crossed_out",  9},
-            {"framed",      51},
-            {"encircled",   52},
-            {"overlined",   53}
+            {"blink",        5},
+            {"rblink",       6},
+            {"reversed",       7},
+            {"conceal",  8},
+            {"crossed",  9},
         };
         if (auto code = y.find(str); code != y.end())
             return init + std::to_string(code->second) + 'm' + stop;
