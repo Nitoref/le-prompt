@@ -109,22 +109,24 @@ Prompt::make_segments()
     right_segments_.reserve(left_futures.size());
 
     for (auto& future: left_futures) {
-        auto status = future.wait_for(std::chrono::seconds(1));
+        auto status = future.wait_for(std::chrono::seconds(5));
         if (status == std::future_status::timeout)
         {
             left_segments_.push_back(Segment{"408", {5, 12}});
         }
+        else
         if (auto segment = future.get())
         {
             left_segments_.push_back(segment);
         }
     }
     for (auto& future: right_futures) {
-        auto status = future.wait_for(std::chrono::seconds(1)) ;
+        auto status = future.wait_for(std::chrono::seconds(5)) ;
         if (status== std::future_status::timeout)
         {
             right_segments_.push_back(Segment{"408", {5, 12}});
         }
+        else
         if (auto segment = future.get())
         {
             right_segments_.push_back(segment);
