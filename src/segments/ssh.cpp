@@ -1,11 +1,12 @@
 #include <cstdlib>
-#include "segments.hpp"
+#include "modules.hpp"
 #include "utils.hpp"
 
-MultiSegment SegmentSsh(PromptConfig p)
+Module SegmentSsh(Config c)
 {
     Segment segment;
     segment.content = utils::string::safe(getenv("SSH_CLIENT"));
-    segment.style = p.theme.ssh;
-    return {segment};
+    segment.style = c.theme.ssh;
+    segment.id = module::id::ssh;
+    return Module {segment};
 }

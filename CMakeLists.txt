@@ -1,9 +1,10 @@
+set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-8")
 cmake_minimum_required(VERSION 3.0)
 
 project(powerline)
 
 set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -fno-rtti -lgit2")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -Wall -Wshadow -Wnon-virtual-dtor -pedantic -fno-rtti -lgit2 -lstdc++fs")
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 include_directories( ${PROJECT_SOURCE_DIR}/src/ )
 

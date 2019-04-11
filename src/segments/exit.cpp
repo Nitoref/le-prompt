@@ -1,5 +1,8 @@
 #include <unordered_map> 
-#include "../segments.hpp"
+#include <string> 
+#include "../modules.hpp"
+
+
 
 
 
@@ -41,26 +44,33 @@ std::unordered_map<int, std::string> signal_map
     { 128 + 29 ,   "SIGINFO"},
 };
 
-MultiSegment
-SegmentExit(PromptConfig p)
+Module
+SegmentExit(Config c)
 {
     Segment segment;
-    int error = p.shell.prev_error_;
-    
-    if (!error) {
-        return {segment};
+
+    int error = c.shell.error;
+    if (!error)
+    {
+        return Module {};
     }
-    if (p.args.numeric_exit_codes) {
-        segment.content = std::to_string(error);
+
+    if (c.args.numeric_exit_codes)
+    {
+        segment.content = std::to_string(error - 128);
     }
     else
-    if (auto signal = signal_map.find(error); signal != signal_map.end()) {
+    if (auto signal  = signal_map.find(error);
+             signal != signal_map.end())
+    {
         segment.content = signal->second;
     }
-    else {
+    else
+    {
         segment.content = std::to_string(error);
     }
-    
-    segment.style = p.theme.cmd_failed;
-    return {segment};
-};
+
+    segment.style = c.theme.cmd_failed;
+    segment.id    = module::id::exit;
+    return Module {segment};
+}

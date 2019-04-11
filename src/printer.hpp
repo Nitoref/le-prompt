@@ -1,7 +1,7 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
 
-#include "shell_info.hpp"
+#include "shell.hpp"
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -14,14 +14,29 @@
 #define FG_256_ "38;5;"
 
 
-
 struct Printer
 {
-    Printer(Shell shell):
-        wrap(shell.wrap),
-        unwrap(shell.unwrap)
+    Printer(Shell::Type id)
     {
-        wrap_mode(1);
+        switch (id)
+        {
+        case Shell::bash:
+            wrap       = "\\[";
+            unwrap     = "\\]";
+            break;
+
+        case Shell::zsh:
+        case Shell::csh:
+        case Shell::tcsh:
+            wrap       = "%{";
+            unwrap     = "%}";
+            break;
+
+        default:
+            wrap       = "";
+            unwrap     = "";
+            break;
+        }
     };
     Printer() = default;
     std::string init;
@@ -81,22 +96,7 @@ struct Printer
 };
 
 
-// namespace ansi
-// {
 
-
-// inline std::string bg(int value)
-// {
-//     return BG_256_ + std::to_string(value) + 'm';
-// }
-// inline std::string fg(int value){
-//     return FG_256_ + std::to_string(value) + 'm';
-// }
-// inline std::string reset(){
-//     return "0m";
-// }
-
-// }
 
 
 #endif

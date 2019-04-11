@@ -1,12 +1,13 @@
 #include <cstdlib>
-#include "segments.hpp"
+#include "modules.hpp"
 #include "utils.hpp"
 
 
-MultiSegment SegmentAws(PromptConfig p)
+Module SegmentAws(Config c)
 {
 	Segment segment;
     segment.content = utils::string::safe(getenv("AWS_PROFILE"));
-    segment.style = p.theme.aws;
-    return {segment};
+    segment.style   = c.theme.aws;
+    segment.id      = module::id::aws;
+    return Module {segment};
 }

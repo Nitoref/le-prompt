@@ -1,16 +1,17 @@
-#include "segments.hpp"
+#include "modules.hpp"
 #include <unistd.h>
 #include "utils.hpp"
 
-MultiSegment
-SegmentJobs(PromptConfig p)
+Module
+SegmentJobs(Config c)
 {
 	Segment segment;
 	
 	std::string ppid = std::to_string(getppid());
 	int jobs = utils::exec("ps -a -oppid= | grep " + ppid).size() - 1;
 	segment.content = jobs ? std::to_string(jobs) : "";
-	segment.style = p.theme.jobs;
-
-	return {segment};
+	segment.style = c.theme.jobs;
+	segment.id = module::id::perms;
+	
+	return Module {segment};
 }

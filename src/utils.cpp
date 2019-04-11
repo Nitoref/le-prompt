@@ -13,7 +13,8 @@
 namespace utils
 {
 
-int term_width ()
+int
+term_width ()
 {
     struct winsize w;
     ioctl(0, TIOCGWINSZ, &w);
@@ -46,6 +47,7 @@ void prepend(std::string& where, std::string what)
 {
     where.insert(0, what);
 }
+
 void append(std::string& where, std::string what)
 {
     where.append(what);
@@ -54,8 +56,9 @@ void append(std::string& where, std::string what)
 std::string
 safe(const char* s)
 {
-    return s ?: "";
+    return s ? s : "";
 }
+
 void
 replace_all(std::string& in, const std::string& from, const std::string& to)
 {
@@ -66,6 +69,7 @@ replace_all(std::string& in, const std::string& from, const std::string& to)
         cursor += to.length();
     }
 }
+
 size_t
 rnfind (std::string& s, char c, size_t n)
 {

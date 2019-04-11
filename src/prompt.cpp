@@ -1,145 +1,88 @@
-#include "shell_info.hpp"
-#include "parse_JSON.hpp"
 #include "arguments.hpp"
-#include "segments.hpp"
 #include "symbols.hpp"
 #include "prompt.hpp"
-#include "utils.hpp"
 #include "theme.hpp"
+#include "shell.hpp"
+#include "utils.hpp"
 
-#include <chrono>
-#include <future>
 #include <string>
-#include <fstream>
 #include <iostream>
 #include <algorithm>
 #include <functional>
 #include <unordered_map>
 
 
-Prompt::Prompt(int argc, char const *argv[])
+Prompt::Prompt(Config config):options(config)
 {
-    assert(argc >= 2 && "Thou shall provide $0 and $? as arguments. ($_ and $status for fish)");
-
-    options.shell             =     Shell(argv[1]);
-    options.shell.prev_error_ = std::stoi(argv[2]);
-    options.shell.width_      = utils::term_width();
-
-    printer = Printer(options.shell);
-
-    if (argc < 4) {
-        return;
-    }
-
-    try {
-        std::ifstream i(argv[3]);
-        nlohmann::json j;
-        i >> j;
-        if (auto k = j.find("args"); k != j.end())
-        {
-            options.args = k->get<Arguments>();
-        }
-        if (auto k = j.find("theme"); k != j.end())
-        {
-            options.theme = k->get<Theme>();
-        }
-        if (auto k = j.find("symbols"); k != j.end())
-        {
-            options.symbols = k->get<Symbols>();
-        }
-        // if (auto k = j.find("extension"); k != j.end())
-        // {
-        //     auto extensions = k->get<std::unordered_map<std::string, segment_constructor_t>>();
-        //     segments_map_.insert(extensions.begin(), extensions.end());
-        // }
-    }
-    catch (nlohmann::json::parse_error e) {
-        std::cout << "Error parsing config file: Wrong syntax\n" << e.what();
-    }
-    catch (nlohmann::detail::type_error e) {
-        std::cout << "Error parsing config file: Wrong argument\n" << e.what();
-    }
-    catch (std::system_error e) {
-        std::cout << "Error: Invalid config file\n" << e.what();
-    }
-    catch (...) {
-        std::cout << "Error: Invalid config file";
-    }
-}
-
-segment_constructor_t*
-Prompt::get_segment_by_name(std::string str)
-{
-    if (auto s = segments_map_.find(str); s != segments_map_.end())
-    {
-        return &s->second;
-    }
-    return nullptr;
+    printer = Printer(options.shell.id);
 }
 
 void
-Prompt::make_segments()
+Prompt::shrink()
 {
-    std::vector<std::future<MultiSegment>> left_futures;
-    std::vector<std::future<MultiSegment>> right_futures;
+    std::vector<std::vector<int>> right_lookup ((int)module::id::Count);
+    std::vector<std::vector<int>> left_lookup ((int)module::id::Count);
     
-    left_futures.reserve(options.args.left_segments.size());
-    right_futures.reserve(options.args.left_segments.size());
-
-    for (auto str: options.args.left_segments)
+    for (size_t i = 0; i <right_segments.size(); ++i)
     {
-        if (auto fun = get_segment_by_name(str))
-        {
-            left_futures.push_back( std::async( 
-                std::launch::async, [=](){ return (*fun)(options);}
-            ));
-        }
+        right_lookup.at((int)right_segments[i].id).push_back(i);
     }
-
-    for (auto str: options.args.right_segments)
+    for (size_t i = 0; i < left_segments.size(); ++i)
     {
-        if (auto fun = get_segment_by_name(str))
-        {
-            right_futures.push_back( std::async(
-                std::launch::async, [=](){ return (*fun)(options);})
-            );
-        }
+        left_lookup.at((int)left_segments[i].id).push_back(i);
     }
 
-    left_segments_.reserve(left_futures.size());
-    right_segments_.reserve(left_futures.size());
+    left_length_  = length (left_segments);
+    right_length_ = length (right_segments);
 
-    for (auto& future: left_futures) {
-        auto status = future.wait_for(std::chrono::seconds(5));
-        if (status == std::future_status::timeout)
+    for (auto i = priority_list_.rbegin(); i != priority_list_.rend(); ++i)
+    {
+        for (auto index: left_lookup.at((int)*i))
         {
-            left_segments_.push_back(Segment{"408", {5, 12}});
+            left_length_ -= utils::string::length(left_segments[index].content) + 3;
         }
-        else
-        if (auto segment = future.get())
+        for (auto index: right_lookup.at((int)*i))
         {
-            for (auto&& s: segment)
-            {
-                s && left_segments_.emplace_back(std::move(s));
-            }
+            right_length_ -= utils::string::length(right_segments[index].content) + 3;
         }
-    }
-    for (auto& future: right_futures) {
-        auto status = future.wait_for(std::chrono::seconds(5)) ;
-        if (status== std::future_status::timeout)
-        {
-            right_segments_.push_back(Segment{"408", {5, 12}});
-        }
-        else
-        if (auto segment = future.get())
-        {
-            for (auto&& s: segment)
-            {
-                s && right_segments_.emplace_back(std::move(s));
-            }
-        }
+        ignored_segments_.insert(*i);
+        if (left_length_ + right_length_ < options.shell.width - 30)
+            return;
     }
 }
+
+std::string
+Prompt::print()
+{
+    std::string output;
+    switch (options.shell.id)
+    {
+    case Shell::Type::bash:
+    case Shell::Type::csh:
+    case Shell::Type::tcsh:
+    {
+        printer.wrap_mode(false);
+        output += printer.wrap;
+        output += printer.cup(options.shell.width - right_length_ + 2);
+        output += format_right_segments();
+        output += printer.cup(0);
+        output += printer.unwrap;
+        printer.wrap_mode(true);
+        output += format_left_segments();
+        output += " ";
+        break;
+    }
+    case Shell::Type::zsh:
+    case Shell::Type::fish:
+    default:
+        printer.wrap_mode(true);
+        output += format_left_segments();
+        output += '\n';
+        output += format_right_segments();
+    }
+    return output;
+}
+
 
 std::string
 Prompt::make_separator(Segment s, std::string regular, std::string thin)
@@ -167,14 +110,14 @@ Prompt::format_segment(Segment s)
     std::string output;
     output += printer.bg(s.style.bg);
     output += printer.fg(s.style.fg);
-    output += ' ';
+    output += std::string(options.args.padding, ' ');
     output += s.content;
-    output += ' ';
+    output += std::string(options.args.padding, ' ');
     return output;
 }
 
 std::string
-Prompt::end_prompt(std::string separator) 
+Prompt::end_separator(std::string separator) 
 {
     std::string output;
     output += printer.reset();
@@ -185,21 +128,34 @@ Prompt::end_prompt(std::string separator)
 }
 
 std::string
-Prompt::format_segments(
-    std::vector<Segment> segments, 
-    std::function<void(std::string&, std::string)> add,
-    std::string regular, std::string thin)
+Prompt::format_segments(std::vector<Segment> segments, bool policy)
 {
-    std::string output;
+    std::string regular, thin;
+    std::function<void(std::string&, std::string)> append;
+    if (policy == true)
+    {
+        regular = options.symbols.separator;
+        thin = options.symbols.separator2;
+        append = utils::string::append;
+    }
+    else
+    {
+        regular = options.symbols.rseparator;
+        thin = options.symbols.rseparator2;
+        append = utils::string::prepend;
+    }
 
+    std::string output;
     for (auto &segment : segments)
     {
-        add(output, make_separator(segment, regular, thin));
-        add(output, format_segment(segment));
+        if (ignored_segments_.find(segment.id) != ignored_segments_.end())
+            continue;
+        append(output, make_separator(segment, regular, thin));
+        append(output, format_segment(segment));
     }
     if (!output.empty())
     {
-        add(output, end_prompt(regular));
+        append(output, end_separator(regular));
         output += printer.reset();
     }
     return output;
@@ -208,50 +164,32 @@ Prompt::format_segments(
 std::string
 Prompt::format_left_segments()
 {
-    return format_segments(
-        left_segments_, utils::string::append,
-        options.symbols.separator, options.symbols.separator_thin
-    );
+    return format_segments(left_segments, true);
 }
 
 std::string
 Prompt::format_right_segments()
 {
-    return format_segments(
-        right_segments_, utils::string::prepend,
-        options.symbols.r_separator, options.symbols.r_separator_thin
-    );
+    return format_segments(right_segments, false);
 }
 
 
 size_t
 Prompt::length(std::vector<Segment> segments)
 {
-    size_t length = 0;
     int color = -1;
+    size_t total = 0;
+
+    size_t separator = utils::string::length(options.symbols.separator);
+    size_t rseparator = utils::string::length(options.symbols.rseparator);
+    
     for (auto& segment: segments)
     {
-        if (segment.style.bg == color)
-        {
-            length += utils::string::length(options.symbols.separator);
-        } 
-        else
-        {
-            length += utils::string::length(options.symbols.separator_thin);
-        }
+        total += segment.style.bg == color ? separator : rseparator;
+        total += utils::string::length(segment.content);
+        total += options.args.padding * 2;
+        
         color = segment.style.bg;
-        length += 2 + utils::string::length(segment.content);
     }
-    return length + 1;
-}
-
-size_t
-Prompt::right_length()
-{
-    return length (right_segments_);
-}
-size_t
-Prompt::left_length()
-{
-    return length (left_segments_);
+    return total + 1;
 }

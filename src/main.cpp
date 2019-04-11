@@ -1,39 +1,84 @@
 #include "prompt.hpp"
+#include "parse_JSON.hpp"
+
 #include <ios>
 #include <string>
 #include <iostream>
+#include <fstream>
 
+module::constructor_map_t module::constructor::map = {
+    {"user",  SegmentUser},
+    {"root",  SegmentShell},
+    {"pwd",   SegmentPwd},
+    {"exit",  SegmentExit},
+    {"host",  SegmentHost},
+    {"jobs",  SegmentJobs},
+    {"git",   SegmentGit},
+    {"time",  SegmentTime},
+    {"perms", SegmentPerms},
+    {"ssh",   SegmentSsh},
+    {"aws",   SegmentAws},
+    {"virtualenv", SegmentVirtualEnv}
+};
 
 
 int main(int argc, char const *argv[])
 {
     std::ios_base::sync_with_stdio(false);
-    Prompt prompt { argc, argv };
+    assert(argc >= 2 && "Thou shall provide shell name and $? ($status for fish) as arguments.\n");
 
-    prompt.make_segments();
-    std::string output;
+    Config config;
+    std::ifstream i;
+    nlohmann::json j;
+    config.shell        =     Shell(argv[1]);
+    config.shell.error  = std::stoi(argv[2]);
 
-    if (prompt.options.shell.name_ == "bash"
-    ||  prompt.options.shell.name_ == "tcsh"
-    ||  prompt.options.shell.name_ == "csh") {
-
-    	int offset = prompt.options.shell.width_ - prompt.right_length() + 2;
-    	if (offset > prompt.left_length()) {
-			prompt.printer.wrap_mode(0);
-    		output += prompt.printer.wrap;
-    		output += prompt.printer.cup(offset);
-    		output += prompt.format_right_segments();
-    		output += prompt.printer.cup(0);
-    		output += prompt.printer.unwrap;
-    	}
-		prompt.printer.wrap_mode(1);
-    	output += prompt.format_left_segments();
-    	output += " ";
+    try 
+    {
+        i.open(argv[3]);
+        i >> j;
+        if (auto k = j.find("args"); k != j.end()) {
+            config.args = k->get<Arguments>();
+        }
+        if (auto k = j.find("theme"); k != j.end()) {
+            config.theme = k->get<Theme>();
+        }
+        if (auto k = j.find("symbols"); k != j.end()) {
+            config.symbols = k->get<Symbols>();
+        }
+        if (auto k = j.find("extension"); k != j.end()) {
+            auto e = k->get<module::constructor_map_t>();
+            module::constructor::map.insert(e.begin(), e.end());
+        }
     }
-    else {
-    	output += prompt.format_left_segments();
-    	output += '\n';
-	    output += prompt.format_right_segments();
+    catch (nlohmann::json::parse_error& e) {
+        std::cout << "Config error: Wrong syntax\n"
+                  << e.what();
     }
-    std::cout << output;
+    catch (nlohmann::detail::type_error& e) {
+        std::cout << "Config error: Wrong argument\n"
+                  << e.what();
+    }
+    catch (std::system_error& e) {
+        std::cout << "Error: Invalid config file\n"
+                  << e.what();
+    }
+    catch (...) {
+        std::cout << "Error: Invalid config file";
+    }
+
+    Prompt prompt { config };
+
+    auto left_futures = module::constructor::spawn(config.args.left_segments, config);
+    auto right_futures = module::constructor::spawn(config.args.right_segments, config);
+
+    prompt.left_segments = module::constructor::join(left_futures, config.args.request_timeout);
+    prompt.right_segments = module::constructor::join(right_futures, config.args.request_timeout);
+	
+    // prompt.left_segments = module::constructor::parse(config.args.left_segments, config);
+    // prompt.right_segments = module::constructor::parse(config.args.right_segments, config);
+	
+	prompt.shrink();
+    std::cout << prompt.print();
+    exit(0);
 }

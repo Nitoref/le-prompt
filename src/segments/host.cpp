@@ -3,24 +3,27 @@
 #include <string>
 #include <cstdlib>
 #include <unistd.h>
-#include "../segments.hpp"
+#include "../modules.hpp"
 
 
 
-MultiSegment
-SegmentHost(PromptConfig p)
+Module
+SegmentHost(Config c)
 {
 	Segment segment;
 
     char* hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
 
-    if (hostname == p.args.default_host) {
-    	return {segment};
+    if (hostname == c.args.default_host)
+    {
+    	return Module {};
     }
+    
     segment.content = hostname;
     segment.content.erase(segment.content.find('.'));
-    segment.style = p.theme.hostname;
+    segment.style = c.theme.hostname;
+    segment.id = module::id::host;
 	
-	return {segment};
-};
+	return Module {segment};
+}

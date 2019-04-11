@@ -1,9 +1,9 @@
 #include <cstdlib>
-#include "segments.hpp"
+#include "modules.hpp"
 #include "utils.hpp"
 
 
-MultiSegment SegmentVirtualEnv(PromptConfig p)
+Module SegmentVirtualEnv(Config c)
 {
     Segment segment;
     
@@ -14,7 +14,8 @@ MultiSegment SegmentVirtualEnv(PromptConfig p)
     if (segment.content.empty()) {
         segment.content = utils::string::safe(getenv("CONDA_DEFAULT_ENV"));
     }
-    segment.style = p.theme.virtual_env;
+    segment.style = c.theme.virtual_env;
+    segment.id = module::id::virtual_env;
     
-    return {segment};
+    return Module {segment};
 }

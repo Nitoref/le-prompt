@@ -2,17 +2,18 @@
 #define PROMPT_CONFIG_H
 
 #include "arguments.hpp"
-#include "theme.hpp"
 #include "symbols.hpp"
-#include "shell_info.hpp"
+#include "theme.hpp"
+#include "shell.hpp"
 
 
-struct PromptConfig
+struct Config
 {
     Arguments args;
     Symbols   symbols;
     Theme     theme;
     Shell     shell;
 };
+
 
 #endif

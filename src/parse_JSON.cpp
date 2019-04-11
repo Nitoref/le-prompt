@@ -1,41 +1,34 @@
 #include "parse_JSON.hpp"
 #include "utils.hpp"
 #include <string>
+#include <chrono>
 
 
-// void from_json(const nlohmann::json& j, std::unordered_map<std::string, std::function<MultiSegment(PromptConfig)>>& m)
-// {
-// 	std::string command;
-// 	Style style;
 
-// 	if (j.is_object())
-// 	{
-// 		for (auto& [name, segment]: j.items())
-// 		{
-// 			if (auto l = segment.find("command"); l != segment.end())
-// 			{
-// 				command = l->get<std::string>();
-// 			}
-// 			else continue;
-
-// 			if (auto l = segment.find("style"); l != segment.end())
-// 			{
-// 				style = l->get<Style>();
-// 			}
-// 			else continue;
-
-// 			m.emplace ( name, [=](PromptConfig p) -> MultiSegment {
-// 				auto result = utils::exec(command);
-// 				if (!result.empty()) {
-// 					utils::string::replace_all(result[0], "\n", "");
-// 					return {Segment {result[0], style}};
-// 				}
-// 				return {Segment{}};
-// 			});
-// 		}
-// 	}
-// }
-
+void from_json(const nlohmann::json& j, Arguments& a)
+{
+	if (auto k = j.find("request_timeout");     k != j.end()) { a.request_timeout    = duration(k->get<int>());};
+	if (auto k = j.find("padding");             k != j.end()) { a.padding            = k->get<int>();};
+	if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
+	if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
+	if (auto k = j.find("cwd_max_dir_size");    k != j.end()) { a.cwd_max_dir_size   = k->get<int>();};
+	if (auto k = j.find("max_width_ratio");     k != j.end()) { a.max_width_ratio    = k->get<int>();};
+	if (auto k = j.find("max_segment_width");   k != j.end()) { a.max_segment_width  = k->get<int>();};
+	if (auto k = j.find("colorize_hostname");   k != j.end()) { a.colorize_hostname  = k->get<bool>();};
+	if (auto k = j.find("numeric_exit_codes");  k != j.end()) { a.numeric_exit_codes = k->get<bool>();};
+	if (auto k = j.find("shorten_g_k_e_names"); k != j.end()) { a.shorten_gke_names  = k->get<bool>();};
+	if (auto k = j.find("git_format");          k != j.end()) { a.git_format   = k->get<std::string>();};
+	if (auto k = j.find("default_user");        k != j.end()) { a.default_user = k->get<std::string>();};
+	if (auto k = j.find("default_host");        k != j.end()) { a.default_host = k->get<std::string>();};
+	if (auto k = j.find("time_format");         k != j.end()) { a.time_format  = k->get<std::string>();};
+	if (auto k = j.find("cwd_mode");            k != j.end()) { a.cwd_mode     = k->get<std::string>();};
+	if (auto k = j.find("path_aliases");        k != j.end()) { a.path_aliases = k->get<std::map<std::string, std::string>>();};
+	if (auto k = j.find("git_ignore");          k != j.end()) { a.git_ignore   = k->get<std::vector<std::string>>();};
+	if (auto o = j.find("segments"); o != j.end()){
+		if (auto k = o->find("left");  k != o->end()) { a.left_segments  = k->get<std::vector<std::string>>();};
+		if ( auto k = o->find("right"); k != o->end()) { a.right_segments = k->get<std::vector<std::string>>();};
+	}
+}
 
 void from_json(const nlohmann::json& j, Style& s)
 {
@@ -65,13 +58,13 @@ void from_json(const nlohmann::json& j, Theme& t)
 	if (auto k = j.find("cmd_passed")     ; k != j.end()) {t.cmd_passed     = k->get<Style>(); };
 	if (auto k = j.find("cmd_failed")     ; k != j.end()) {t.cmd_failed     = k->get<Style>(); };
 	if (auto k = j.find("svn_changes")    ; k != j.end()) {t.svn_changes    = k->get<Style>(); };
+	if (auto k = j.find("git_stash")      ; k != j.end()) {t.git_stash      = k->get<Style>(); };
 	if (auto k = j.find("git_ahead")      ; k != j.end()) {t.git_ahead      = k->get<Style>(); };
 	if (auto k = j.find("git_behind")     ; k != j.end()) {t.git_behind     = k->get<Style>(); };
 	if (auto k = j.find("git_staged")     ; k != j.end()) {t.git_staged     = k->get<Style>(); };
 	if (auto k = j.find("git_not_staged") ; k != j.end()) {t.git_not_staged = k->get<Style>(); };
-	if (auto k = j.find("git_untracked")  ; k != j.end()) {t.git_untracked  = k->get<Style>(); };
 	if (auto k = j.find("git_conflicted") ; k != j.end()) {t.git_conflicted = k->get<Style>(); };
-	if (auto k = j.find("git_stashed")    ; k != j.end()) {t.git_stashed    = k->get<Style>(); };
+	if (auto k = j.find("git_untracked")  ; k != j.end()) {t.git_untracked  = k->get<Style>(); };
 	if (auto k = j.find("virtual_env")    ; k != j.end()) {t.virtual_env    = k->get<Style>(); };
 	if (auto k = j.find("virtual_go")     ; k != j.end()) {t.virtual_go     = k->get<Style>(); };
 	if (auto k = j.find("perlbrew")       ; k != j.end()) {t.perlbrew       = k->get<Style>(); };
@@ -86,46 +79,26 @@ void from_json(const nlohmann::json& j, Theme& t)
 
 void from_json(const nlohmann::json& j, Symbols& s)
 {
-	if (auto k = j.find("lock")             ; k != j.end()) { s.lock             = k->get<std::string>(); };
-	if (auto k = j.find("network")          ; k != j.end()) { s.network          = k->get<std::string>(); };
-	if (auto k = j.find("separator")        ; k != j.end()) { s.separator        = k->get<std::string>(); };
-	if (auto k = j.find("separator")        ; k != j.end()) { s.separator        = k->get<std::string>(); };
-	if (auto k = j.find("separator_thin")   ; k != j.end()) { s.separator_thin   = k->get<std::string>(); };
-	if (auto k = j.find("r_separator")      ; k != j.end()) { s.r_separator      = k->get<std::string>(); };
-	if (auto k = j.find("r_separator_thin") ; k != j.end()) { s.r_separator_thin = k->get<std::string>(); };
-	if (auto k = j.find("git_branch")       ; k != j.end()) { s.git_branch       = k->get<std::string>(); };
-	if (auto k = j.find("git_detached")     ; k != j.end()) { s.git_detached     = k->get<std::string>(); };
-	if (auto k = j.find("git_ahead")        ; k != j.end()) { s.git_ahead        = k->get<std::string>(); };
-	if (auto k = j.find("git_behind")       ; k != j.end()) { s.git_behind       = k->get<std::string>(); };
-	if (auto k = j.find("git_staged")       ; k != j.end()) { s.git_staged       = k->get<std::string>(); };
-	if (auto k = j.find("git_not_staged")   ; k != j.end()) { s.git_not_staged   = k->get<std::string>(); };
-	if (auto k = j.find("git_conflicted")   ; k != j.end()) { s.git_conflicted   = k->get<std::string>(); };
-	if (auto k = j.find("cwd_wrap")         ; k != j.end()) { s.cwd_wrap         = k->get<std::string>();};
-	if (auto k = j.find("git_untracked")    ; k != j.end()) { s.git_untracked    = k->get<std::string>(); };
-};
-
-
-void from_json(const nlohmann::json& j, Arguments& a)
-{
-	if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
-	if (auto k = j.find("cwd_max_depth");       k != j.end()) { a.cwd_max_depth      = k->get<int>();};
-	if (auto k = j.find("cwd_max_dir_size");    k != j.end()) { a.cwd_max_dir_size   = k->get<int>();};
-	if (auto k = j.find("max_width_ratio");     k != j.end()) { a.max_width_ratio    = k->get<int>();};
-	if (auto k = j.find("max_segment_width");   k != j.end()) { a.max_segment_width  = k->get<int>();};
-	if (auto k = j.find("colorize_hostname");   k != j.end()) { a.colorize_hostname  = k->get<bool>();};
-	if (auto k = j.find("numeric_exit_codes");  k != j.end()) { a.numeric_exit_codes = k->get<bool>();};
-	if (auto k = j.find("shorten_g_k_e_names"); k != j.end()) { a.shorten_gke_names  = k->get<bool>();};
-	if (auto k = j.find("default_user");        k != j.end()) { a.default_user = k->get<std::string>();};
-	if (auto k = j.find("default_host");        k != j.end()) { a.default_host = k->get<std::string>();};
-	if (auto k = j.find("time_format");         k != j.end()) { a.time_format  = k->get<std::string>();};
-	if (auto k = j.find("git_mode");            k != j.end()) { a.git_mode     = k->get<std::string>();};
-	if (auto k = j.find("cwd_mode");            k != j.end()) { a.cwd_mode     = k->get<std::string>();};
-	if (auto k = j.find("shell");               k != j.end()) { a.shell        = k->get<std::string>();};
-	if (auto k = j.find("duration");            k != j.end()) { a.duration     = k->get<std::string>();};
-	if (auto k = j.find("path_aliases");        k != j.end()) { a.path_aliases = k->get<std::map<std::string, std::string>>();};
-	if (auto k = j.find("ignore_repos");        k != j.end()) { a.ignore_repos = k->get<std::vector<std::string>>();};
-	if (auto o = j.find("segments"); o != j.end()){
-		if (auto k = o->find("left");  k != o->end()) { a.left_segments  = k->get<std::vector<std::string>>();};
-		if ( auto k = o->find("right"); k != o->end()) { a.right_segments = k->get<std::vector<std::string>>();};
-	}
+	if (auto k = j.find("bash") ; k != j.end()) { s.bash  = k->get<std::string>(); };
+	if (auto k = j.find("fish") ; k != j.end()) { s.fish  = k->get<std::string>(); };
+	if (auto k = j.find("zsh")  ; k != j.end()) { s.zsh   = k->get<std::string>(); };
+	if (auto k = j.find("csh")  ; k != j.end()) { s.csh   = k->get<std::string>(); };
+	if (auto k = j.find("tcsh") ; k != j.end()) { s.tcsh  = k->get<std::string>(); };
+	if (auto k = j.find("lock")     ; k != j.end()) { s.lock     = k->get<std::string>(); };
+	if (auto k = j.find("network")  ; k != j.end()) { s.network  = k->get<std::string>(); };
+	if (auto k = j.find("cwd_wrap") ; k != j.end()) { s.cwd_wrap = k->get<std::string>();};
+	if (auto k = j.find("separator")   ; k != j.end()) { s.separator   = k->get<std::string>(); };
+	if (auto k = j.find("separator")   ; k != j.end()) { s.separator   = k->get<std::string>(); };
+	if (auto k = j.find("separator2")  ; k != j.end()) { s.separator2  = k->get<std::string>(); };
+	if (auto k = j.find("rseparator")  ; k != j.end()) { s.rseparator  = k->get<std::string>(); };
+	if (auto k = j.find("rseparator2") ; k != j.end()) { s.rseparator2 = k->get<std::string>(); };
+	if (auto k = j.find("git_branch")     ; k != j.end()) { s.git_branch     = k->get<std::string>(); };
+	if (auto k = j.find("git_detached")   ; k != j.end()) { s.git_detached   = k->get<std::string>(); };
+	if (auto k = j.find("git_stash")      ; k != j.end()) { s.git_stash      = k->get<std::string>(); };
+	if (auto k = j.find("git_ahead")      ; k != j.end()) { s.git_ahead      = k->get<std::string>(); };
+	if (auto k = j.find("git_behind")     ; k != j.end()) { s.git_behind     = k->get<std::string>(); };
+	if (auto k = j.find("git_staged")     ; k != j.end()) { s.git_staged     = k->get<std::string>(); };
+	if (auto k = j.find("git_not_staged") ; k != j.end()) { s.git_not_staged = k->get<std::string>(); };
+	if (auto k = j.find("git_conflicted") ; k != j.end()) { s.git_conflicted = k->get<std::string>(); };
+	if (auto k = j.find("git_untracked")  ; k != j.end()) { s.git_untracked  = k->get<std::string>(); };
 }
