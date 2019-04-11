@@ -43,7 +43,7 @@ SegmentGit(Config c)
     }
 
     bool dirty = status.ahead      || status.behind    || status.staged 
-          || status.not_staged || status.untracked || status.conflicted;
+              || status.not_staged || status.untracked || status.conflicted;
 
     for (char segment: c.args.git_format)
     {

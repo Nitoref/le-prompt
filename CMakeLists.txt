@@ -1,10 +1,12 @@
 set(CMAKE_CXX_COMPILER "/usr/local/bin/g++-8")
+# set(CMAKE_CXX_COMPILER "clang++")
 cmake_minimum_required(VERSION 3.0)
 
 project(powerline)
 
 set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -Wall -Wshadow -Wnon-virtual-dtor -pedantic -fno-rtti -lgit2 -lstdc++fs")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -flto -Wall -Wshadow -Wnon-virtual-dtor -pedantic -fno-rtti -lgit2 -lstdc++fs")
+# set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -Wall -Wshadow -Wnon-virtual-dtor -pedantic -fno-rtti -lgit2 -lc++fs -L /usr/local/Cellar/llvm/8.0.0/lib/")
 set (EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 include_directories( ${PROJECT_SOURCE_DIR}/src/ )
 

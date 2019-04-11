@@ -58,7 +58,6 @@ using constructor_t     = std::function<Module(Config)>;
 using constructor_map_t = std::unordered_map<std::string, constructor_t>;
 
 
-
 class constructor
 {
 public:
