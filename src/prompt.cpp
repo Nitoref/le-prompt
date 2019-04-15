@@ -22,8 +22,8 @@ std::string
 Prompt::print()
 {
     std::string output;
-    shrink();
     
+    this->shrink();
     auto align = options.shell.width - right_length_ + 2;
     
     switch (options.shell.id)
@@ -35,14 +35,28 @@ Prompt::print()
             
             if (!newline_segments.empty() || options.args.force_newline)
             {
-                output += options.symbols.top_prefix;
-                output += format_left_segments();
-                output += printer.cup(align);
-                output += format_right_segments();
-                output += "\n";
-                output += options.symbols.bot_prefix;
-                output += format_newline_segments();
-                output += std::string(options.args.padding_end, ' ');
+                if (options.args.native_rprompt)
+                {
+                    output += options.symbols.top_prefix;
+                    output += format_left_segments();
+                    output += "\n";
+                    output += options.symbols.bot_prefix;
+                    output += format_newline_segments();
+                    output += std::string(options.args.padding_end, ' ');
+                    output += "\n";
+                    output += format_right_segments();
+                }
+                else
+                {
+                    output += options.symbols.top_prefix;
+                    output += format_left_segments();
+                    output += printer.cup(align);
+                    output += format_right_segments();
+                    output += "\n";
+                    output += options.symbols.bot_prefix;
+                    output += format_newline_segments();
+                    output += std::string(options.args.padding_end, ' ');
+                }
             }
             else
             {
@@ -160,22 +174,20 @@ Prompt::make_separator(Segment s, std::string regular, std::string thin)
         output += thin;
     }
     else
+    if (prev_color_ == -1)
+    {
+        output += printer.fg(s.style.bg);
+        output += printer.bg(prev_color_);
+        output += printer.font("reversed");
+        output += regular;
+        output += printer.reset();
+    }
+    else
     if (prev_color_ != -2)
     {
-        if (prev_color_ == -1)
-        {
-            output += printer.fg(s.style.bg);
-            output += printer.bg(prev_color_);
-            output += printer.font("reversed");
-            output += regular;
-            output += printer.reset();
-        }
-        else
-        {
-            output += printer.fg(prev_color_);
-            output += printer.bg(s.style.bg);
-            output += regular;
-        }
+        output += printer.fg(prev_color_);
+        output += printer.bg(s.style.bg);
+        output += regular;
 
     }
     prev_color_ = s.style.bg;

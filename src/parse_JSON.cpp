@@ -14,12 +14,13 @@ using jsonit = nlohmann::basic_json<>::iterator;
 
 void from_json(const nlohmann::json& j, Arguments& a)
 {
-	if (auto k = j.find("timeout");       k != j.end()) { a.timeout       = k->get<int>();};
-	if (auto k = j.find("width_limit");   k != j.end()) { a.width_limit   = k->get<int>();};
-	if (auto k = j.find("padding_left");  k != j.end()) { a.padding_left  = k->get<int>();};
-	if (auto k = j.find("padding_right"); k != j.end()) { a.padding_right = k->get<int>();};
-	if (auto k = j.find("padding_end");   k != j.end()) { a.padding_end   = k->get<int>();};
-	if (auto k = j.find("force_newline"); k != j.end()) { a.force_newline = k->get<bool>();};
+	if (auto k = j.find("timeout");        k != j.end()) { a.timeout        = k->get<int>();};
+	if (auto k = j.find("width_limit");    k != j.end()) { a.width_limit    = k->get<int>();};
+	if (auto k = j.find("padding_left");   k != j.end()) { a.padding_left   = k->get<int>();};
+	if (auto k = j.find("padding_right");  k != j.end()) { a.padding_right  = k->get<int>();};
+	if (auto k = j.find("padding_end");    k != j.end()) { a.padding_end    = k->get<int>();};
+	if (auto k = j.find("force_newline");  k != j.end()) { a.force_newline  = k->get<bool>();};
+	if (auto k = j.find("native_rprompt"); k != j.end()) { a.native_rprompt = k->get<bool>();};
 	
 	if (auto k = j.find("numeric_exit");  k != j.end()) { a.numeric_exit  = k->get<bool>();};
 	if (auto k = j.find("jobs_count");    k != j.end()) { a.jobs_count    = k->get<bool>();};

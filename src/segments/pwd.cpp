@@ -1,5 +1,6 @@
 #include <pwd.h>
 #include <unistd.h>
+#include <regex>
 #include <string>
 #include <string_view>
 #include <iostream>
@@ -45,6 +46,12 @@ fold(std::string& path, int max_depth, std::string symbol)
     return;
 }
 
+
+
+
+
+
+
 Module
 SegmentPwd(const Config& c)
 {
@@ -58,24 +65,32 @@ SegmentPwd(const Config& c)
 
     fold(path, c.args.cwd_depth, c.symbols.cwd_wrap);
 
-    if (c.args.cwd_fancy == false)
-    {
-        auto style = at_home ? c.theme.home : c.theme.path;
-        return Module { {module::id::cwd, path, style } };
+    for (auto& [what, with]: c.shell.escape_map) {
+        utils::string::replace_all(path, what, with);
     }
+    
+    auto style = at_home ? c.theme.home : c.theme.path;
+    return Module { {module::id::cwd, path, style } };
 
-    Module module;
-    for (auto dir: std::filesystem::path(path))
-    {
-        module.emplace_back(module::id::path, dir, c.theme.path);
-    }
-    module.back().style = c.theme.cwd;
-    module.back().id = module::id::cwd;
-    if (at_home)
-    {
-        module.front().id = module::id::home;
-        module.front().style = c.theme.home;
-    }
 
-    return module;
+    // if (c.args.cwd_fancy == false)
+    // {
+    //     auto style = at_home ? c.theme.home : c.theme.path;
+    //     return Module { {module::id::cwd, path, style } };
+    // }
+
+    // Module module;
+    // for (auto dir: std::filesystem::path(path))
+    // {
+    //     module.emplace_back(module::id::path, dir, c.theme.path);
+    // }
+    // module.back().style = c.theme.cwd;
+    // module.back().id = module::id::cwd;
+    // if (at_home)
+    // {
+    //     module.front().id = module::id::home;
+    //     module.front().style = c.theme.home;
+    // }
+
+    // return module;
 }

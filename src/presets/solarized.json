@@ -30,13 +30,14 @@
     
     "symbols" :
     {
-        "readonly" : "!",
-        "host"     : "",
+        "host"     : "@",
         "root"     : " ",
         "jobs"     : " ",
 
         "prompt"         : "$",
         "cwd_wrap"       : "…",
+
+        "rseparator2" : "",
 
         "git_branch"     : " ",
         "git_hash"       : "",
@@ -52,43 +53,36 @@
     
     "theme":
     {
-    "separator":      { "fg": 254 },
-    "exit_success":   { "fg": 254, "bg" : 235},
-    "exit_failure":   { "fg": 254, "bg" : 160},
+        "separator":      { "fg": 254 },
+        "exit_success":   { "fg": 254, "bg" : 235},
+        "exit_failure":   { "fg": 254, "bg" : 160},
 
-    "username":       { "fg": 254, "bg" : 240},
-    "root":           { "fg":  37, "bg" : 234},
-    "hostname":       { "fg": 254, "bg" : 235},
-    "home":           { "fg": 230, "bg" :  61},
-    "path":           { "fg": 254, "bg" :  61},
-    "cwd":            { "fg": 230, "bg" :  61},
-    "readonly":       { "fg": 234, "bg" : 166},
-    
-    "time":           { "fg": 254, "bg" : 235},
-    "jobs":           { "fg": 136, "bg" : 235},
-    "ssh":            { "fg":   8, "bg" :   9},
-    "aws":            { "fg":  -1, "bg" :  -1},
-    "docker":         { "fg":  13, "bg" :  55},
-    "dot_env":        { "fg": 254, "bg" :  55},
-    "virtual_env":    { "fg":   8, "bg" :   6},
-    "duration":       { "fg":  -1, "bg" :  -1},
+        "username":       { "fg": 254},
+        "root":           { "fg":  37},
+        "hostname":       { "fg": 248},
+        "home":           { "fg": 230, "bg" :  61},
+        "path":           { "fg": 254, "bg" :  61},
+        "cwd":            { "fg": 230, "bg" :  61},
+        "readonly":       { "fg": 234, "bg" : 166},
+        
+        "time":           { "fg": 252},
+        "jobs":           { "fg": 136, "bg" : 235},
+        "ssh":            { "fg":   8, "bg" :   9},
+        "aws":            { "fg":  -1, "bg" :  -1},
+        "docker":         { "fg":  13, "bg" :  55},
+        "dot_env":        { "fg": 254, "bg" :  55},
+        "virtual_env":    { "fg":   8, "bg" :   6},
+        "duration":       { "fg":  -1, "bg" :  -1},
 
-    "git_clean":      { "fg": 254, "bg" :  64},
-    "git_dirty":      { "fg": 254, "bg" : 125},
-    "git_stash":      { "fg":  33, "bg" : 230},
-    "git_ahead":      { "fg":  37, "bg" : 230},
-    "git_behind":     { "fg":  37, "bg" : 230},
-    "git_staged":     { "fg":  64, "bg" : 230},
-    "git_nstaged":    { "fg": 160, "bg" : 230},
-    "git_untracked":  { "fg":  61, "bg" : 230},
-    "git_conflicted": { "fg": 166, "bg" : 230}
+        "git_clean":      { "fg": 254, "bg" :  64},
+        "git_dirty":      { "fg": 254, "bg" : 125},
+        "git_stash":      { "fg":  33, "bg" : 230},
+        "git_ahead":      { "fg":  37, "bg" : 230},
+        "git_behind":     { "fg":  37, "bg" : 230},
+        "git_staged":     { "fg":  64, "bg" : 230},
+        "git_nstaged":    { "fg": 160, "bg" : 230},
+        "git_untracked":  { "fg":  61, "bg" : 230},
+        "git_conflicted": { "fg": 166, "bg" : 230}
 
-    },
-    "extension" : {
-        "yolk" : {
-            "command" : "echo yolk",
-            "style" : {"bg":-1, "fg": -1},
-            "size" : 5
-        }
     }
 }

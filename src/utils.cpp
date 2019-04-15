@@ -63,13 +63,24 @@ void append(std::string& where, std::string what)
 
 
 void
-replace_all(std::string& in, const std::string from, const std::string to)
+replace_all(std::string& where, std::string what, std::string with)
 {
-    size_t cursor = 0;
-    while((cursor = in.find(from, cursor)) != std::string::npos)
+    size_t from = 0;
+    while((from = where.find(what, from)) != std::string::npos)
     {
-        in.replace(cursor, from.length(), to);
-        cursor += to.length();
+        where.replace(from, what.length(), with);
+        from += with.length();
+    }
+}
+
+void
+replace_all(std::string& where, char what, std::string with)
+{
+    size_t from = 0;
+    while((from = where.find(what, from)) != std::string::npos)
+    {
+        where.replace(from, 1, with);
+        from += with.length();
     }
 }
 

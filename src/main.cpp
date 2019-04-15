@@ -82,14 +82,17 @@ int main(int argc, char const *argv[])
 
     Prompt prompt { config };
 
-    auto left_futures    = module::constructor::spawn(config.args.left_segments, config);
-    auto right_futures   = module::constructor::spawn(config.args.right_segments, config);
-    // auto newline_futures = module::constructor::spawn(config.args.newline_segments, config);
+    auto left_futures = module::constructor::spawn(config.args.left_segments, config);
+    auto right_futures = module::constructor::spawn(config.args.right_segments, config);
+    auto newline_futures = module::constructor::spawn(config.args.newline_segments, config);
 
-    prompt.left_segments   = module::constructor::join(left_futures, config.args.timeout);
+    prompt.left_segments = module::constructor::join(left_futures, config.args.timeout);
     prompt.right_segments  = module::constructor::join(right_futures, config.args.timeout);
-    // prompt.newline_segments = module::constructor::join(newline_futures, config.args.request_timeout);
-    prompt.newline_segments = module::constructor::parse(config.args.newline_segments, config);
+    prompt.newline_segments = module::constructor::join(newline_futures, config.args.timeout);
+
+    // prompt.left_segments = module::constructor::parse(config.args.left_segments, config);
+    // prompt.right_segments = module::constructor::parse(config.args.right_segments, config);
+    // prompt.newline_segments = module::constructor::parse(config.args.newline_segments, config);
 	
     std::cout << prompt.print();
     exit(0);

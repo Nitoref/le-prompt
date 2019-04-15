@@ -22,7 +22,9 @@ inline std::string
 safe(const char* s) {return s ? s : "";}
 
 void
-replace_all(std::string& in, const std::string from, const std::string to);
+replace_all(std::string& where, const std::string what, const std::string with);
+void
+replace_all(std::string& where, char what, std::string with);
 
 void
 prepend(std::string& where, std::string what);

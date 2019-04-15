@@ -10,7 +10,6 @@
 #include "utils.hpp"
 #include <string>
 #include <tuple>
-#include <unordered_map>
 
 
 struct GitStatus
@@ -181,12 +180,14 @@ SegmentGit(const Config& c)
 }
 
 
+
 int
 get_stashed(size_t index, const char *message, const git_oid *stash_id, void *status)
 {
     ((GitStatus*)status)->stash ++;
     return 0;
 }
+
 
 int
 get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
@@ -269,7 +270,6 @@ get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head)
 }
 
 
-
 int
 get_name(GitStatus& status, git_repository *repo)
 {
@@ -313,7 +313,6 @@ get_name(GitStatus& status, git_repository *repo)
     git_reference_free(head);
     return 0;
 }
-
 
 
 int
