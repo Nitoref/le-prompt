@@ -15,34 +15,31 @@ size_t
 term_width();
 
 
-namespace string
-{
-
 inline std::string
-safe(const char* s) {return s ? s : "";}
-
-void
-replace_all(std::string& where, const std::string what, const std::string with);
-void
-replace_all(std::string& where, char what, std::string with);
-
-void
-prepend(std::string& where, std::string what);
-
-void
-append(std::string& where, std::string what);
+string(const char* s) {return s ? s : "";}
 
 
 size_t
-rnfind (std::string& s, char c, size_t n);
+strlen(const char * s_);
 
 size_t
-length(const char * s_);
+strlen(std::string s);
+
+
+void
+strrepl(std::string& where, const std::string what, const std::string with);
+void
+strrepl(std::string& where, char what, std::string with);
+
+
+void
+str_prepend(std::string& where, std::string what);
+
+void
+str_append(std::string& where, std::string what);
 
 size_t
-length(std::string s);
-
-}
+strrnfind (std::string& s, char c, size_t n);
 
 }
 

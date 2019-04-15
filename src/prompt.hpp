@@ -68,11 +68,20 @@ public:
     std::vector<Segment> right_segments;
     std::vector<Segment> newline_segments;
 
+
 private:
 
     size_t left_length_;
     size_t right_length_;
+
+    std::vector<size_t> left_lengths_;
+    std::vector<size_t> right_lengths_;
+
+    // std::vector<std::vector<int>> id_lookup_left_;
+    // std::vector<std::vector<int>> id_lookup_right_;
+    
     std::unordered_set<module::id> ignored_segments_;
+
 
     size_t 
     length(std::vector<Segment> segments, position pos);

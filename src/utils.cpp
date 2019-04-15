@@ -45,25 +45,8 @@ term_width ()
 }
 
 
-
-namespace string
-{
-
-
-void prepend(std::string& where, std::string what)
-{
-    where.insert(0, what);
-}
-
-
-void append(std::string& where, std::string what)
-{
-    where.append(what);
-}
-
-
 void
-replace_all(std::string& where, std::string what, std::string with)
+strrepl(std::string& where, std::string what, std::string with)
 {
     size_t from = 0;
     while((from = where.find(what, from)) != std::string::npos)
@@ -74,7 +57,7 @@ replace_all(std::string& where, std::string what, std::string with)
 }
 
 void
-replace_all(std::string& where, char what, std::string with)
+strrepl(std::string& where, char what, std::string with)
 {
     size_t from = 0;
     while((from = where.find(what, from)) != std::string::npos)
@@ -85,8 +68,18 @@ replace_all(std::string& where, char what, std::string with)
 }
 
 
+void str_prepend(std::string& where, std::string what)
+{
+    where.insert(0, what);
+}
+
+void str_append(std::string& where, std::string what)
+{
+    where.append(what);
+}
+
 size_t
-rnfind (std::string& s, char c, size_t n)
+strrnfind (std::string& s, char c, size_t n)
 {
     if (n != 0  && !s.empty())
         for (int i = s.length() - 1; i >= 0; --i)
@@ -97,15 +90,15 @@ rnfind (std::string& s, char c, size_t n)
 }
 
 
-size_t length(std::string s) {
-    return length(s.c_str());
-}
 
+size_t strlen(std::string s) {
+    return strlen(s.c_str());
+}
 
 // Props to http://www.daemonology.net/blog/2008-06-05-faster-utf8-strlen.html
 #define ONEMASK ((size_t)(-1) / 0xFF)
 size_t 
-length(const char * s_)
+strlen(const char * s_)
 {
     const char * s;
     size_t count = 0;
@@ -141,9 +134,6 @@ length(const char * s_)
     }
 done:
     return ((s - s_) - count);
-}
-
-
 }
 
 

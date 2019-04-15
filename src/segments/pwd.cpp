@@ -13,9 +13,9 @@
 int
 remove_home(std::string& path, std::string symbol)
 {
-    std::string home = utils::string::safe(std::getenv("HOME"));
+    std::string home = utils::string(std::getenv("HOME"));
     if (home.empty()) {
-        home = utils::string::safe(getpwuid(getuid())->pw_dir);
+        home = utils::string(getpwuid(getuid())->pw_dir);
     }
     if (home.empty()) {
         return 0;
@@ -31,7 +31,7 @@ remove_home(std::string& path, std::string symbol)
 void
 fold(std::string& path, int max_depth, std::string symbol)
 {
-    size_t stop = utils::string::rnfind(path, '/', max_depth);
+    size_t stop = utils::strrnfind(path, '/', max_depth);
     if (stop == std::string::npos)
     {
         return;
@@ -55,18 +55,18 @@ fold(std::string& path, int max_depth, std::string symbol)
 Module
 SegmentPwd(const Config& c)
 {
-    auto path = utils::string::safe(getenv("PWD"));
+    auto path = utils::string(getenv("PWD"));
     bool at_home = remove_home(path, c.symbols.home);
 
     for (auto& [from, to]: c.args.path_aliases)
     {
-        utils::string::replace_all(path, from, to);
+        utils::strrepl(path, from, to);
     };
 
     fold(path, c.args.cwd_depth, c.symbols.cwd_wrap);
 
     for (auto& [what, with]: c.shell.escape_map) {
-        utils::string::replace_all(path, what, with);
+        utils::strrepl(path, what, with);
     }
     
     auto style = at_home ? c.theme.home : c.theme.path;

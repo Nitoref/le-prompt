@@ -212,7 +212,7 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
         return 1;
     }
 
-    std::string workdir = utils::string::safe(
+    std::string workdir = utils::string(
         git_repository_workdir(repository)
     );
     for (auto path: ignored_repositories)

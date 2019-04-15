@@ -34,8 +34,8 @@ SegmentHost(const Config& c)
 //     char* host_c_str = (char*)malloc(HOSTNAME_MAX);
 //     gethostname(host_c_str, HOSTNAME_MAX);
 
-//     std::string host = utils::string::safe(host_c_str);
-//     std::string user = utils::string::safe(getenv("USER"));
+//     std::string host = utils::string(host_c_str);
+//     std::string user = utils::string(getenv("USER"));
     
 //     if (user == c.args.default_user) {
 //         return Module {};

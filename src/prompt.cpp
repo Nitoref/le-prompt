@@ -35,28 +35,14 @@ Prompt::print()
             
             if (!newline_segments.empty() || options.args.force_newline)
             {
-                if (options.args.native_rprompt)
-                {
-                    output += options.symbols.top_prefix;
-                    output += format_left_segments();
-                    output += "\n";
-                    output += options.symbols.bot_prefix;
-                    output += format_newline_segments();
-                    output += std::string(options.args.padding_end, ' ');
-                    output += "\n";
-                    output += format_right_segments();
-                }
-                else
-                {
-                    output += options.symbols.top_prefix;
-                    output += format_left_segments();
-                    output += printer.cup(align);
-                    output += format_right_segments();
-                    output += "\n";
-                    output += options.symbols.bot_prefix;
-                    output += format_newline_segments();
-                    output += std::string(options.args.padding_end, ' ');
-                }
+                output += options.symbols.top_prefix;
+                output += format_left_segments();
+                output += printer.cup(align);
+                output += format_right_segments();
+                output += "\n";
+                output += options.symbols.bot_prefix;
+                output += format_newline_segments();
+                output += std::string(options.args.padding_end, ' ');
             }
             else
             {
@@ -110,41 +96,41 @@ Prompt::shrink()
 {
     left_length_  = length (left_segments, position::left);
     right_length_ = length (right_segments, position::right);
-    if (left_length_ + right_length_ < options.shell.width)
+    if (left_length_ + right_length_ < 0.5 * options.shell.width)
     {
         return;
     }
 
-
-    std::vector<std::vector<int>> right_lookup ((int)module::id::__count);
-    std::vector<std::vector<int>> left_lookup ((int)module::id::__count);
+    // std::vector<std::vector<int>> right_lookup ((int)module::id::__count);
+    // std::vector<std::vector<int>> left_lookup ((int)module::id::__count);
     
-    for (size_t i = 0; i <right_segments.size(); ++i)
-    {
-        right_lookup.at((int)right_segments[i].id).push_back(i);
-    }
-    for (size_t i = 0; i < left_segments.size(); ++i)
-    {
-        left_lookup.at((int)left_segments[i].id).push_back(i);
-    }
-
+    // for (size_t i = 0; i <right_segments.size(); ++i)
+    // {
+    //     right_lookup.at((int)right_segments[i].id).push_back(i);
+    // }
+    // for (size_t i = 0; i < left_segments.size(); ++i)
+    // {
+    //     left_lookup.at((int)left_segments[i].id).push_back(i);
+    // }
 
     for (auto i = priority_list_.rbegin(); i != priority_list_.rend(); ++i)
     {
-        for (auto index: left_lookup.at((int)*i))
+        for (auto index: id_lookup_left_.at((int)*i))
         {
-            left_length_ -= utils::string::length(left_segments[index].content);
-            left_length_ -= utils::string::length(options.symbols.separator);
-            left_length_ -= options.args.padding_left + options.args.padding_right;
+            left_length_ -= left_lengths_[index];
+            // left_length_ -= utils::strlen(left_segments[index].content);
+            // left_length_ -= utils::strlen(options.symbols.separator);
+            // left_length_ -= options.args.padding_left + options.args.padding_right;
         }
-        for (auto index: right_lookup.at((int)*i))
+        for (auto index: id_lookup_right_.at((int)*i))
         {
-            right_length_ -= utils::string::length(right_segments[index].content);
-            right_length_ -= utils::string::length(options.symbols.rseparator);
-            right_length_ -= options.args.padding_left + options.args.padding_right;
+            right_length_ -= right_lengths_[index];
+            // right_length_ -= utils::strlen(right_segments[index].content);
+            // right_length_ -= utils::strlen(options.symbols.rseparator);
+            // right_length_ -= options.args.padding_left + options.args.padding_right;
         }
         ignored_segments_.insert(*i);
-        if (left_length_ + right_length_ < options.shell.width)
+        if (left_length_ + right_length_ < 0.5 * options.shell.width)
         {
             return;
         }
@@ -188,7 +174,6 @@ Prompt::make_separator(Segment s, std::string regular, std::string thin)
         output += printer.fg(prev_color_);
         output += printer.bg(s.style.bg);
         output += regular;
-
     }
     prev_color_ = s.style.bg;
     return output;
@@ -205,39 +190,6 @@ Prompt::final_separator(std::string regular, std::string thin)
     return output;
 }
 
-std::string
-Prompt::format_segments(std::vector<Segment> segments, position pos)
-{
-    std::string regular, thin;
-    std::function<void(std::string&, std::string)> append;
-    if (pos == position::left)
-    {
-        regular = options.symbols.separator;
-        thin    = options.symbols.separator2;
-        append  = utils::string::append;
-    }
-    else
-    {
-        regular = options.symbols.rseparator;
-        thin    = options.symbols.rseparator2;
-        append  = utils::string::prepend;
-    }
-
-    std::string output;
-    for (auto &segment : segments)
-    {
-        if (ignored_segments_.find(segment.id) != ignored_segments_.end())
-            continue;
-        append(output, make_separator(segment, regular, thin));
-        append(output, format_segment(segment));
-    }
-    if (!output.empty())
-    {
-        append(output, final_separator(regular, thin));
-        output += printer.reset();
-    }
-    return output;
-}
 
 std::string
 Prompt::format_left_segments()
@@ -258,39 +210,101 @@ Prompt::format_newline_segments()
 }
 
 
-size_t
-Prompt::length(std::vector<Segment> segments, position pos)
+std::string
+Prompt::format_segments(std::vector<Segment> segments, position pos)
 {
-    int   color = -2;
-    size_t total = 0;
-    size_t thin;
-    size_t regular;
-
+    std::string regular, thin;
+    std::function<void(std::string&, std::string)> append;
     if (pos == position::left)
     {
-        regular = utils::string::length(options.symbols.separator);
-        thin = utils::string::length(options.symbols.separator2);
+        regular = options.symbols.separator;
+        thin    = options.symbols.separator2;
+        append  = utils::str_append;
     }
     else
     {
-        regular = utils::string::length(options.symbols.rseparator);
-        thin = utils::string::length(options.symbols.rseparator2);
+        regular = options.symbols.rseparator;
+        thin    = options.symbols.rseparator2;
+        append  = utils::str_prepend;
     }
 
+    std::string output;
+    for (auto &segment : segments)
+    {
+        auto ignored = ignored_segments_.find(segment.id);
+        if (ignored != ignored_segments_.end())
+            continue;
+        append(output, make_separator(segment, regular, thin));
+        append(output, format_segment(segment));
+    }
+    if (!output.empty())
+    {
+        append(output, final_separator(regular, thin));
+        output += printer.reset();
+    }
+    return output;
+}
+
+
+size_t
+Prompt::length(std::vector<Segment> segments, position pos)
+{
+    int previous_color = -2;
+    size_t total    = 0;
+    size_t subtotal = 0;
+    size_t separator;
+    size_t separator2;
+
+    std::vector<size_t>* length_vector;
+    std::vector<std::vector<int>>* id_vector;
+
+    if (pos == position::left)
+    {
+        separator  = utils::strlen(options.symbols.separator);
+        separator2 = utils::strlen(options.symbols.separator2);
+        length_vector = &left_lengths_;
+        id_vector     = &id_lookup_left_;
+    }
+    else
+    {
+        separator  = utils::strlen(options.symbols.rseparator);
+        separator2 = utils::strlen(options.symbols.rseparator2);
+        length_vector = &right_lengths_;
+        id_vector     = &id_lookup_right_;
+    }
+
+    length_vector->reserve(segments.size());
+    id_vector->resize((int)module::id::__count);
+
+    size_t index = 0;
     for (auto& segment: segments)
     {
-        if (segment.style.bg == color) {
-            total += thin;
+        // Build the lookup table for shrink system
+        id_vector->at((int)segment.id).push_back(index++);
+
+        if (segment.style.bg == previous_color) {
+            subtotal += separator2;
+            total += subtotal;
+            length_vector->push_back(subtotal);
         }
-        else if (color != -2) {
-            total += regular;
+        else if (previous_color != -2) {
+            subtotal += separator;
+            total += subtotal;
+            length_vector->push_back(subtotal);
         }
-        total += utils::string::length(segment.content);
-        total += options.args.padding_left;
-        total += options.args.padding_right;
+        subtotal = 0;
+        subtotal += utils::strlen(segment.content);
+        subtotal += options.args.padding_left;
+        subtotal += options.args.padding_right;
         
-        color = segment.style.bg;
+        previous_color = segment.style.bg;
     }
-    total += color == -1 ? 0 : regular;
+
+    subtotal += previous_color == -1 ? 0 : separator;
+    total += subtotal;
+    length_vector->push_back(subtotal);
+
     return total + 1;
+    // There's also the top/bot_prefx to keep in mind
+    // And also padding_end
 }

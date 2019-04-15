@@ -8,7 +8,7 @@ Module
 SegmentUser(const Config& c)
 {
 	Segment segment;
-    segment.content = utils::string::safe(getenv("USER"));
+    segment.content = utils::string(getenv("USER"));
 
     if(segment.content == c.args.default_user)
     {
