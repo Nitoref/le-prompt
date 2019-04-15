@@ -1,9 +1,9 @@
 #include <cstdlib>
-#include "modules.hpp"
-#include "utils.hpp"
+#include "../modules.hpp"
+#include "../utils.hpp"
 
 
-Module SegmentVirtualEnv(Config c)
+Module SegmentVirtualEnv(const Config& c)
 {
     Segment segment;
     

@@ -1,0 +1,32 @@
+{
+    "separator":      { "fg":  252},
+    "exit_success":   { "fg":  18, "bg" :   7},
+    "exit_failure":   { "fg": 255, "bg" : 161},
+
+    "username":       { "fg": 234, "bg" : 250},
+    "root":           { "fg": 234, "bg" : 198},
+    "hostname":       { "fg": 234, "bg" : 252},
+    "home":           { "fg":  30, "bg" :  15},
+    "path":           { "fg": 234, "bg" : 254},
+    "cwd":            { "fg": 236, "bg" : 254},
+    "readonly":       { "fg": 124, "bg" : 253},
+
+    "time":           { "fg": 236, "bg" :  15},
+    "jobs":           { "fg": 238, "bg" :  39},
+    "ssh":            { "fg": 166, "bg" : 254},
+    "aws":            { "fg":  -1, "bg" :  -1},
+    "docker":         { "fg":  55, "bg" : 177},
+    "virtual_env":    { "fg":  35, "bg" : 254},
+    "dot_env":        { "fg":  15, "bg" :  55},
+    "duration":       { "fg":  -1, "bg" :  -1},
+
+    "git_clean":     { "fg": 232, "bg" : 230},
+    "git_dirty":     { "fg": 232, "bg" : 223},
+    "git_stash":      { "fg":  15, "bg" :  20},
+    "git_ahead":      { "fg": 240, "bg" : 250},
+    "git_behind":     { "fg": 240, "bg" : 251},
+    "git_staged":     { "fg":  22, "bg" :  15},
+    "git_nstaged":    { "fg": 130, "bg" :  15},
+    "git_untracked":  { "fg":  52, "bg" :  15},
+    "git_conflicted": { "fg":   9, "bg" :  15}
+}

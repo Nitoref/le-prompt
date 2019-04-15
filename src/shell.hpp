@@ -3,36 +3,33 @@
 
 #include "utils.hpp"
 
+#include <unistd.h>
 #include <string>
 #include <unordered_map>
 
 struct Shell
 {
-    enum Type {bash, csh, tcsh, zsh, fish, other};
-    
     Shell() = default;
-    std::string wrap;
-    std::string unwrap;
-    std::string escape;
-    std::string indicator;
-    std::string backslash;
-    std::string backtick;
-    std::string dollar;
 
-    Type id   = Type::other;
-	int error = 0;
-    int width = 80;
+    enum Type {bash, dash, csh, ksh, zsh, fish, other};
+    
+    Type   id    = Type::other;
+    bool   root  = false;
+	int    error = 0;
+    size_t width = 80;
 
     static Type type(std::string str)
     {
     	static std::unordered_map<std::string, Type>
     	shell_type_map {
-	        {"csh",  Type::csh},
-	        {"tcsh", Type::tcsh},
 	        {"sh",   Type::bash},
-	        {"bash", Type::bash},
-	        {"fish", Type::fish},
 	        {"zsh",  Type::zsh},
+	        {"ksh",  Type::ksh},
+	        {"csh",  Type::csh},
+	        {"tcsh", Type::csh},
+	        {"bash", Type::bash},
+	        {"dash", Type::dash},
+	        {"fish", Type::fish},
     	};
     	auto item = shell_type_map.find(str);
 		if (item != shell_type_map.end())
@@ -44,7 +41,8 @@ struct Shell
 
 	Shell(std::string sh)
 	{
-		id = Shell::type(sh);
+		id    = Shell::type(sh);
+        root  = getuid() == 0;
         width = utils::term_width();
 	}
 };

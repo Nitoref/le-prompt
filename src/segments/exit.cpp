@@ -3,9 +3,6 @@
 #include "../modules.hpp"
 
 
-
-
-
 static const
 std::unordered_map<int, std::string> signal_map
 {
@@ -45,7 +42,7 @@ std::unordered_map<int, std::string> signal_map
 };
 
 Module
-SegmentExit(Config c)
+SegmentExit(const Config& c)
 {
     Segment segment;
 
@@ -55,9 +52,9 @@ SegmentExit(Config c)
         return Module {};
     }
 
-    if (c.args.numeric_exit_codes)
+    if (c.args.numeric_exit)
     {
-        segment.content = std::to_string(error - 128);
+        segment.content = std::to_string(error);
     }
     else
     if (auto signal  = signal_map.find(error);
@@ -70,7 +67,7 @@ SegmentExit(Config c)
         segment.content = std::to_string(error);
     }
 
-    segment.style = c.theme.cmd_failed;
+    segment.style = c.theme.exit_failure;
     segment.id    = module::id::exit;
     return Module {segment};
 }

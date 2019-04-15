@@ -1,17 +1,30 @@
-#include "modules.hpp"
+#include "../modules.hpp"
+#include "../utils.hpp"
 #include <unistd.h>
-#include "utils.hpp"
+
 
 Module
-SegmentJobs(Config c)
+SegmentJobs(const Config& c)
 {
-	Segment segment;
-	
 	std::string ppid = std::to_string(getppid());
 	int jobs = utils::exec("ps -a -oppid= | grep " + ppid).size() - 1;
-	segment.content = jobs ? std::to_string(jobs) : "";
-	segment.style = c.theme.jobs;
-	segment.id = module::id::perms;
+	if (!jobs)
+	{
+		return Module {};
+	}
+
+	std::string content;
+	if (c.args.jobs_count)
+	{
+		content += std::to_string(jobs);
+	}
+	content += c.symbols.jobs;
 	
-	return Module {segment};
+	return Module {
+		{
+			module::id::perms,
+			content,
+			c.theme.jobs
+		}
+	};
 }

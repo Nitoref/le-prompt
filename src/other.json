@@ -1,0 +1,19 @@
+    "symbols" : {
+        "lock" :           "\uE0A2",
+        "network" :        "\uE0A2",
+        "cwd_wrap" :       "…",
+        "separator" :      "▶",
+        "rseparator" :     "◀",
+        "separator2" :     "❯",
+        "rseparator2" :    "❮",
+        "git_branch" :     "@",
+        "git_detached" :   "&",
+        "git_stash" :      "*",
+        "git_ahead" :      "↑",
+        "git_behind" :     "↓",
+        "git_staged" :     "+",
+        "git_not_staged" : "!",
+        "git_conflicted" : "!",
+        "git_untracked" :  "?"
+    },
+    

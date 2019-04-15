@@ -1,9 +1,10 @@
-#include <filesystem>
 #include <iostream>
-#include <list>
 
-int main() 
+int main(int argc, char **argv, char **envp)
 {
-    auto path = std::filesystem::current_path();
-    std::cout << path << '\n';
+  std::string s = "hello";
+  auto a = s.find("j");
+  auto b = s.find(a, '/');
+  s = s.substr(6);
+  std::cout << b << "\n";
 }

@@ -13,7 +13,30 @@
 namespace utils
 {
 
-int
+
+std::vector<std::string>
+exec(const std::string& cmd)
+{
+    using pipe = std::unique_ptr<FILE,decltype(&pclose)>;    
+    std::vector<std::string> out;
+    std::array<char, 1024> buff;
+
+    if (pipe p(popen(cmd.data(), "r"), pclose); p)
+    {
+        while (fgets(buff.data(), buff.size(), p.get()) != nullptr)
+        {
+            out.emplace_back(buff.data());
+            if (out.back().back() == '\n')
+            {
+                out.back().pop_back();
+            }
+        }
+    }
+    return out;
+}
+
+
+size_t
 term_width ()
 {
     struct winsize w;
@@ -22,45 +45,25 @@ term_width ()
 }
 
 
-std::vector<std::string>
-exec(const std::string& cmd)
-{
-    std::array<char, 1024> buffer;
-    std::vector<std::string> result;
-
-    std::unique_ptr<FILE,decltype(&pclose)> pipe(popen(cmd.data(), "r"), pclose);
-    if (pipe)
-    {
-        while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-        {
-            result.emplace_back(buffer.data());
-        }
-    }
-    return result;
-}
-
 
 namespace string
 {
+
 
 void prepend(std::string& where, std::string what)
 {
     where.insert(0, what);
 }
 
+
 void append(std::string& where, std::string what)
 {
     where.append(what);
 }
 
-std::string
-safe(const char* s)
-{
-    return s ? s : "";
-}
 
 void
-replace_all(std::string& in, const std::string& from, const std::string& to)
+replace_all(std::string& in, const std::string from, const std::string to)
 {
     size_t cursor = 0;
     while((cursor = in.find(from, cursor)) != std::string::npos)
@@ -69,6 +72,7 @@ replace_all(std::string& in, const std::string& from, const std::string& to)
         cursor += to.length();
     }
 }
+
 
 size_t
 rnfind (std::string& s, char c, size_t n)
@@ -79,6 +83,11 @@ rnfind (std::string& s, char c, size_t n)
                 if (--n == 0)
                     return i;
     return std::string::npos;
+}
+
+
+size_t length(std::string s) {
+    return length(s.c_str());
 }
 
 
@@ -121,10 +130,6 @@ length(const char * s_)
     }
 done:
     return ((s - s_) - count);
-}
-
-size_t length(std::string s) {
-    return length(s.c_str());
 }
 
 

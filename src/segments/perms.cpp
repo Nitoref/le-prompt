@@ -1,18 +1,22 @@
 #include <cstdlib>
 #include <unistd.h>
-#include "modules.hpp"
+#include "../modules.hpp"
 
 
 Module
-SegmentPerms(Config c)
+SegmentPerms(const Config& c)
 {
-	Segment segment;
     char* cwd = getenv("PWD");
-    if (!access(cwd, W_OK)) {
+    if (!access(cwd, W_OK))
+    {
         return {Segment {}};
     }
-	segment.content = c.symbols.lock;
-    segment.style = c.theme.readonly;
-    segment.id = module::id::perms;
-    return Module {segment};
+
+    return Module {
+    	{
+	    	module::id::perms,
+	    	c.symbols.readonly,
+	    	c.theme.readonly
+    	}
+    };
 }

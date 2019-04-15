@@ -1,100 +1,88 @@
 {
-    "args" : {
-        "segments" : {
-            "left": [
-                "user",
-                "perms",
-                "pwd",
-                "root",
-                "exit"
-            ],
-            "right": [
+    "args" :
+    {
+        "left_segments": [
+            "perms",
+            "pwd",
+            "git",
+            "shell"
+        ],
+        "right_segments": [
+            "time",
+            "host",
+            "jobs",
+            "root",
+            "exit"
+        ],
 
-                "time",
-                "host",
-                "git",
-                "jobs"
-            ]
-        },
+        "padding_left": 1,
+        "padding_right": 1,
+        "padding_end": 1,
 
-        "base_theme": "",
-        "base_symbols": "",
+        "hostname_short": true,
 
-
-        "request_timeout" : 10,
-
-        "max_prompt_width"  : 0,
-        "max_segment_width" : 0,
-
-
+        "jobs_count"  : true,
         "time_format" : "%H:%M:%S",
-        "git_format" : "@><+-?!%",
 
-        "cwd_max_depth" : 10,
+        "cwd_fancy" : true,
+        "cwd_depth" : 3
+    },
+    
+    "symbols" :
+    {
+        "host"     : "@",
+        "root"     : " ",
+        "jobs"     : " ",
+
+        "prompt"         : "$",
+        "cwd_wrap"       : "…",
+
+        "rseparator2" : "",
+
+        "git_branch"     : " ",
+        "git_hash"       : "",
+        "git_tag"        : "",
+        "git_stash"      : "⚑",
+        "git_ahead"      : "",
+        "git_behind"     : "",
+        "git_staged"     : "",
+        "git_nstaged"    : "✎",
+        "git_conflicted" : "×",
+        "git_untracked"  : "…"
+    },
+    
+    "theme":
+    {
+        "separator":      { "fg": 254 },
+        "exit_success":   { "fg": 254, "bg" : 235},
+        "exit_failure":   { "fg": 254, "bg" : 160},
+
+        "username":       { "fg": 254},
+        "root":           { "fg":  37},
+        "hostname":       { "fg": 248},
+        "home":           { "fg": 230, "bg" :  61},
+        "path":           { "fg": 254, "bg" :  61},
+        "cwd":            { "fg": 230, "bg" :  61},
+        "readonly":       { "fg": 234, "bg" : 166},
         
-        "colorize_hostname" : false,
-        "numeric_exit_codes" : false,
+        "time":           { "fg": 252},
+        "jobs":           { "fg": 136, "bg" : 235},
+        "ssh":            { "fg":   8, "bg" :   9},
+        "aws":            { "fg":  -1, "bg" :  -1},
+        "docker":         { "fg":  13, "bg" :  55},
+        "dot_env":        { "fg": 254, "bg" :  55},
+        "virtual_env":    { "fg":   8, "bg" :   6},
+        "duration":       { "fg":  -1, "bg" :  -1},
 
-        "path_aliases" : {
-            "Desktop" : "Desktaupe",
-            "Movies" : "Cheese"
-        }
-    },
-    "symbols" : {
-        "lock" :           "\uE0A2",
-        "network" :        "\uE0A2",
-        "separator" :      "\uE0B0",
-        "separator2" :     "\uE0B1",
-        "git_branch" :     "\uE0A0",
-        "git_detached" :   "\u27A6",
-        "git_stashed" :    "\u2691",
-        "git_ahead" :      "\u2B06",
-        "git_behind" :     "\u2B07",
-        "git_staged" :     "\u2714",
-        "git_not_staged" : "\u270E",
-        "git_conflicted" : "\u273C",
-        "git_untracked" :  "\u2026",
-        "cwd_wrap" :       "\u2026"
-    },
-    "theme": {
-        "separator"      : {"fg" : 15},
-        "username"       : {"fg" : 250  ,"bg" : 240},
-        "username_root"  : {"fg" : 124  ,"bg" : 124},
-        "hostname"       : {"fg" : 250  ,"bg" : 238},
-        "home"           : {"fg" :   0  ,"bg" :  61},
-        "alias"          : {"fg" :   0  ,"bg" :  61},
-        "path"           : {"fg" :   0  ,"bg" :  61},
-        "cwd"            : {"fg" :   0  ,"bg" : 244},
-        "readonly"       : {"fg" : 254  ,"bg" : 124},
-        "ssh"            : {"fg" : 254  ,"bg" : 166},
-        "docker_machine" : {"fg" : 177  ,"bg" :  55},
-        "dot_env"        : {"fg" :  15  ,"bg" :  55},
-        "repo_clean"     : {"fg" :   0  ,"bg" :  41},
-        "repo_dirty"     : {"fg" :   0  ,"bg" : 214},
-        "jobs"           : {"fg" :  39  ,"bg" : 238},
-        "cmd_passed"     : {"fg" :  15  ,"bg" : 236},
-        "cmd_failed"     : {"fg" :  15  ,"bg" : 161},
-        "svn_changes"    : {"fg" :  22  ,"bg" : 148},
-        "git_ahead"      : {"fg" : 250  ,"bg" : 240},
-        "git_behind"     : {"fg" : 250  ,"bg" : 240},
-        "git_staged"     : {"fg" :  15  ,"bg" :  22},
-        "git_not_staged" : {"fg" :  15  ,"bg" : 130},
-        "git_untracked"  : {"fg" :  15  ,"bg" :  52},
-        "git_conflicted" : {"fg" :  15  ,"bg" :   9},
-        "git_stashed"    : {"fg" :  15  ,"bg" :  20},
-        "virtual_env"    : {"fg" :   0  ,"bg" :  35},
-        "perlbrew"       : {"fg" :   0  ,"bg" :  20},
-        "time"           : {"fg" :  15  ,"bg" : 236},
-        "shell_var"      : {"fg" :  52  ,"bg" :  11},
-        "node"           : {"fg" :  15  ,"bg" :  40},
-        "load"           : {"fg" :  15  ,"bg" :  22},
-        "nix_shell"      : {"fg" :   0  ,"bg" :  69},
-        "duration"       : {"fg" : 250  ,"bg" : 237}
-    },
-    "extension" : {
-        "trkl" : {
-            "command" : "",
-            "style" : {"bg":25, "fg": 230}
-        }
+        "git_clean":      { "fg": 254, "bg" :  64},
+        "git_dirty":      { "fg": 254, "bg" : 125},
+        "git_stash":      { "fg":  33, "bg" : 230},
+        "git_ahead":      { "fg":  37, "bg" : 230},
+        "git_behind":     { "fg":  37, "bg" : 230},
+        "git_staged":     { "fg":  64, "bg" : 230},
+        "git_nstaged":    { "fg": 160, "bg" : 230},
+        "git_untracked":  { "fg":  61, "bg" : 230},
+        "git_conflicted": { "fg": 166, "bg" : 230}
+
     }
 }

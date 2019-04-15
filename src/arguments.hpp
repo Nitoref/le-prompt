@@ -4,31 +4,46 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <chrono>
 
-using duration = std::chrono::milliseconds;
 
 struct Arguments
 {
+    using str    = std::string;
+    using strvec = std::vector<str>;
+    using strmap = std::map<str, str>;
+
     Arguments() = default;
-            int cwd_max_depth      = 0;
-            int cwd_max_dir_size   = 0;
-            int max_width_ratio    = 0;
-            int max_segment_width  = 0;
-            int padding            = 1;
-           bool colorize_hostname  = false;
-           bool numeric_exit_codes = false;
-           bool shorten_gke_names  = false;
-       duration request_timeout    = duration(1000);
-    std::string default_user       = "";
-    std::string default_host       = "";
-    std::string time_format        = "%T";
-    std::string git_format         = "@><+-?!%";
-    std::string cwd_mode           = "fancy";
-    std::vector<std::string> git_ignore     = {};
-    std::vector<std::string> left_segments  = {"user","host","pwd","root"};
-    std::vector<std::string> right_segments = {"time", "git"};
-    std::map<std::string, std::string> path_aliases;
+
+    int  timeout = 1000;
+    
+    int  width_limit    = 0;
+    int  padding_left   = 1;
+    int  padding_right  = 1;
+    int  padding_end    = 1;
+
+    bool force_newline  = false;
+    bool native_rprompt = false;
+     
+    bool numeric_exit  = false;
+    bool jobs_count    = true;
+
+    str default_user = "";
+    str default_host = "";
+    str time_format  = "%T";
+
+    bool cwd_fancy   = false;
+    int  cwd_depth   = 0;
+    int  cwd_dir_limit = 0;
+
+    str    git_format  = "@.><+!?x";
+    bool   git_compact = false;
+    bool   git_count   = true;
+    strvec git_ignore  = {};
+
+    strmap path_aliases     = {};
+    strvec left_segments    = {"user","host","pwd","shell"};
+    strvec right_segments   = {"time", "git"};
+    strvec newline_segments = {};
 };
 
 

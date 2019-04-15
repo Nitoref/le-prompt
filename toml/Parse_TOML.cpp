@@ -36,8 +36,8 @@
 //   if (( k = theme -> get_table("repo_clean")))     { toml_get_style (k, t.repo_clean);};
 //   if (( k = theme -> get_table("repo_dirty")))     { toml_get_style (k, t.repo_dirty);};
 //   if (( k = theme -> get_table("jobs")))           { toml_get_style (k, t.jobs);};
-//   if (( k = theme -> get_table("cmd_passed")))     { toml_get_style (k, t.cmd_passed);};
-//   if (( k = theme -> get_table("cmd_failed")))     { toml_get_style (k, t.cmd_failed);};
+//   if (( k = theme -> get_table("exit_success")))   { toml_get_style (k, t.exit_success);};
+//   if (( k = theme -> get_table("exit_failure")))   { toml_get_style (k, t.exit_failure);};
 //   if (( k = theme -> get_table("svn_changes")))    { toml_get_style (k, t.svn_changes);};
 //   if (( k = theme -> get_table("git_ahead")))      { toml_get_style (k, t.git_ahead);};
 //   if (( k = theme -> get_table("git_behind")))     { toml_get_style (k, t.git_behind);};

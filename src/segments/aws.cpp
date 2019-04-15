@@ -1,13 +1,15 @@
 #include <cstdlib>
-#include "modules.hpp"
-#include "utils.hpp"
+#include "../utils.hpp"
+#include "../modules.hpp"
 
 
-Module SegmentAws(Config c)
+Module SegmentAws(const Config& c)
 {
-	Segment segment;
-    segment.content = utils::string::safe(getenv("AWS_PROFILE"));
-    segment.style   = c.theme.aws;
-    segment.id      = module::id::aws;
-    return Module {segment};
+    return Module {
+    	{
+    		module::id::aws,
+			utils::string::safe(getenv("AWS_PROFILE")),
+			c.theme.aws
+    	}
+    };
 }

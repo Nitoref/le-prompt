@@ -21,28 +21,35 @@ struct Printer
         switch (id)
         {
         case Shell::bash:
-            wrap       = "\\[";
-            unwrap     = "\\]";
+            wrap    = "\\[";
+            unwrap  = "\\]";
+            newline = "\n";
+            break;
+
+        case Shell::csh:
+            wrap    = "%{";
+            unwrap  = "%}";
+            newline = " \\n";
             break;
 
         case Shell::zsh:
-        case Shell::csh:
-        case Shell::tcsh:
-            wrap       = "%{";
-            unwrap     = "%}";
+            wrap    = "%{";
+            unwrap  = "%}";
+            newline = "\n";
             break;
-
+        
         default:
-            wrap       = "";
-            unwrap     = "";
+            newline = " \n";
             break;
         }
     };
+    
     Printer() = default;
     std::string init;
     std::string stop;
     std::string wrap;
     std::string unwrap;
+    std::string newline;
 
     void wrap_mode(bool yes)
     {
@@ -56,12 +63,32 @@ struct Printer
 
     inline std::string bg(int value)
     {
-        return init + BG_256_ + std::to_string(value) + 'm' + stop;
+        std::string s(init);
+        if (value < 0) {
+            s += BG_STD_;
+            s += '9';
+        } else {
+            s += BG_256_;
+            s += std::to_string(value);
+        }
+        s += 'm';
+        s += stop;
+        return s;
     }
 
     inline std::string fg(int value)
     {
-        return init + FG_256_ + std::to_string(value) + 'm' + stop;
+        std::string s(init);
+        if (value < 0) {
+            s += FG_STD_;
+            s += '9';
+        } else {
+            s += FG_256_;
+            s += std::to_string(value);
+        }
+        s += 'm';
+        s += stop;
+        return s;
     }
 
     inline std::string reset()
