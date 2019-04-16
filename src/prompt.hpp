@@ -112,51 +112,51 @@ private:
 
 
 
-class SubPrompt
-{
-public:
+// class SubPrompt
+// {
+// public:
     
-    template<typename F>
-    SubPrompt (std::string a, std::string b, F f):
-    separator(a), separator2(b), append(f)
-    {}
+//     template<typename F>
+//     SubPrompt (std::string a, std::string b, F f):
+//     separator(a), separator2(b), append(f)
+//     {}
 
-    Printer printer;
+//     Printer printer;
 
-    std::vector<Segment> segments;
-    std::vector<std::vector<int>> id_lookup;
-    std::vector<size_t> lengths;
-    size_t length;
+//     std::vector<Segment> segments;
+//     std::vector<std::vector<int>> id_lookup;
+//     std::vector<size_t> lengths;
+//     size_t length;
 
-    std::string prefix;
-    std::string separator;
-    std::string separator2;
-    size_t padding_left;
-    size_t padding_right;
+//     std::string prefix;
+//     std::string separator;
+//     std::string separator2;
+//     size_t padding_left;
+//     size_t padding_right;
 
-    int prev_color  = -2;
+//     int prev_color  = -2;
 
-    std::function<void(std::string&, std::string)>
-    append;
+//     std::function<void(std::string&, std::string)>
+//     append;
 
-    void
-    preformat();
+//     void
+//     preformat();
 
-    inline std::string
-    format_segment(Segment s);
+//     inline std::string
+//     format_segment(Segment s);
     
-    inline std::string
-    make_separator(Segment s);
+//     inline std::string
+//     make_separator(Segment s);
     
-    inline std::string
-    final_separator();
+//     inline std::string
+//     final_separator();
     
-    std::string
-    format_left_segment(Segment s);
+//     std::string
+//     format_left_segment(Segment s);
     
-    std::string 
-    format_right_segment(Segment s);
+//     std::string 
+//     format_right_segment(Segment s);
     
-    std::string 
-    format_with_ignored(std::vector<module::id>& ignored);
-};
+//     std::string 
+//     format_with_ignored(std::vector<module::id>& ignored);
+// };

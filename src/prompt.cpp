@@ -282,10 +282,10 @@ Prompt::length(std::vector<Segment> segments, position pos)
         previous_color = segment.style.bg;
     }
 
-    subtotal += previous_color == -1 ? 0 : separator;
+    subtotal += previous_color == -1 ? 1 : separator + 1;
     total += subtotal;
     length_vector->push_back(subtotal);
 
-    return total + 1;
+    return total;
     // There's also the top/bot_prefx to keep in mind
 }
