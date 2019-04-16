@@ -8,9 +8,9 @@
 
 struct Arguments
 {
-    using str    = std::string;
-    using strvec = std::vector<str>;
-    using strmap = std::map<str, str>;
+    using string    = std::string;
+    using strvec = std::vector<string>;
+    using strmap = std::map<string, string>;
 
     Arguments() = default;
 
@@ -27,15 +27,15 @@ struct Arguments
     bool numeric_exit  = false;
     bool jobs_count    = true;
 
-    str default_user = "";
-    str default_host = "";
-    str time_format  = "%T";
+    string default_user = "";
+    string default_host = "";
+    string time_format  = "%T";
 
-    bool cwd_fancy   = false;
-    int  cwd_depth   = 0;
-    int  cwd_dir_limit = 0;
+    bool dir_fancy   = false;
+    int  dir_depth   = 0;
+    int  dir_dir_limit = 0;
 
-    str    git_format  = "@.><+!?x";
+    string    git_format  = "@.><+!?x";
     bool   git_compact = false;
     bool   git_count   = true;
     strvec git_ignore  = {};

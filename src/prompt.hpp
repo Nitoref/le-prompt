@@ -3,6 +3,7 @@
 
 #include <unordered_set> 
 #include <unordered_map> 
+#include <functional>
 #include <future>
 #include <vector>
 #include <string>
@@ -18,9 +19,6 @@ class Prompt
 public:
 
     Prompt(Config& config);
-    
-    void
-    shrink();
 
     std::string
     print();
@@ -46,7 +44,7 @@ public:
         module::id::jobs,
         module::id::time,
         module::id::perms,
-        module::id::cwd,
+        module::id::dir,
         module::id::path,
         module::id::home,
         module::id::git_branch,
@@ -71,17 +69,20 @@ public:
 
 private:
 
-    size_t left_length_;
-    size_t right_length_;
+    std::vector<std::vector<int>> id_lookup_left_;
+    std::vector<std::vector<int>> id_lookup_right_;
 
     std::vector<size_t> left_lengths_;
     std::vector<size_t> right_lengths_;
 
-    // std::vector<std::vector<int>> id_lookup_left_;
-    // std::vector<std::vector<int>> id_lookup_right_;
+    size_t left_length_;
+    size_t right_length_;
     
     std::unordered_set<module::id> ignored_segments_;
 
+    
+    void
+    shrink();
 
     size_t 
     length(std::vector<Segment> segments, position pos);
@@ -103,6 +104,59 @@ private:
     
     std::string 
     format_segments(std::vector<Segment> segments, position pos);
-
 };
 #endif
+
+
+
+
+
+
+class SubPrompt
+{
+public:
+    
+    template<typename F>
+    SubPrompt (std::string a, std::string b, F f):
+    separator(a), separator2(b), append(f)
+    {}
+
+    Printer printer;
+
+    std::vector<Segment> segments;
+    std::vector<std::vector<int>> id_lookup;
+    std::vector<size_t> lengths;
+    size_t length;
+
+    std::string prefix;
+    std::string separator;
+    std::string separator2;
+    size_t padding_left;
+    size_t padding_right;
+
+    int prev_color  = -2;
+
+    std::function<void(std::string&, std::string)>
+    append;
+
+    void
+    preformat();
+
+    inline std::string
+    format_segment(Segment s);
+    
+    inline std::string
+    make_separator(Segment s);
+    
+    inline std::string
+    final_separator();
+    
+    std::string
+    format_left_segment(Segment s);
+    
+    std::string 
+    format_right_segment(Segment s);
+    
+    std::string 
+    format_with_ignored(std::vector<module::id>& ignored);
+};

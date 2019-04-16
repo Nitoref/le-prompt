@@ -16,7 +16,7 @@ Module SegmentShell  (const Config& c);
 Module SegmentJobs   (const Config& c);
 Module SegmentTime   (const Config& c);
 Module SegmentPerms  (const Config& c);
-Module SegmentPwd    (const Config& c);
+Module SegmentDir    (const Config& c);
 Module SegmentGit    (const Config& c);
 Module SegmentSsh    (const Config& c);
 Module SegmentAws    (const Config& c);
@@ -36,7 +36,7 @@ enum class id: unsigned int {
 	jobs,
 	time,
 	perms,
-	cwd,
+	dir,
 	path,
 	home,
 	git_branch,

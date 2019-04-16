@@ -6,8 +6,8 @@
 Module
 SegmentPerms(const Config& c)
 {
-    char* cwd = getenv("PWD");
-    if (!access(cwd, W_OK))
+    char* dir = getenv("PWD");
+    if (!access(dir, W_OK))
     {
         return {Segment {}};
     }

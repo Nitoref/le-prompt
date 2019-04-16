@@ -8,15 +8,15 @@
     "hostname":       { "fg":  15, "bg" :   0},
     "home":           { "fg":  15, "bg" :   4},
     "path":           { "fg":  15, "bg" :  10},
-    "cwd":            { "fg":  15, "bg" :  10},
+    "dir":            { "fg":  15, "bg" :  10},
     "readonly":       { "fg":   8, "bg" :   1},
     
     "time":           { "fg":  15, "bg" :   0},
     "jobs":           { "fg":   4, "bg" :   0},
     "ssh":            { "fg":   8, "bg" :   9},
     "aws":            { "fg":  -1, "bg" :  -1},
-    "docker":         { "fg":  13, "bg" :  55},
-    "dot_env":        { "fg":  15, "bg" :  55},
+    "docker":         { "fg":  13, "bg" :   5},
+    "dot_env":        { "fg":  15, "bg" :   5},
     "virtual_env":    { "fg":   8, "bg" :   6},
     "duration":       { "fg":  -1, "bg" :  -1},
 

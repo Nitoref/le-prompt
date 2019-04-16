@@ -4,11 +4,12 @@
         "left_segments": [
             "size",
             "perms",
-            "pwd",
+            "dir",
             "git"
         ],
         "right_segments": [
             "time",
+            "jobs",
             "exit"
         ],
         "newline_segments": [
@@ -22,10 +23,10 @@
         "force_newline": true,
         "hostname_short": true,
         "numeric_exit": true,
-        "jobs_count"  : false,
+        "jobs_count"  : true,
         "git_count"  : true,
         "time_format" : "%H:%M  %d/%m/%y",
-        "cwd_fancy" : false
+        "dir_fancy" : false
     },
     
     "symbols" :
@@ -41,7 +42,7 @@
         "rseparator2" : "",
 
         "prompt"         : "$",
-        "cwd_wrap"       : "…",
+        "dir_wrap"       : "…",
 
         "git_branch" :     "",
         "git_detached" :   "#",
@@ -63,7 +64,7 @@
         "hostname":       { "fg": 254, "bg" : 235},
         "home":           { "fg": 230, "bg" :  24},
         "path":           { "fg": 254, "bg" :  24},
-        "cwd":            { "fg": 230, "bg" :  24},
+        "dir":            { "fg": 230, "bg" :  24},
         "readonly":       { "fg": 234, "bg" : 166},
         
         "time":           { "fg": 234, "bg" : 245},

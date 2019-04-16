@@ -27,7 +27,7 @@ strlen(std::string s);
 
 
 void
-strrepl(std::string& where, const std::string what, const std::string with);
+strrepl(std::string& where, std::string what, std::string with);
 void
 strrepl(std::string& where, char what, std::string with);
 

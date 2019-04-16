@@ -32,14 +32,14 @@ struct Symbols
     std::string host     = "@";
     std::string jobs     = "…";
     std::string readonly = " ⃠"; // "\u20E0"
-    std::string cwd_wrap = "…";  // "\u2026"
+    std::string dir_wrap = "…";  // "\u2026"
     
     // std::string prompt   = "❯";
     // std::string host     = "@";
     // std::string root     = " "; // "\uF09C"
     // std::string jobs     = "";  // "\uF013"
     // std::string readonly = " "; // "\uF023"
-    // std::string cwd_wrap = "…";  // "\u2026"
+    // std::string dir_wrap = "…";  // "\u2026"
     
     std::string git_branch   = "";  // ""
     std::string git_dirty    = "✳"; //

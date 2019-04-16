@@ -20,7 +20,7 @@ struct Theme
     Style hostname;
     Style home;
     Style path;
-    Style cwd;
+    Style dir;
     Style readonly;
     
     Style ssh;

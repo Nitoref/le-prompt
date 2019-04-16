@@ -6,7 +6,7 @@
 
 > Default modules
 
-✅  Cwd
+✅  Dir
 👌  Exitcode
 ✅  Git
 👌  Hostname
@@ -46,9 +46,9 @@
 Modules options
 
 ✅ modules
-✅ cwd-mode
-✅ cwd-max-depth
-❌ cwd-max-dir-size
+✅ dir-mode
+✅ dir-max-depth
+❌ dir-max-dir-size
 ❌ colorize-hostname
 ✅ numeric-exit-codes
 ❌ shorten-gke-names

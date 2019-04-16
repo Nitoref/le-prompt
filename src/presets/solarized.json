@@ -3,15 +3,15 @@
     {
         "left_segments": [
             "perms",
-            "pwd",
-            "git",
+            "root",
             "shell"
         ],
         "right_segments": [
             "time",
             "host",
+            "dir",
             "jobs",
-            "root",
+            "git",
             "exit"
         ],
 
@@ -24,20 +24,21 @@
         "jobs_count"  : true,
         "time_format" : "%H:%M:%S",
 
-        "cwd_fancy" : true,
-        "cwd_depth" : 3
+        "dir_fancy" : true,
+        "dir_depth" : 3
     },
     
     "symbols" :
     {
         "host"     : "@",
-        "root"     : " ",
-        "jobs"     : " ",
+        "root"     : "",
+        "jobs"     : "",
 
         "prompt"         : "$",
-        "cwd_wrap"       : "…",
+        "dir_wrap"       : "…",
 
-        "rseparator2" : "",
+        "separator2" : " ",
+        "rseparator2" : " ",
 
         "git_branch"     : " ",
         "git_hash"       : "",
@@ -62,8 +63,8 @@
         "hostname":       { "fg": 248},
         "home":           { "fg": 230, "bg" :  61},
         "path":           { "fg": 254, "bg" :  61},
-        "cwd":            { "fg": 230, "bg" :  61},
-        "readonly":       { "fg": 234, "bg" : 166},
+        "dir":            { "fg": 230, "bg" :  61},
+        "readonly":       { "fg": 166},
         
         "time":           { "fg": 252},
         "jobs":           { "fg": 136, "bg" : 235},
@@ -81,7 +82,7 @@
         "git_behind":     { "fg":  37, "bg" : 230},
         "git_staged":     { "fg":  64, "bg" : 230},
         "git_nstaged":    { "fg": 160, "bg" : 230},
-        "git_untracked":  { "fg":  61, "bg" : 230},
+        "git_untracked":  { "fg": 136, "bg" : 230},
         "git_conflicted": { "fg": 166, "bg" : 230}
 
     }

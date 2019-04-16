@@ -47,13 +47,8 @@ fold(std::string& path, int max_depth, std::string symbol)
 }
 
 
-
-
-
-
-
 Module
-SegmentPwd(const Config& c)
+SegmentDir(const Config& c)
 {
     auto path = utils::string(getenv("PWD"));
     bool at_home = remove_home(path, c.symbols.home);
@@ -63,20 +58,20 @@ SegmentPwd(const Config& c)
         utils::strrepl(path, from, to);
     };
 
-    fold(path, c.args.cwd_depth, c.symbols.cwd_wrap);
+    fold(path, c.args.dir_depth, c.symbols.dir_wrap);
 
     for (auto& [what, with]: c.shell.escape_map) {
         utils::strrepl(path, what, with);
     }
     
     auto style = at_home ? c.theme.home : c.theme.path;
-    return Module { {module::id::cwd, path, style } };
+    return Module { {module::id::dir, path, style } };
 
 
-    // if (c.args.cwd_fancy == false)
+    // if (c.args.dir_fancy == false)
     // {
     //     auto style = at_home ? c.theme.home : c.theme.path;
-    //     return Module { {module::id::cwd, path, style } };
+    //     return Module { {module::id::dir, path, style } };
     // }
 
     // Module module;
@@ -84,8 +79,8 @@ SegmentPwd(const Config& c)
     // {
     //     module.emplace_back(module::id::path, dir, c.theme.path);
     // }
-    // module.back().style = c.theme.cwd;
-    // module.back().id = module::id::cwd;
+    // module.back().style = c.theme.dir;
+    // module.back().id = module::id::dir;
     // if (at_home)
     // {
     //     module.front().id = module::id::home;

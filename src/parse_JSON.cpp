@@ -29,9 +29,9 @@ void from_json(const nlohmann::json& j, Arguments& a)
 	if (auto k = j.find("default_host"); k != j.end()) { a.default_host = k->get<str>();};
 	if (auto k = j.find("time_format");  k != j.end()) { a.time_format  = k->get<str>();};
 	
-	if (auto k = j.find("cwd_depth");       k != j.end()) { a.cwd_depth       = k->get<int>();};
-	if (auto k = j.find("cwd_dir_limit");   k != j.end()) { a.cwd_dir_limit   = k->get<int>();};
-	if (auto k = j.find("cwd_fancy");       k != j.end()) { a.cwd_fancy       = k->get<bool>();};
+	if (auto k = j.find("dir_depth");       k != j.end()) { a.dir_depth       = k->get<int>();};
+	if (auto k = j.find("dir_dir_limit");   k != j.end()) { a.dir_dir_limit   = k->get<int>();};
+	if (auto k = j.find("dir_fancy");       k != j.end()) { a.dir_fancy       = k->get<bool>();};
 
 	if (auto k = j.find("git_format");  k != j.end()) { a.git_format  = k->get<str>();};
 	if (auto k = j.find("git_compact"); k != j.end()) { a.git_compact = k->get<bool>();};
@@ -60,7 +60,7 @@ void from_json(const nlohmann::json& j, Theme& t)
 	
 	if (auto k = j.find("home")           ; k != j.end()) {t.home           = k->get<Style>(); };
 	if (auto k = j.find("path")           ; k != j.end()) {t.path           = k->get<Style>(); };
-	if (auto k = j.find("cwd")            ; k != j.end()) {t.cwd            = k->get<Style>(); };
+	if (auto k = j.find("dir")            ; k != j.end()) {t.dir            = k->get<Style>(); };
 	if (auto k = j.find("readonly")       ; k != j.end()) {t.readonly       = k->get<Style>(); };
 	
 	if (auto k = j.find("time")           ; k != j.end()) {t.time           = k->get<Style>(); };
@@ -100,7 +100,7 @@ void from_json(const nlohmann::json& j, Symbols& s)
 	if (auto k = j.find("root")     ; k != j.end()) { s.root     = k->get<str>();};
 	if (auto k = j.find("host")     ; k != j.end()) { s.host     = k->get<str>();};
 	if (auto k = j.find("jobs")     ; k != j.end()) { s.jobs     = k->get<str>();};
-	if (auto k = j.find("cwd_wrap") ; k != j.end()) { s.cwd_wrap = k->get<str>();};
+	if (auto k = j.find("dir_wrap") ; k != j.end()) { s.dir_wrap = k->get<str>();};
 	if (auto k = j.find("readonly") ; k != j.end()) { s.readonly = k->get<str>();};
 	
 	if (auto k = j.find("git_branch")  ; k != j.end()) { s.git_branch  = k->get<str>(); };

@@ -3,7 +3,7 @@
     {
         "left_segments": [
             "perms",
-            "pwd",
+            "dir",
             "git"
         ],
         "right_segments": [
@@ -30,8 +30,8 @@
         "git_format"  : "@d",
         "git_compact" : true,
         
-        "cwd_fancy" : false,
-        "cwd_depth" : 3
+        "dir_fancy" : false,
+        "dir_depth" : 3
     },
     
     "symbols" :
@@ -42,7 +42,7 @@
         
         "prompt": "❯",
 
-        "cwd_wrap" :    "…",
+        "dir_wrap" :    "…",
         
         "separator" :   "",
         "separator2" :  "",
@@ -74,7 +74,7 @@
         "hostname" : {"fg" : 240},
         "home"     : {"fg" :  74},
         "path"     : {"fg" : 223},
-        "cwd"      : {"fg" : 223},
+        "dir"      : {"fg" : 223},
         "readonly" : {"fg" : 209},
         
         "time"    : {"fg" : 244},

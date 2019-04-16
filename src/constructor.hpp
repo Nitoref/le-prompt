@@ -13,7 +13,6 @@
 
 namespace module
 {
-
 using constructor_t     = std::function<Module(const Config&)>;
 using constructor_map_t = std::unordered_map<std::string, constructor_t>;
 
@@ -28,9 +27,6 @@ public:
     static constructor_t*
     get(std::string str);
     
-	static std::vector<Segment>
-	parse(std::vector<std::string>& strings, Config& config);
-	
     static std::vector<std::future<Module>>
 	spawn(std::vector<std::string>& segments, Config& config);
 

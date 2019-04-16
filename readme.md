@@ -105,7 +105,7 @@ The configuration file is JSON document (with comments accepted) with three obje
   	"max_segment_width" : 0,    //
   	"request_timeout" : 1000,   // 
   	"time_format" : "%H:%M:%S", //
-  	"cwd_max_depth" : 4,       // Maximum path depth in pwd module.
+  	"dir_max_depth" : 4,       // Maximum path depth in pwd module.
   	  
   	// Set of aliases to shorten pwd module
   	"path_aliases" : {

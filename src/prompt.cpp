@@ -12,6 +12,7 @@
 #include <unordered_map>
 
 
+
 Prompt::Prompt(Config& config):
 options(config),
 printer(options.shell.id)
@@ -39,17 +40,17 @@ Prompt::print()
                 output += format_left_segments();
                 output += printer.cup(align);
                 output += format_right_segments();
-                output += "\n";
+                output += printer.endl;
                 output += options.symbols.bot_prefix;
                 output += format_newline_segments();
                 output += std::string(options.args.padding_end, ' ');
             }
             else
             {
-                output += "\n";
+                output += printer.endl;
                 output += format_left_segments();
                 output += std::string(options.args.padding_end, ' ');
-                output += "\n";
+                output += printer.endl;
                 output += format_right_segments();
             }
             break;
@@ -70,7 +71,7 @@ Prompt::print()
             {
                 output += options.symbols.top_prefix;
                 output += format_left_segments();
-                output += printer.newline;
+                output += printer.endl;
                 output += options.symbols.bot_prefix;
                 output += format_newline_segments();
             }
@@ -81,7 +82,7 @@ Prompt::print()
             output += std::string(options.args.padding_end, ' ');
             
             if (options.shell.id == Shell::Type::csh)
-                output += " %{\x1b[D%}";
+                output += "%{\x1b[D%}";
             
             break;
         }
@@ -96,41 +97,23 @@ Prompt::shrink()
 {
     left_length_  = length (left_segments, position::left);
     right_length_ = length (right_segments, position::right);
-    if (left_length_ + right_length_ < 0.5 * options.shell.width)
+    if (left_length_ + right_length_ < 0.7 * options.shell.width)
     {
         return;
     }
-
-    // std::vector<std::vector<int>> right_lookup ((int)module::id::__count);
-    // std::vector<std::vector<int>> left_lookup ((int)module::id::__count);
-    
-    // for (size_t i = 0; i <right_segments.size(); ++i)
-    // {
-    //     right_lookup.at((int)right_segments[i].id).push_back(i);
-    // }
-    // for (size_t i = 0; i < left_segments.size(); ++i)
-    // {
-    //     left_lookup.at((int)left_segments[i].id).push_back(i);
-    // }
 
     for (auto i = priority_list_.rbegin(); i != priority_list_.rend(); ++i)
     {
         for (auto index: id_lookup_left_.at((int)*i))
         {
-            left_length_ -= left_lengths_[index];
-            // left_length_ -= utils::strlen(left_segments[index].content);
-            // left_length_ -= utils::strlen(options.symbols.separator);
-            // left_length_ -= options.args.padding_left + options.args.padding_right;
+            left_length_ -= left_lengths_.at(index);
         }
         for (auto index: id_lookup_right_.at((int)*i))
         {
-            right_length_ -= right_lengths_[index];
-            // right_length_ -= utils::strlen(right_segments[index].content);
-            // right_length_ -= utils::strlen(options.symbols.rseparator);
-            // right_length_ -= options.args.padding_left + options.args.padding_right;
+            right_length_ -= right_lengths_.at(index);
         }
         ignored_segments_.insert(*i);
-        if (left_length_ + right_length_ < 0.5 * options.shell.width)
+        if (left_length_ + right_length_ < 0.7 * options.shell.width)
         {
             return;
         }
@@ -279,7 +262,6 @@ Prompt::length(std::vector<Segment> segments, position pos)
     size_t index = 0;
     for (auto& segment: segments)
     {
-        // Build the lookup table for shrink system
         id_vector->at((int)segment.id).push_back(index++);
 
         if (segment.style.bg == previous_color) {
@@ -306,5 +288,4 @@ Prompt::length(std::vector<Segment> segments, position pos)
 
     return total + 1;
     // There's also the top/bot_prefx to keep in mind
-    // And also padding_end
 }

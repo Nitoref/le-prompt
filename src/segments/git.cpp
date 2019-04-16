@@ -31,6 +31,7 @@ struct GitStatus
 int get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories);
 int get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head);
 int get_stats(GitStatus& status, git_status_list *status_list);
+int get_stash(size_t index, const char *message, const git_oid *stash_id, void *status);
 int get_name(GitStatus& status, git_repository *repo);
 
 
@@ -180,15 +181,6 @@ SegmentGit(const Config& c)
 }
 
 
-
-int
-get_stashed(size_t index, const char *message, const git_oid *stash_id, void *status)
-{
-    ((GitStatus*)status)->stash ++;
-    return 0;
-}
-
-
 int
 get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
 {
@@ -239,11 +231,19 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     {
         return 1;
     }
-    git_stash_foreach(repository, &get_stashed, (void*)&status);
+    git_stash_foreach(repository, &get_stash, (void*)&status);
 
     git_status_list_free(status_list);
     git_repository_free(repository);
     git_libgit2_shutdown();
+    return 0;
+}
+
+
+int
+get_stash(size_t index, const char *message, const git_oid *stash_id, void *status)
+{
+    ((GitStatus*)status)->stash ++;
     return 0;
 }
 

@@ -6,8 +6,9 @@
 Module
 SegmentJobs(const Config& c)
 {
-	std::string ppid = std::to_string(getppid());
+	std::string ppid = std::to_string(getpgid(getppid()));
 	int jobs = utils::exec("ps -a -oppid= | grep " + ppid).size() - 1;
+	
 	if (!jobs)
 	{
 		return Module {};

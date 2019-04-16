@@ -25,7 +25,7 @@
 //   if (( k = theme -> get_table("hostname")))       { toml_get_style (k, t.hostname);};
 //   if (( k = theme -> get_table("home")))           { toml_get_style (k, t.home);};
 //   if (( k = theme -> get_table("path")))           { toml_get_style (k, t.path);};
-//   if (( k = theme -> get_table("cwd")))            { toml_get_style (k, t.cwd);};
+//   if (( k = theme -> get_table("dir")))            { toml_get_style (k, t.dir);};
 //   if (( k = theme -> get_table("readonly")))       { toml_get_style (k, t.readonly);};
 //   if (( k = theme -> get_table("ssh")))            { toml_get_style (k, t.ssh);};
 //   if (( k = theme -> get_table("docker_machine"))) { toml_get_style (k, t.docker_machine);};
@@ -86,15 +86,15 @@
 //     // cpptoml::option<bool> b;
 //     // cpptoml::option<std::string> s;
 //     if ( auto i = args -> get_as<int>  ("TermWidth"))          {a.term_width          = *i;};
-//     if ( auto i = args -> get_as<int>  ("CwdMaxDepth"))        {a.cwd_max_depth       = *i;};
-//     if ( auto i = args -> get_as<int>  ("CwdMaxDirSize"))      {a.cwd_max_dir_size    = *i;};
+//     if ( auto i = args -> get_as<int>  ("DirMaxDepth"))        {a.dir_max_depth       = *i;};
+//     if ( auto i = args -> get_as<int>  ("DirMaxDirSize"))      {a.dir_max_dir_size    = *i;};
 //     if ( auto i = args -> get_as<int>  ("MaxWidthRatio"))      {a.max_width_ratio     = *i;};
 //     if ( auto i = args -> get_as<int>  ("MaxSegmentWidth"))    {a.max_segment_width   = *i;};
 //     if ( auto b = args -> get_as<bool> ("ColorizeHostname"))   {a.colorize_hostname   = *b;};
 //     if ( auto b = args -> get_as<bool> ("NumericExitCodes"))   {a.numeric_exit_codes  = *b;};
 //     if ( auto b = args -> get_as<bool> ("ShortenGKENames"))    {a.shorten_gke_names   = *b;};
 //     if ( auto s = args -> get_as<std::string> ("GitMode"))     {a.git_mode            = *s;};
-//     if ( auto s = args -> get_as<std::string> ("CwdMode"))     {a.cwd_mode            = *s;};
+//     if ( auto s = args -> get_as<std::string> ("DirMode"))     {a.dir_mode            = *s;};
 //     if ( auto s = args -> get_as<std::string> ("Shell"))       {a.shell               = *s;};
 //     if ( auto s = args -> get_as<std::string> ("IgnoreRepos")) {a.ignore_repos        = *s;};
 //     if ( auto s = args -> get_as<std::string> ("Duration"))    {a.duration            = *s;};

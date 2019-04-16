@@ -21,25 +21,22 @@ struct Printer
         switch (id)
         {
         case Shell::bash:
-            wrap    = "\\[";
-            unwrap  = "\\]";
-            newline = "\n";
+            wrap   = "\\[";
+            unwrap = "\\]";
             break;
 
         case Shell::csh:
-            wrap    = "%{";
-            unwrap  = "%}";
-            newline = " \\n";
+            wrap   = "%{";
+            unwrap = "%}";
+            endl   = " \\n";
             break;
 
         case Shell::zsh:
-            wrap    = "%{";
-            unwrap  = "%}";
-            newline = "\n";
+            wrap   = "%{";
+            unwrap = "%}";
             break;
         
         default:
-            newline = " \n";
             break;
         }
     };
@@ -49,7 +46,7 @@ struct Printer
     std::string stop;
     std::string wrap;
     std::string unwrap;
-    std::string newline;
+    std::string endl = "\n";
 
     void wrap_mode(bool yes)
     {

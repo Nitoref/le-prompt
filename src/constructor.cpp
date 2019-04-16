@@ -66,23 +66,5 @@ constructor::join(std::vector<std::future<Module>>& futures, int duration)
     return segments;
 }
 
-std::vector<Segment>
-constructor::parse(std::vector<std::string>& strings, Config& config)
-{
-    std::vector<Segment> segments;
-    segments.reserve(strings.size());
-    for (auto string: strings)
-    {
-        if (auto fun = get(string))
-        {
-            for (auto&& segment: (*fun)(config))
-            {
-                if (segment)
-                    segments.emplace_back(segment);
-            }
-        }
-    }
-    return segments;
-}
 
 }
