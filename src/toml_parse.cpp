@@ -6,6 +6,23 @@ namespace toml
 using string = std::string;
 
 
+template<typename T>
+void try_get(std::shared_ptr<cpptoml::table> table, string key, T& to) {
+    if ( cpptoml::option<T> v = table -> get_as<T> (key) ) {
+        to = *v;
+    };
+}
+
+// template<typename T>
+// void try_get_array(std::shared_ptr<cpptoml::table> table, string key, T& to) {
+//     if ( cpptoml::option<T> v = table -> get_as<T> (key) ) {
+//         to = *v;
+//     };
+// }
+
+
+
+
 void parse(Config& config, string filename) {
 	
     auto file = cpptoml::parse_file(filename);
@@ -26,7 +43,7 @@ void parse(Config& config, string filename) {
     {
 	    get_theme(t, config.theme);
     }
-    if (auto e = file -> get_table_array("extensions"))
+    if (auto e = file -> get_table_array("extension"))
     {
         get_extensions(e);
     }

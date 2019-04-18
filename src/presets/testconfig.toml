@@ -1,0 +1,75 @@
+segments.left = ['perms','root','shell']
+segments.right = ['time','host','jobs','dir','git','status']
+segments.bottom = []
+
+global.timeout = 100
+global.width_limit = 0.5
+global.padding_left = 1
+global.padding_right = 1
+global.padding_end = 1
+global.force_newline = 1
+global.native_rprompt = false
+
+global.theme.separator       = {fg = 254}
+global.symbol.separator2     = ''
+global.symbol.rseparator2    = ''
+
+status.numeric = false
+status.always = false
+status.theme.success = {fg = 254, bg = 235}
+status.theme.failure = {fg = 254, bg = 160}
+
+jobs.verbose = 1
+jobs.alays = false
+jobs.theme.default = {fg = 254, bg = 235}
+jobs.theme.none    = {fg = 254, bg = 235}
+
+user.default = ""
+user.always = false
+user.theme.default = {fg = 254}
+user.theme.root = {fg = 37}
+
+context.default = ""
+context.template = "u@h"
+context.always = false
+context.theme.default = {fg = 248}
+context.theme.root = {fg = 248}
+
+time.template = "%H:%M:%S"
+time.theme   = {fg = 252}
+
+dir.depth  = 0
+dir.length = 0
+dir.absolute = false
+dir.fancy    = false
+dir.theme.home = {fg = 254, bg = 235}
+dir.theme.path = {fg = 254, bg = 235}
+dir.theme.cwd  = {fg = 254, bg = 235}
+dir.theme.readonly = {fg = 166}
+
+git.template = "@.><+!?x"
+git.fancy = 1
+git.verbose = 1
+git.ignore = ["/nope/", "what/"]
+git.symbol.branch     = ''
+git.symbol.hash       = ''
+git.symbol.tag        = ''
+git.symbol.stash      = '⚑'
+git.symbol.ahead      = ''
+git.symbol.behind     = ''
+git.symbol.staged     = ''
+git.symbol.nstaged    = '✎'
+git.symbol.conflicted = '×'
+git.symbol.untracked  = '…'
+git.theme.clean       = {fg = 254, bg = 64}
+git.theme.dirty       = {fg = 254, bg = 125}
+git.theme.stash       = {fg = 33,  bg = 230}
+git.theme.ahead       = {fg = 37,  bg = 230}
+git.theme.behind      = {fg = 37,  bg = 230}
+git.theme.staged      = {fg = 64,  bg = 230}
+git.theme.nstaged     = {fg = 160, bg = 230}
+git.theme.untracked   = {fg = 136, bg = 230}
+git.theme.conflicted  = {fg = 166, bg = 230}
+
+[[extensions]]
+empty = true

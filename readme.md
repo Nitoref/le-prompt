@@ -1,84 +1,94 @@
-A fully featured theme for your shell with left, right and multi-line prompt support for bash, ksh, tcsh, zsh and fish.
+A no-latency fully featured theme with left, right and multi-line prompt support.
 
-This theme is for people that love their good ol' shell, or don't want/can switch to zsh - but still want a wonderfull looking shell like all the cool kids. It's also a theme for people that have to work in different environements, but want a unifying experience.
-
-* Fast.
-* Shell agnostic right and multi-line prompt support.
-* Easily configurable.
-* Extensible.
+Working with bash, ksh, tcsh, zsh and fish.
 
 #### Yet another one ?
 
-[powerline-go](https://github.com/justjanne/powerline-go) is the closest project from this one, and has heavily influenced it - this project adresses some of its drawbacks by providing better performance (written in C++ with libgit2 integration and parallelization), shell support, right prompt support and a better configuration format.
+This theme is for people that love their good ol' shell, or don't want/can switch to zsh - but still want a wonderfull looking shell like all the cool kids. It's also a theme for people that have to work in different environements, but want a unifying experience.
 
-#### Installation
+[powerline-go](https://github.com/justjanne/powerline-go) is the closest project from this one, and has heavily influenced it - this project adresses some of its drawbacks by providing better performance (written in C++ with parallelization and libgit2 integration), wider shell support, right prompt support for every shell, extensibility and a better configuration format.
+
+#### Is it overkill ?
+
+Yes, but you know you want it.
+
+#### How do I get it ?
 
 #####Requisites
 
  `xterm-256color`compatible terminal as well as [powerline fonts](https://github.com/powerline/fonts)  /  [nerd fonts](https://github.com/ryanoasis/nerd-fonts) are highly recommended to fully enjoy this software.
 
-###### bash 
+
 
 ```bash
-# file: .bash_profile
+# file: .bashrc
 
-POWERLINE_EXE="/path/to/powerline"
-POWERLINE_CONFIG="/path/to/config.json"
-function update_prompt() {
- 	PS1="$($POWERLINE_EXE bash $? $POWERLINE_CONFIG)"
+LE_PROMPT_EXE="/Users/nitoref/le_prompt/build/bin/powerline"
+LE_PROMPT_CONFIG="/Users/nitoref/le_prompt/src/presets/pure.toml"
+
+function le_prompt() {
+ 	PS1="$($LE_PROMPT_EXE bash $? $LE_PROMPT_CONFIG)"
 }
-PROMPT_COMMAND="update_prompt; $PROMPT_COMMAND"
+PROMPT_COMMAND="le_prompt; $PROMPT_COMMAND"
 ```
 
-###### zsh 
+
 
 ```sh
-#file: .zprofile
+#file: .zshrc
 
-POWERLINE_EXE="/path/to/powerline"
-POWERLINE_CONFIG="/path/to/config.json"
+LE_PROMPT_EXE="/Users/nitoref/Desktop/powerless/C++/build/bin/powerline"
+LE_PROMPT_CONFIG="/Users/nitoref/Desktop/powerless/C++/src/presets/pure.toml"
 
-function update_prompt() {
-	TMP=("${(f)$($POWERLINE_EXE zsh $? $POWERLINE_CONFIG)}")
-	PS1="$TMP[1] "; RPROMPT="$TMP[2]"
+function le_prompt() {
+	LE_ERROR=$?
+	TMP=("${(f)$($LE_PROMPT_EXE zsh $LE_ERROR $LE_PROMPT_CONFIG)}")
+	[ -n "$TMP[1]" ] && print -P $TMP[1]; PS1=$TMP[2]; RPS1=$TMP[3]
 }
-precmd_functions+=(update_prompt)
+precmd_functions+=(le_prompt)
 ```
 
-###### (t)csh 
+
 
 ```sh
 # file: .(t)cshrc
 
-set POWERLINE_EXE     = "path/to/powerline"
-set POWERLINE_CONFIG  = "path/to/config.json"
-set POWERLINE_COMMAND = '$POWERLINE_EXE $0 $? $POWERLINE_CONFIG'
-alias precmd 'set prompt="`$POWERLINE_EXE csh $? $POWERLINE_CONFIG`"'
-
+set LE_PROMPT_EXE     = "/Users/nitoref/Desktop/powerless/C++/build/bin/powerline"
+set LE_PROMPT_CONFIG  = "/Users/nitoref/Desktop/powerless/C++/src/presets/minimal.toml"
+alias precmd 'set prompt="`$LE_PROMPT_EXE csh $? $LE_PROMPT_CONFIG`"'
 ```
 
-###### fish 
+
 
 ```sh
-# file: config.fish
+set -U LE_PROMPT_EXE "/Users/nitoref/Desktop/powerless/C++/build/bin/powerline"
+set -U LE_PROMPT_CONFIG "/Users/nitoref/Desktop/powerless/C++/src/presets/solarized.toml"
 
-set -U POWERLINE_EXE "path/to/powerline"
-set -U POWERLINE_CONFIG "path/to/config.json"
-
+function le_prompt --on-event fish_prompt
+    set -U LE_PROMPT ($LE_PROMPT_EXE fish $status $LE_PROMPT_CONFIG)
+    echo -n "$LE_PROMPT[1]"
+end
 function fish_prompt
-    set -U PROMPT ($POWERLINE_EXE fish $status $POWERLINE_CONFIG)
-    printf $PROMPT[1]
+    echo -n "$LE_PROMPT[2]"
 end
 function fish_right_prompt
-    printf $PROMPT[2]
+    echo -n "$LE_PROMPT[3]"
 end
+```
+
+```sh
+# file: .kshrc
+
+LE_PROMPT_EXE="/Users/nitoref/Desktop/powerless/C++/build/bin/powerline"
+LE_PROMPT_CONFIG="/Users/nitoref/Desktop/powerless/C++/src/presets/minimal.toml"
+PS1='$(echo -ne "$($LE_PROMPT_EXE ksh $? $LE_PROMPT_CONFIG)")'
 ```
 
 
 
 ### Configuration
 
-The configuration file is a TOML document (yay) with five sections:
+The configuration file is a TOML document  with five sections:
 
 ```toml
 [segments]
@@ -89,7 +99,7 @@ The configuration file is a TOML document (yay) with five sections:
 ...
 [theme]
 ...
-[[extensions]]
+[[extension]]
 ...
 ```
 
@@ -105,17 +115,21 @@ right  = ['time','host','root','jobs','git','status']
 bottom = ['shell']
 ```
 
-Special requirements, or a feature not implemented yet ? Just turn any command into a module on your prompt.  If a module is already named that way, it'll get overriden. You may or may not want to call this very program from an extension. 
+Special requirements, or a feature not implemented yet ? Just turn any text, command or environment variable into a segment on your prompt with the `[[extension]]` table array.  If a module is already named that way, it'll get overriden. You may or may not want to call this very software from within an extension. 
 
 ```javascript
-[[extensions]]
-name    = "size"
-command = "du -sh | head -c 5"
-style   = {"bg":155, "fg": 210}
+[[extension]]
+name = 'hello'
+text = 'world'
 
-[[extensions]]
-name = "version"
-command = 
+[[extension]]
+name = 'foo'
+env  = 'BAR'
+
+[[extension]]
+name  = 'size'
+cmd   = 'du -sh | head -c 5'
+style = {"bg":155, "fg": 210}
 ```
 
 
@@ -126,8 +140,8 @@ command =
 [args]
 
 # Left aligned, right aligned and newline modules
-left_segments = ["user","perms","pwd","root","exit"]
-right_segments = ["time","host","git","jobs"]
+left_segments = ['user','perms','pwd','root','exit']
+right_segments = ['time','host','git','jobs']
 down_segments = []
 
 # [0 - 1] , maximum prompt / input ratio allowed
@@ -184,7 +198,6 @@ git_fancy = true
 git_count  =  true
 # Absolute paths to ignored git working directories
 git_ignore =  {}
-
 ```
 
 
@@ -221,6 +234,9 @@ git_staged   = "+"
 git_nstaged  = "!"
 git_conflicted = "×"
 git_untracked  = "?"
-
 ```
+
+
+
+#### Contribute
 

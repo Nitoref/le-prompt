@@ -1,18 +1,19 @@
+#include "../lib/cpptoml.hpp"
+#include "toml11/toml.hpp"
+#include "nlohmann.hpp"
+
 #include <algorithm>
 #include <vector>
 #include <iostream>
 #include <iterator>
 #include <functional>
 #include <iostream>
+#include <fstream>
+
 
 int main(int argc, char **argv, char **envp)
 {
-	std::string s = "hello%you%two";
-	std::string o;
-	std::transform(
-		s.begin(), s.end(),
-		std::back_inserter(o),
-        [](char c) -> std::string { if (c == '%') return "%%"; return std::string(1, c); }
-    );
-
+  	const auto data  = toml::parse("/Users/nitoref/le_prompt/src/presets/alloptions.toml");
+    const auto file = cpptoml::parse_file("/Users/nitoref/le_prompt/src/presets/alloptions.toml");
+	std::cout << data;
 }
