@@ -70,8 +70,8 @@ dot_env     = {fg = 55}
 virtual_env = {fg = 35}
 duration    = {fg = 237}
 
-git_clean  = {fg = 250}
-git_dirty  = {fg = 242}
+git_clean  = {fg = 242}
+git_dirty  = {fg = 250}
 git_stash  = {fg = 76}
 git_ahead  = {fg = 159}
 git_behind = {fg = 240}
