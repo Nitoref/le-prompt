@@ -8,11 +8,15 @@
 
 struct Arguments
 {
-    using string    = std::string;
+    using string = std::string;
     using strvec = std::vector<string>;
     using strmap = std::map<string, string>;
 
     Arguments() = default;
+    
+    strvec left_segments    = {"user","host","pwd","shell"};
+    strvec right_segments   = {"time", "git", "exit", "root"};
+    strvec down_segments = {};
 
     int  timeout = 1000;
     
@@ -23,8 +27,8 @@ struct Arguments
 
     bool force_newline  = false;
     bool native_rprompt = false;
-     
-    bool numeric_exit  = false;
+    
+    bool numeric_status  = false;
     bool jobs_count    = true;
 
     string default_user = "";
@@ -33,17 +37,14 @@ struct Arguments
 
     bool dir_fancy   = false;
     int  dir_depth   = 0;
-    int  dir_dir_limit = 0;
+    int  dir_length = 0;
 
-    string    git_format  = "@.><+!?x";
-    bool   git_compact = false;
+    string git_format  = "@.><+!?x";
+    bool   git_fancy   = true;
     bool   git_count   = true;
     strvec git_ignore  = {};
 
-    strmap path_aliases     = {};
-    strvec left_segments    = {"user","host","pwd","shell"};
-    strvec right_segments   = {"time", "git"};
-    strvec newline_segments = {};
+    strmap path_aliases = {};
 };
 
 

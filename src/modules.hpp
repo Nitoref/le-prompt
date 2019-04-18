@@ -11,7 +11,7 @@
 Module SegmentUser   (const Config& c);
 Module SegmentRoot   (const Config& c);
 Module SegmentHost   (const Config& c);
-Module SegmentExit   (const Config& c);
+Module SegmentStatus (const Config& c);
 Module SegmentShell  (const Config& c);
 Module SegmentJobs   (const Config& c);
 Module SegmentTime   (const Config& c);
@@ -31,7 +31,7 @@ enum class id: unsigned int {
 	user,
 	root,
 	host,
-	exit,
+	status,
 	shell,
 	jobs,
 	time,

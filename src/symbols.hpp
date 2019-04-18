@@ -31,6 +31,7 @@ struct Symbols
     std::string root     = "#";
     std::string host     = "@";
     std::string jobs     = "…";
+    std::string node     = "⬢";
     std::string readonly = " ⃠"; // "\u20E0"
     std::string dir_wrap = "…";  // "\u2026"
     

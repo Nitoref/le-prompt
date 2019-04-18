@@ -16,13 +16,22 @@
 
 struct Printer
 {
-    Printer(Shell::Type id)
+    Printer() = delete;
+
+    static inline std::string init;
+    static inline std::string stop;
+    static inline std::string wrap;
+    static inline std::string unwrap;
+    static inline std::string endl;
+    
+    static void mode(Shell::Type id)
     {
         switch (id)
         {
         case Shell::bash:
             wrap   = "\\[";
             unwrap = "\\]";
+            endl   = "\n";
             break;
 
         case Shell::csh:
@@ -34,21 +43,16 @@ struct Printer
         case Shell::zsh:
             wrap   = "%{";
             unwrap = "%}";
+            endl   = "\n";
             break;
         
         default:
+            endl   = "\n";
             break;
         }
     };
-    
-    Printer() = default;
-    std::string init;
-    std::string stop;
-    std::string wrap;
-    std::string unwrap;
-    std::string endl = "\n";
 
-    void wrap_mode(bool yes)
+    static void wrap_mode(bool yes)
     {
         init = ESCAPE;
         stop = "";
@@ -58,7 +62,7 @@ struct Printer
         }
     }
 
-    inline std::string bg(int value)
+    static inline std::string bg(int value)
     {
         std::string s(init);
         if (value < 0) {
@@ -73,7 +77,7 @@ struct Printer
         return s;
     }
 
-    inline std::string fg(int value)
+    static inline std::string fg(int value)
     {
         std::string s(init);
         if (value < 0) {
@@ -88,17 +92,17 @@ struct Printer
         return s;
     }
 
-    inline std::string reset()
+    static inline std::string reset()
     {
         return init + "0m" + stop;
     }
 
-    inline std::string cup(size_t i)
+    static inline std::string cup(size_t i)
     {
         return init +(i ? std::to_string(i) : "") + 'G' + stop;
     }
 
-    inline std::string font(const char* str)
+    static inline std::string font(const char* str)
     {
         static
         std::unordered_map<std::string, int> y =

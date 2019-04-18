@@ -51,7 +51,7 @@ signal_str(int code)
 
 
 Module
-SegmentExit(const Config& c)
+SegmentStatus(const Config& c)
 {
     Segment segment;
 
@@ -61,7 +61,7 @@ SegmentExit(const Config& c)
         return Module {};
     }
 
-    if (c.args.numeric_exit)
+    if (c.args.numeric_status)
     {
         segment.content = std::to_string(error);
     }
@@ -71,6 +71,6 @@ SegmentExit(const Config& c)
     }
 
     segment.style = c.theme.exit_failure;
-    segment.id    = module::id::exit;
+    segment.id    = module::id::status;
     return Module {segment};
 }

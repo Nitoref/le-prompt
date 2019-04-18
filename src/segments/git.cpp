@@ -64,7 +64,7 @@ SegmentGit(const Config& c)
         branch_symbol = c.symbols.git_branch;
 
 
-    if (c.args.git_compact)
+    if (!c.args.git_fancy)
     {
         std::string content;
         for (char ch: c.args.git_format)

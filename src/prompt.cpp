@@ -15,277 +15,131 @@
 
 Prompt::Prompt(Config& config):
 options(config),
-printer(options.shell.id)
+left (options.symbols.separator,  options.symbols.separator2,  options.args.padding_left, options.args.padding_right, utils::str_append),
+right(options.symbols.rseparator, options.symbols.rseparator2, options.args.padding_left, options.args.padding_right, utils::str_prepend),
+down (left)
 {}
 
 
 std::string
-Prompt::print()
+Prompt::make()
 {
-    std::string output;
-    
-    this->shrink();
-    auto align = options.shell.width - right_length_ + 2;
-    
+    left.preformat();
+    right.preformat();
+    down.preformat();
+    shrink();
     switch (options.shell.id)
     {
         case Shell::Type::zsh:
         case Shell::Type::fish:    
-        {
-            printer.wrap_mode(true);
-            
-            if (!newline_segments.empty() || options.args.force_newline)
-            {
-                output += options.symbols.top_prefix;
-                output += format_left_segments();
-                output += printer.cup(align);
-                output += format_right_segments();
-                output += printer.endl;
-                output += options.symbols.bot_prefix;
-                output += format_newline_segments();
-                output += std::string(options.args.padding_end, ' ');
-            }
-            else
-            {
-                output += printer.endl;
-                output += format_left_segments();
-                output += std::string(options.args.padding_end, ' ');
-                output += printer.endl;
-                output += format_right_segments();
-            }
-            break;
-        }
-        default:
-        {
-            printer.wrap_mode(false);
-            
-            output += printer.wrap;
-            output += printer.cup(align);
-            output += format_right_segments();
-            output += printer.cup(0);
-            output += printer.unwrap;
-            
-            printer.wrap_mode(true);
-            
-            if (!newline_segments.empty() || options.args.force_newline)
-            {
-                output += options.symbols.top_prefix;
-                output += format_left_segments();
-                output += printer.endl;
-                output += options.symbols.bot_prefix;
-                output += format_newline_segments();
-            }
-            else
-            {
-                output += format_left_segments();
-            }
-            output += std::string(options.args.padding_end, ' ');
-            
-            if (options.shell.id == Shell::Type::csh)
-                output += "%{\x1b[D%}";
-            
-            break;
-        }
+            return print_native();
     }
-    return output;
+    return print_emulated();
 }
-
 
 
 void
 Prompt::shrink()
 {
-    left_length_  = length (left_segments, position::left);
-    right_length_ = length (right_segments, position::right);
-    if (left_length_ + right_length_ < 0.7 * options.shell.width)
+    if (left.length + right.length < 0.7 * options.shell.width)
     {
         return;
     }
 
-    for (auto i = priority_list_.rbegin(); i != priority_list_.rend(); ++i)
+    for (auto i = priority_list.rbegin(); i != priority_list.rend(); ++i)
     {
-        for (auto index: id_lookup_left_.at((int)*i))
+        for (auto index: left.id_lookup.at((int)*i))
         {
-            left_length_ -= left_lengths_.at(index);
+            left.length -= utils::strlen(left.segments.at(index).content)
+            + options.args.padding_left + options.args.padding_right + 1;
         }
-        for (auto index: id_lookup_right_.at((int)*i))
+        for (auto index: right.id_lookup.at((int)*i))
         {
-            right_length_ -= right_lengths_.at(index);
+            right.length -= utils::strlen(right.segments.at(index).content)
+            + options.args.padding_left + options.args.padding_right + 1;
         }
-        ignored_segments_.insert(*i);
-        if (left_length_ + right_length_ < 0.7 * options.shell.width)
+        ignored_segments.insert(*i);
+        if (left.length + right.length < 0.7 * options.shell.width)
         {
             return;
         }
     }
 }
 
-
 std::string
-Prompt::format_segment(Segment s) 
+Prompt::print_native()
 {
     std::string output;
-    output += printer.bg(s.style.bg);
-    output += printer.fg(s.style.fg);
-    output += std::string(options.args.padding_left, ' ');
-    output += s.content;
-    output += std::string(options.args.padding_right, ' ');
-    return output;
-}
-
-std::string
-Prompt::make_separator(Segment s, std::string regular, std::string thin)
-{
-    std::string output;
-    if (s.style.bg == prev_color_)
+    std::string rprompt;
+    int align;
+    
+    Printer::wrap_mode(true);
+    
+    if (!down.segments.empty() || options.args.force_newline)
     {
-        output += printer.fg(options.theme.separator.fg);
-        output += thin;
-    }
-    else
-    if (prev_color_ == -1)
-    {
-        output += printer.fg(s.style.bg);
-        output += printer.bg(prev_color_);
-        output += printer.font("reversed");
-        output += regular;
-        output += printer.reset();
-    }
-    else
-    if (prev_color_ != -2)
-    {
-        output += printer.fg(prev_color_);
-        output += printer.bg(s.style.bg);
-        output += regular;
-    }
-    prev_color_ = s.style.bg;
-    return output;
-}
+        output += options.symbols.top_prefix;
+        output += left.format_without(ignored_segments);
 
-std::string
-Prompt::final_separator(std::string regular, std::string thin)
-{
-    std::string output;
-    output += printer.reset();
-    output += printer.fg(prev_color_);
-    output += prev_color_ == -1 ? "" : regular;
-    prev_color_ = -2;
-    return output;
-}
-
-
-std::string
-Prompt::format_left_segments()
-{
-    return format_segments(left_segments, position::left);
-}
-
-std::string
-Prompt::format_right_segments()
-{
-    return format_segments(right_segments, position::right);
-}
-
-std::string
-Prompt::format_newline_segments()
-{
-    return format_segments(newline_segments, position::left);
-}
-
-
-std::string
-Prompt::format_segments(std::vector<Segment> segments, position pos)
-{
-    std::string regular, thin;
-    std::function<void(std::string&, std::string)> append;
-    if (pos == position::left)
-    {
-        regular = options.symbols.separator;
-        thin    = options.symbols.separator2;
-        append  = utils::str_append;
-    }
-    else
-    {
-        regular = options.symbols.rseparator;
-        thin    = options.symbols.rseparator2;
-        append  = utils::str_prepend;
-    }
-
-    std::string output;
-    for (auto &segment : segments)
-    {
-        auto ignored = ignored_segments_.find(segment.id);
-        if (ignored != ignored_segments_.end())
-            continue;
-        append(output, make_separator(segment, regular, thin));
-        append(output, format_segment(segment));
-    }
-    if (!output.empty())
-    {
-        append(output, final_separator(regular, thin));
-        output += printer.reset();
-    }
-    return output;
-}
-
-
-size_t
-Prompt::length(std::vector<Segment> segments, position pos)
-{
-    int previous_color = -2;
-    size_t total    = 0;
-    size_t subtotal = 0;
-    size_t separator;
-    size_t separator2;
-
-    std::vector<size_t>* length_vector;
-    std::vector<std::vector<int>>* id_vector;
-
-    if (pos == position::left)
-    {
-        separator  = utils::strlen(options.symbols.separator);
-        separator2 = utils::strlen(options.symbols.separator2);
-        length_vector = &left_lengths_;
-        id_vector     = &id_lookup_left_;
-    }
-    else
-    {
-        separator  = utils::strlen(options.symbols.rseparator);
-        separator2 = utils::strlen(options.symbols.rseparator2);
-        length_vector = &right_lengths_;
-        id_vector     = &id_lookup_right_;
-    }
-
-    length_vector->reserve(segments.size());
-    id_vector->resize((int)module::id::__count);
-
-    size_t index = 0;
-    for (auto& segment: segments)
-    {
-        id_vector->at((int)segment.id).push_back(index++);
-
-        if (segment.style.bg == previous_color) {
-            subtotal += separator2;
-            total += subtotal;
-            length_vector->push_back(subtotal);
-        }
-        else if (previous_color != -2) {
-            subtotal += separator;
-            total += subtotal;
-            length_vector->push_back(subtotal);
-        }
-        subtotal = 0;
-        subtotal += utils::strlen(segment.content);
-        subtotal += options.args.padding_left;
-        subtotal += options.args.padding_right;
+        rprompt = right.format_without(ignored_segments);
+        align = options.shell.width - right.actual_length + 1;
+        output += Printer::cup(align);
+        output += rprompt;
         
-        previous_color = segment.style.bg;
+        output += Printer::endl;
+
+        output += options.symbols.bot_prefix;
+        output += down.format_without(ignored_segments);
+        output += std::string(options.args.padding_end, ' ');
     }
+    else
+    {
+        output += Printer::endl;
+        output += left.format_without(ignored_segments);
+        output += std::string(options.args.padding_end, ' ');
+        output += Printer::endl;
+        output += right.format_without(ignored_segments);
+    }
+    return output;
+}
 
-    subtotal += previous_color == -1 ? 1 : separator + 1;
-    total += subtotal;
-    length_vector->push_back(subtotal);
 
-    return total;
-    // There's also the top/bot_prefx to keep in mind
+std::string
+Prompt::print_emulated()
+{
+    std::string output;
+    std::string rprompt;
+    int align;
+
+    Printer::wrap_mode(false);
+    
+    output += Printer::wrap;
+
+    rprompt = right.format_without(ignored_segments);
+    align = options.shell.width - right.actual_length + 1;
+    output += Printer::cup(align);
+    output += rprompt;
+
+    output += Printer::cup(0);
+    output += Printer::unwrap;
+    
+    Printer::wrap_mode(true);
+    
+    if (!down.segments.empty() || options.args.force_newline)
+    {
+        output += options.symbols.top_prefix;
+        output += left.format_without(ignored_segments);
+        output += Printer::endl;
+        output += options.symbols.bot_prefix;
+        output += down.format_without(ignored_segments);
+    }
+    else
+    {
+        output += left.format_without(ignored_segments);
+    }
+    output += std::string(options.args.padding_end, ' ');
+    
+    if (options.shell.id == Shell::Type::csh)
+        output += "%{\x1b[D%}";
+
+    return output;
 }

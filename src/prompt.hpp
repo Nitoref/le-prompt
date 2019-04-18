@@ -12,42 +12,113 @@
 #include "modules.hpp"
 
 
+class SubPrompt
+{
+public:
+    
+    // Constructor
+    template<typename F>
+    SubPrompt (std::string a, std::string b, int c, int d, F f):
+    separator(a),
+    separator2(b),
+    separator_length(utils::strlen(a)),
+    separator2_length(utils::strlen(b)),
+    padding_left(c),
+    padding_right(d),
+    append(f)
+    {}
+
+    // Content
+    std::vector<Segment> segments;
+
+    // Symbols
+    std::string separator;
+    std::string separator2;
+    int separator_length;
+    int separator2_length;
+    int padding_left;
+    int padding_right;
+
+    // Information
+    size_t length = 0;
+    size_t actual_length = 0;
+
+    std::vector<std::vector<int>> id_lookup;
+
+    // Output status
+    int prev_color  = -2;
+
+    // Output function
+    std::function<
+        void(std::string&, std::string)
+    >append;
+
+    void
+    preformat();
+    
+    std::string
+    format_without(std::unordered_set<module::id>& ignored);
+
+    inline std::string
+    format_segment(Segment s);
+    
+    inline std::string
+    make_separator(Segment s);
+    
+    inline std::string
+    final_separator();
+};
+
+
 class Prompt
 {
-    enum position {left, right};
-
 public:
 
+    // Constructor
     Prompt(Config& config);
 
-    std::string
-    print();
-
-    std::string
-    format_left_segments();
-    
-    std::string
-    format_right_segments();
-    
-    std::string
-    format_newline_segments();
-
+    // Configuration
     Config  options;
-    Printer printer;
+    
+    // Subprompts
+    SubPrompt left;
+    SubPrompt right;
+    SubPrompt down;
+    
+    // Ignored segments
+    std::unordered_set<module::id> ignored_segments;
+
+    // 
+    std::string
+    make();
+
+    // 
+    void
+    shrink();
+
+    //
+    std::string
+    print_native();
+    
+    //
+    std::string
+    print_emulated();
+
+
     int prev_color_  = -2;
 
-    std::vector<module::id> priority_list_
+    std::vector<module::id> priority_list
     {
         module::id::extension,
         module::id::shell,
-        module::id::exit,
+        module::id::status,
         module::id::jobs,
         module::id::time,
         module::id::perms,
+        module::id::git_branch,
         module::id::dir,
         module::id::path,
         module::id::home,
-        module::id::git_branch,
         module::id::git_ahead,
         module::id::git_behind,
         module::id::git_staged,
@@ -55,108 +126,11 @@ public:
         module::id::git_untracked,
         module::id::git_conflicted,
         module::id::git_stash,
-        module::id::host,
         module::id::user,
+        module::id::host,
         module::id::ssh,
         module::id::aws,
         module::id::virtual_env,
     };
-
-    std::vector<Segment> left_segments;
-    std::vector<Segment> right_segments;
-    std::vector<Segment> newline_segments;
-
-
-private:
-
-    std::vector<std::vector<int>> id_lookup_left_;
-    std::vector<std::vector<int>> id_lookup_right_;
-
-    std::vector<size_t> left_lengths_;
-    std::vector<size_t> right_lengths_;
-
-    size_t left_length_;
-    size_t right_length_;
-    
-    std::unordered_set<module::id> ignored_segments_;
-
-    
-    void
-    shrink();
-
-    size_t 
-    length(std::vector<Segment> segments, position pos);
-
-    inline std::string
-    format_segment(Segment s);
-    
-    inline std::string
-    make_separator(Segment s, std::string regular, std::string thin);
-    
-    inline std::string
-    final_separator(std::string regular, std::string thin);
-    
-    std::string
-    format_left_segment(Segment s);
-    
-    std::string 
-    format_right_segment(Segment s);
-    
-    std::string 
-    format_segments(std::vector<Segment> segments, position pos);
 };
 #endif
-
-
-
-
-
-
-// class SubPrompt
-// {
-// public:
-    
-//     template<typename F>
-//     SubPrompt (std::string a, std::string b, F f):
-//     separator(a), separator2(b), append(f)
-//     {}
-
-//     Printer printer;
-
-//     std::vector<Segment> segments;
-//     std::vector<std::vector<int>> id_lookup;
-//     std::vector<size_t> lengths;
-//     size_t length;
-
-//     std::string prefix;
-//     std::string separator;
-//     std::string separator2;
-//     size_t padding_left;
-//     size_t padding_right;
-
-//     int prev_color  = -2;
-
-//     std::function<void(std::string&, std::string)>
-//     append;
-
-//     void
-//     preformat();
-
-//     inline std::string
-//     format_segment(Segment s);
-    
-//     inline std::string
-//     make_separator(Segment s);
-    
-//     inline std::string
-//     final_separator();
-    
-//     std::string
-//     format_left_segment(Segment s);
-    
-//     std::string 
-//     format_right_segment(Segment s);
-    
-//     std::string 
-//     format_with_ignored(std::vector<module::id>& ignored);
-// };
