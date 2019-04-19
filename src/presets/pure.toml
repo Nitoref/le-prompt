@@ -27,6 +27,10 @@ dir.theme.home  = {fg = 74}
 dir.theme.path  = {fg = 223}
 dir.theme.cwd   = {fg = 223}
 dir.symbol.wrap = '…'
+dir.alias = [
+	{'/usr/local/Cellar' = 'cellar'},
+	{'Documents' = ''}
+]
 
 readonly.symbol = ''
 readonly.theme  = {fg = 209}

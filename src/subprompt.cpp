@@ -1,11 +1,6 @@
-#include "prompt.hpp"
-#include "utils.hpp"
+#include "subprompt.hpp"
 
-#include <string>
-#include <iostream>
 #include <algorithm>
-#include <functional>
-#include <unordered_map>
 
 
 std::string
@@ -24,7 +19,7 @@ SubPrompt::format_without(std::unordered_set<module::id>& ignored)
     if (!output.empty())
     {
         append(output, final_separator());
-        output += Printer::reset();
+        output += printer::reset();
     }
     return output;
 }
@@ -35,8 +30,8 @@ SubPrompt::format_segment(Segment s)
 {
     std::string output;
     output.reserve(20);
-    output += Printer::bg(s.style.bg);
-    output += Printer::fg(s.style.fg);
+    output += printer::bg(s.style.bg);
+    output += printer::fg(s.style.fg);
     output += std::string(padding_left, ' ');
     output += s.content;
     output += std::string(padding_right, ' ');
@@ -55,25 +50,25 @@ SubPrompt::make_separator(Segment s)
     output.reserve(20); // maybe ?
     if (s.style.bg == prev_color)
     {
-        output += Printer::fg(160); //options.theme.separator.fg
+        output += printer::fg(160); //options.theme.separator.fg
         output += separator2;
         actual_length += separator2_length;
     }
     else
     if (prev_color == -1)
     {
-        output += Printer::fg(s.style.bg);
-        output += Printer::bg(prev_color);
-        output += Printer::font("reversed");
+        output += printer::fg(s.style.bg);
+        output += printer::bg(prev_color);
+        output += printer::font("reversed");
         output += separator;
-        output += Printer::reset();
+        output += printer::reset();
         actual_length += separator_length;
     }
     else
     if (prev_color != -2)
     {
-        output += Printer::fg(prev_color);
-        output += Printer::bg(s.style.bg);
+        output += printer::fg(prev_color);
+        output += printer::bg(s.style.bg);
         output += separator;
         actual_length += separator_length;
     }
@@ -86,8 +81,8 @@ std::string
 SubPrompt::final_separator()
 {
     std::string output;
-    output += Printer::reset();
-    output += Printer::fg(prev_color);
+    output += printer::reset();
+    output += printer::fg(prev_color);
     if (prev_color != -1) 
     {
         output += separator;

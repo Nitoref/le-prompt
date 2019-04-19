@@ -1,6 +1,7 @@
+#include "utils.hpp"
+#include "modules.hpp"
+
 #include <cstdlib>
-#include "../utils.hpp"
-#include "../modules.hpp"
 
 
 Module SegmentAws(const config& c)

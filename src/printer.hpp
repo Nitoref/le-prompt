@@ -15,9 +15,9 @@
 #define FG_256_ "38;5;"
 
 
-struct Printer
+struct printer
 {
-    Printer() = delete;
+    printer() = delete;
 
     static inline std::string init;
     static inline std::string stop;

@@ -16,6 +16,7 @@ struct config
 
 	using string = std::string;
 	using strvec = std::vector<string>;
+	using strmap = std::map<string, string>;
 
 
 	config(int argc, char const *argv[]);
@@ -102,6 +103,7 @@ struct config
 		bool   fancy;
 		size_t depth;
 		size_t length;
+		strmap alias;
 	}
 	dir;
 
@@ -127,16 +129,16 @@ struct config
 	struct git
 	{
 		string symbol_branch;
-		string symbol_hash;
-		string symbol_tag;
-		string symbol_dirty;
-		string symbol_stash;
-		string symbol_ahead;
-		string symbol_behind;
-		string symbol_staged;
-		string symbol_nstaged;
-		string symbol_conflicted;
-		string symbol_untracked;
+		string symbol_hash  = "#";
+		string symbol_tag   = "&";
+		string symbol_dirty = "✳";
+		string symbol_stash = "°";
+		string symbol_ahead   = "↑";
+		string symbol_behind  = "↓"; 
+		string symbol_staged  = "+";
+		string symbol_nstaged = "!"; 
+		string symbol_conflicted = "×";
+		string symbol_untracked  = "?";
 
 		Style theme_clean;
 		Style theme_dirty;
@@ -211,17 +213,15 @@ struct config
 	ssh;
 
 
-private:
-
 	using table_ptr = std::shared_ptr<cpptoml::table>;
 
 	void parse(string filename);
 
 	template<class T>
 	void get(const table_ptr data, string key, T& t);
-	void get(const table_ptr data, string key, Style& style);
-	// template<class T>
-	void get(const table_ptr data, string key, std::vector<string>& t);
+	void get(const table_ptr data, string key, Style& s);
+	void get(const table_ptr data, string key, strvec& t);
+	void get(const table_ptr data, string key, strmap& t);
 
 	void get_segments   (table_ptr table);
 	void get_global     (table_ptr table);

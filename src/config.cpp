@@ -97,6 +97,7 @@ void config::get_dir(table_ptr table)
     get(table, "fancy"      , dir.fancy);
     get(table, "depth"      , dir.depth);
     get(table, "length"     , dir.length);
+    get(table, "alias"      , dir.alias);
 }
 
 void config::get_readonly(table_ptr table)
@@ -199,26 +200,35 @@ void config::get(const table_ptr data, string key, T& t)
         t = *value; 
 }
 
-void config::get(const table_ptr data, string key, Style& style)
+void config::get(const table_ptr data, string key, Style& s)
 {
     auto table = data -> get_table_qualified(key);
     if (!table)
         return;
 
     auto fg = table -> get_as<int>("fg");
-    if (fg) style.fg = *fg;
+    if (fg) s.fg = *fg;
     auto bg = table -> get_as<int>("bg");
-    if (bg) style.bg = *bg;
+    if (bg) s.bg = *bg;
 }
 
-// template<class T>
-void config::get(const table_ptr data, string key, std::vector<string>& t)
+void config::get(const table_ptr data, string key, strvec& t)
 {
     auto values = data -> get_array_of<string>(key);
     if (!values)
         return;
-    t.clear();
-    t.reserve(values->size());
+    t.clear(), t.reserve(values->size());
     for (const auto& value: *values)
         t.push_back(value);
+}
+
+void config::get(const table_ptr data, string key, strmap& t)
+{
+    auto values = data -> get_table_array(key);
+    if (!values)
+        return;
+    for (const auto& value: *values)    // for each table_array
+    	for (const auto& pair: *value)  // for each pair
+        	// std::cout << pair.first <<  "\n"; //*(pair.second);
+            ;
 }

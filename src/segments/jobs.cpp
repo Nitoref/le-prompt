@@ -1,5 +1,5 @@
-#include "../modules.hpp"
-#include "../utils.hpp"
+#include "modules.hpp"
+#include "utils.hpp"
 #include <unistd.h>
 
 
@@ -23,7 +23,7 @@ SegmentJobs(const config& c)
 	
 	return Module {
 		{
-			module::id::perms,
+			module::id::jobs,
 			content,
 			c.jobs.theme
 		}

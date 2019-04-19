@@ -24,6 +24,10 @@ dir.symbol.wrap = "…"
 dir.theme.home = {fg = 230, bg = 24}
 dir.theme.path = {fg = 254, bg = 24}
 dir.theme.cwd  = {fg = 230, bg = 24}
+dir.alias = [
+	{'/usr/local/Cellar' = 'cellar'},
+	{'Documents' = ''}
+]
 
 root.symbol = "#"
 root.theme  = {fg = 37}
