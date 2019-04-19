@@ -7,7 +7,7 @@ using string = std::string;
 
 
 template<typename T>
-void try_get(std::shared_ptr<cpptoml::table> table, string key, T& to) {
+void get(std::shared_ptr<cpptoml::table> table, string key, T& to) {
     if ( cpptoml::option<T> v = table -> get_as<T> (key) ) {
         to = *v;
     };
