@@ -1,56 +1,65 @@
-segments.left = ['perms','root','shell']
-segments.right = ['time','host','jobs','dir','git','status']
-segments.bottom = []
-
-global.timeout = 100
-global.width_limit = 0.5
-global.padding_left = 1
-global.padding_right = 1
-global.padding_end = 1
-global.force_newline = 1
-global.native_rprompt = false
-
-global.theme.separator       = {fg = 254}
-global.symbol.separator2     = ''
-global.symbol.rseparator2    = ''
-
-status.numeric = false
-status.always = false
-status.theme.success = {fg = 254, bg = 235}
-status.theme.failure = {fg = 254, bg = 160}
-
-jobs.verbose = 1
-jobs.alays = false
-jobs.theme.default = {fg = 254, bg = 235}
-jobs.theme.none    = {fg = 254, bg = 235}
-
-user.default = ""
-user.always = false
-user.theme.default = {fg = 254}
-user.theme.root = {fg = 37}
-
 context.default = ""
 context.template = "u@h"
 context.always = false
 context.theme.default = {fg = 248}
 context.theme.root = {fg = 248}
 
-time.template = "%H:%M:%S"
-time.theme   = {fg = 252}
+segments.left = [
+  'perms',
+  'root',
+  'shell'
+]
+segments.right = [
+  'time',
+  'host',
+  'user',
+  'jobs',
+  'dir',
+  'git',
+  'status'
+]
 
+global.force_newline  = false
+global.native_rprompt = false
+
+global.padding.left  = 1
+global.padding.right = 1
+global.padding.end   = 1
+global.symbol.separator   = ''
+global.symbol.separator2  = ''
+global.symbol.rseparator  = ''
+global.symbol.rseparator2 = ''
+global.symbol.top_prefix  = ''
+global.symbol.bot_prefix  = ''
+global.theme.separator  = {fg = 254}
+global.theme.background = {fg = 254}
+
+user.default       = 'nitoref'
+user.theme.default = {fg = 254}
+user.theme.root    = {fg = 37}
+user.always        = false
+
+host.default  = ""
+host.symbol   = "@"
+host.template = "u@h"
+host.always   = false
+host.theme    = {fg = 248}
+
+dir.theme.home   = {fg = 230, bg = 61}
+dir.theme.path   = {fg = 254, bg = 61}
+dir.theme.cwd    = {fg = 230, bg = 61}
+dir.symbol.wrap  = '…'
+dir.symbol.home  = '~'
+dir.fancy  = true
 dir.depth  = 0
 dir.length = 0
-dir.absolute = false
-dir.fancy    = false
-dir.theme.home = {fg = 254, bg = 235}
-dir.theme.path = {fg = 254, bg = 235}
-dir.theme.cwd  = {fg = 254, bg = 235}
-dir.theme.readonly = {fg = 166}
 
-git.template = "@.><+!?x"
-git.fancy = 1
-git.verbose = 1
-git.ignore = ["/nope/", "what/"]
+readonly.theme  = {fg = 166}
+readonly.symbol = " ⃠"
+
+aws.theme    = {fg = -1, bg = -1}
+docker.theme = {fg = 13,  bg = 55}
+
 git.symbol.branch     = ''
 git.symbol.hash       = ''
 git.symbol.tag        = ''
@@ -61,15 +70,45 @@ git.symbol.staged     = ''
 git.symbol.nstaged    = '✎'
 git.symbol.conflicted = '×'
 git.symbol.untracked  = '…'
-git.theme.clean       = {fg = 254, bg = 64}
-git.theme.dirty       = {fg = 254, bg = 125}
-git.theme.stash       = {fg = 33,  bg = 230}
-git.theme.ahead       = {fg = 37,  bg = 230}
-git.theme.behind      = {fg = 37,  bg = 230}
-git.theme.staged      = {fg = 64,  bg = 230}
-git.theme.nstaged     = {fg = 160, bg = 230}
-git.theme.untracked   = {fg = 136, bg = 230}
-git.theme.conflicted  = {fg = 166, bg = 230}
 
-[[extensions]]
-empty = true
+git.theme.clean      = {fg = 254, bg = 64}
+git.theme.dirty      = {fg = 254, bg = 125}
+git.theme.stash      = {fg = 33,  bg = 230}
+git.theme.ahead      = {fg = 37,  bg = 230}
+git.theme.behind     = {fg = 37,  bg = 230}
+git.theme.staged     = {fg = 64,  bg = 230}
+git.theme.nstaged    = {fg = 160, bg = 230}
+git.theme.untracked  = {fg = 136, bg = 230}
+git.theme.conflicted = {fg = 166, bg = 230}
+
+git.fancy = true
+git.count = true
+git.template = ""
+git.ignore   = []
+
+jobs.symbol = ''
+jobs.verbose = true
+jobs.always  = false
+jobs.theme.default = {fg = 136, bg = 235}
+jobs.theme.none    = {fg = 136, bg = 235}
+
+root.theme  = {fg = 37}
+root.symbol = ''
+
+status.numeric = false
+status.symbol.success  = false
+status.symbol.failure  = false
+status.theme.success = {fg = 254, bg = 235}
+status.theme.failure = {fg = 254, bg = 160}
+
+virtual_env.theme    = {fg = 8,   bg = 6}
+
+prompt.symbol = '$'
+prompt.theme.success = {fg = -1, bg = -1}
+prompt.theme.failure = {fg = -1, bg = 160}
+
+time.theme    = {fg = 252}
+time.template = '%H:%M:%S'
+
+ssh.theme = {fg = 8,   bg = 9}
+
