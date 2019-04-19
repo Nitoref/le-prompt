@@ -2,7 +2,7 @@
 #include "modules.hpp"
 
 
-Module SegmentNode (Config& c)
+Module SegmentNode (config& c)
 {
 	return Module {};
 }

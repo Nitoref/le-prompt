@@ -1,8 +1,4 @@
-#include "arguments.hpp"
-#include "symbols.hpp"
 #include "prompt.hpp"
-#include "theme.hpp"
-#include "shell.hpp"
 #include "utils.hpp"
 
 #include <string>

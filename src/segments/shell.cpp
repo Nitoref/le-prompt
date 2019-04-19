@@ -2,14 +2,14 @@
 
 
 Module
-SegmentShell(const Config& c)
+SegmentShell(const config& c)
 {
     return Module {
         {
             module::id::shell,
-            c.symbols.prompt,
-            c.shell.error ? c.theme.exit_failure
-                          : c.theme.exit_success
+            c.prompt.symbol,
+            c._meta.error ? c.prompt.theme_failure
+                          : c.prompt.theme_success
 
         }
     };

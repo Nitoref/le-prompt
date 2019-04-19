@@ -1,12 +1,13 @@
 #include "modules.hpp"
+#include "utils.hpp"
 
 
-Module SegmentDocker(const Config& c) {
+Module SegmentDocker(const config& c) {
 
 	Segment segment;
 
 	segment.id      = module::id::docker;
-	segment.style   = c.theme.docker;
+	segment.style   = c.docker.theme;
 	segment.content = utils::string(getenv("DOCKER_MACHINE_NAME"));
 
 	if (segment)

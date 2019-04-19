@@ -10,14 +10,33 @@
 namespace toml
 {
 
-void parse(Config& config, std::string filename);
+using string = std::string;
+using table_ptr = std::shared_ptr<cpptoml::table>;
 
-void get_style(std::shared_ptr<cpptoml::table> k, Style& s);
-void get_theme(std::shared_ptr<cpptoml::table> conf, Theme& t);
-void get_symbols(std::shared_ptr<cpptoml::table> conf, Symbols& s);
-void get_arguments(std::shared_ptr<cpptoml::table> conf, Arguments& a);
-void get_segments(std::shared_ptr<cpptoml::table> args, Arguments& a);
-void get_extensions(std::shared_ptr<cpptoml::table_array> extensions);
+void parse(config& config, string filename);
+
+template<class T>
+void get(const table_ptr data, string key, T& t);
+void get(const table_ptr data, string key, Style& style);
+// template<class T>
+void get(const table_ptr data, string key, std::vector<string>& t);
+
+void get_segments   (table_ptr table, config& c);
+void get_global     (table_ptr table, config& c);
+void get_user       (table_ptr table, config& c);
+void get_context    (table_ptr table, config& c);
+void get_dir        (table_ptr table, config& c);
+void get_readonly   (table_ptr table, config& c);
+void get_aws        (table_ptr table, config& c);
+void get_docker     (table_ptr table, config& c);
+void get_git        (table_ptr table, config& c);
+void get_jobs       (table_ptr table, config& c);
+void get_root       (table_ptr table, config& c);
+void get_status     (table_ptr table, config& c);
+void get_virtual_env(table_ptr table, config& c);
+void get_prompt     (table_ptr table, config& c);
+void get_time       (table_ptr table, config& c);
+void get_ssh        (table_ptr table, config& c);
 
 }
 

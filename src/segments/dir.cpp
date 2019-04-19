@@ -48,23 +48,23 @@ fold(std::string& path, int max_depth, std::string symbol)
 
 
 Module
-SegmentDir(const Config& c)
+SegmentDir(const config& c)
 {
     auto path = utils::string(getenv("PWD"));
-    bool at_home = remove_home(path, c.symbols.home);
+    bool at_home = remove_home(path, c.dir.symbol_home);
 
-    for (auto& [from, to]: c.args.path_aliases)
-    {
-        utils::strrepl(path, from, to);
-    };
+    // for (auto& [from, to]: c.args.path_aliases)
+    // {
+    //     utils::strrepl(path, from, to);
+    // };
 
-    fold(path, c.args.dir_depth, c.symbols.dir_wrap);
+    fold(path, c.dir.depth, c.dir.symbol_wrap);
 
-    for (auto& [what, with]: c.shell.escape_map) {
-        utils::strrepl(path, what, with);
-    }
+    // for (auto& [what, with]: c.shell.escape_map) {
+    //     utils::strrepl(path, what, with);
+    // }
     
-    auto style = at_home ? c.theme.home : c.theme.path;
+    auto style = at_home ? c.dir.theme_home : c.dir.theme_path;
     return Module { {module::id::dir, path, style } };
 
 

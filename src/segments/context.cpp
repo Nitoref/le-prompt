@@ -7,29 +7,23 @@
 
 
 Module
-SegmentHost(const Config& c)
+SegmentContext(const config& c)
 {
 	Segment segment;
 
     char* hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
 
-    if (hostname == c.args.default_host)
-    {
-    	return Module {};
-    }
-    
-    segment.content += c.symbols.host;
     segment.content += std::string(hostname);
     segment.content.erase(segment.content.find('.'));
-    segment.style = c.theme.hostname;
-    segment.id = module::id::host;
+    segment.style = c.context.theme;
+    segment.id = module::id::context;
 	
 	return Module {segment};
 }
 
 // Module
-// SegmentHost(const Config& c)
+// SegmentHost(const config& c)
 // {
 //     char* host_c_str = (char*)malloc(HOSTNAME_MAX);
 //     gethostname(host_c_str, HOSTNAME_MAX);

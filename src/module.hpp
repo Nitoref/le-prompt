@@ -1,7 +1,6 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include "theme.hpp"
 #include <vector>
 #include <string>
 
@@ -10,6 +9,12 @@ namespace module
 {
 enum class id: unsigned int;
 }
+
+struct Style
+{
+    int   fg = -1;
+    int   bg = -1;
+};
 
 class Segment
 {

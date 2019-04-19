@@ -4,7 +4,7 @@
 
 
 Module
-SegmentPerms(const Config& c)
+SegmentPerms(const config& c)
 {
     char* dir = getenv("PWD");
     if (!access(dir, W_OK))
@@ -15,8 +15,8 @@ SegmentPerms(const Config& c)
     return Module {
     	{
 	    	module::id::perms,
-	    	c.symbols.readonly,
-	    	c.theme.readonly
+	    	c.readonly.symbol,
+	    	c.readonly.theme
     	}
     };
 }

@@ -2,9 +2,6 @@
 #include <chrono>
 
 
-namespace module
-{
-
 constructor_t* 
 constructor::get(std::string str)
 {
@@ -24,7 +21,7 @@ constructor::merge(constructor_map_t extension)
 
 
 std::vector<std::future<Module>>
-constructor::spawn(std::vector<std::string>& segments, Config& config)
+constructor::spawn(std::vector<std::string>& segments, config& config)
 {
     std::vector<std::future<Module>> futures;
     futures.reserve(segments.size());
@@ -64,7 +61,4 @@ constructor::join(std::vector<std::future<Module>>& futures, int duration)
         }
     }
     return segments;
-}
-
-
 }

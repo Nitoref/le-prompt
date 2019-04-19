@@ -36,12 +36,12 @@ int get_name(GitStatus& status, git_repository *repo);
 
 
 Module
-SegmentGit(const Config& c)
+SegmentGit(const config& c)
 {
     GitStatus status;
  
 
-    if (get_git_status(status, c.args.git_ignore))
+    if (get_git_status(status, c.git.ignore))
     {
         return Module {};
     };
@@ -59,32 +59,32 @@ SegmentGit(const Config& c)
 
     std::string branch_symbol;
     if (status.detached)
-        branch_symbol = c.symbols.git_hash;
+        branch_symbol = c.git.symbol_hash;
     else
-        branch_symbol = c.symbols.git_branch;
+        branch_symbol = c.git.symbol_branch;
 
 
-    if (!c.args.git_fancy)
+    if (!c.git.fancy)
     {
         std::string content;
-        for (char ch: c.args.git_format)
+        for (char ch: c.git.format)
         {
             switch (ch) {
                 case '@': content += branch_symbol + status.name; break;
-                case 'd': content += dirty ? c.symbols.git_dirty : ""; break;
-                case '.': content += status.stash ? c.symbols.git_stash : ""; break;
-                case '>': content += status.ahead ? c.symbols.git_ahead : ""; break;
-                case '<': content += status.behind ? c.symbols.git_behind : ""; break;
-                case '+': content += status.staged ? c.symbols.git_staged : ""; break;
-                case '!': content += status.nstaged ? c.symbols.git_nstaged : ""; break;
-                case '?': content += status.untracked ? c.symbols.git_untracked : ""; break;
-                case 'x': content += status.conflicted ? c.symbols.git_conflicted : ""; break;
+                case 'd': content += dirty ? c.git.symbol_dirty : ""; break;
+                case '.': content += status.stash ? c.git.symbol_stash : ""; break;
+                case '>': content += status.ahead ? c.git.symbol_ahead : ""; break;
+                case '<': content += status.behind ? c.git.symbol_behind : ""; break;
+                case '+': content += status.staged ? c.git.symbol_staged : ""; break;
+                case '!': content += status.nstaged ? c.git.symbol_nstaged : ""; break;
+                case '?': content += status.untracked ? c.git.symbol_untracked : ""; break;
+                case 'x': content += status.conflicted ? c.git.symbol_conflicted : ""; break;
                 default: break;
             }
         }
         return Module { {
             module::id::git_branch, content,
-            dirty ? c.theme.git_dirty : c.theme.git_clean
+            dirty ? c.git.theme_dirty : c.git.theme_clean
         } };
     }
 
@@ -92,7 +92,7 @@ SegmentGit(const Config& c)
     Module    module;
     // Segment  segment;
     
-    for (char ch: c.args.git_format)
+    for (char ch: c.git.format)
     {
         switch (ch)
         {
@@ -100,76 +100,76 @@ SegmentGit(const Config& c)
             module.emplace_back(
                 module::id::git_branch,
                 branch_symbol + status.name,
-                dirty ? c.theme.git_dirty : c.theme.git_clean
+                dirty ? c.git.theme_dirty : c.git.theme_clean
             );
         break;
         case '.':
             if (status.stash) {
-                std::string count = c.args.git_count ? std::to_string(status.stash) : "";
+                std::string count = c.git.count ? std::to_string(status.stash) : "";
                 module.emplace_back(
                     module::id::git_stash,
-                    count + c.symbols.git_stash,
-                    c.theme.git_stash
+                    count + c.git.symbol_stash,
+                    c.git.theme_stash
                 );
             }
         break;
         case '>':
             if (status.ahead) {
-                std::string count = c.args.git_count ? std::to_string(status.ahead) : "";
+                std::string count = c.git.count ? std::to_string(status.ahead) : "";
                 module.emplace_back(
                     module::id::git_ahead,
-                    count + c.symbols.git_ahead,
-                    c.theme.git_ahead
+                    count + c.git.symbol_ahead,
+                    c.git.theme_ahead
                 );
             }
         break;
         case '<':
             if (status.behind) {
-                std::string count = c.args.git_count ? std::to_string(status.behind) : "";
+                std::string count = c.git.count ? std::to_string(status.behind) : "";
                 module.emplace_back(
                     module::id::git_behind,
-                    count + c.symbols.git_behind,
-                    c.theme.git_behind
+                    count + c.git.symbol_behind,
+                    c.git.theme_behind
                 );
             }
         break;
         case '+':
             if (status.staged) {
-                std::string count = c.args.git_count ? std::to_string(status.staged) : "";
+                std::string count = c.git.count ? std::to_string(status.staged) : "";
                 module.emplace_back(
                     module::id::git_staged,
-                    count + c.symbols.git_staged,
-                    c.theme.git_staged
+                    count + c.git.symbol_staged,
+                    c.git.theme_staged
                 );
             }
         break;
         case '!':
             if (status.nstaged) {
-                std::string count = c.args.git_count ? std::to_string(status.nstaged) : "";
+                std::string count = c.git.count ? std::to_string(status.nstaged) : "";
                 module.emplace_back(
                     module::id::git_nstaged,
-                    count + c.symbols.git_nstaged,
-                    c.theme.git_nstaged
+                    count + c.git.symbol_nstaged,
+                    c.git.theme_nstaged
                 );
             }
         break;
         case '?':
             if (status.untracked) {
-                std::string count = c.args.git_count ? std::to_string(status.untracked) : "";
+                std::string count = c.git.count ? std::to_string(status.untracked) : "";
                 module.emplace_back(
                     module::id::git_untracked,
-                    count + c.symbols.git_untracked,
-                    c.theme.git_untracked
+                    count + c.git.symbol_untracked,
+                    c.git.theme_untracked
                 );
             }
         break;
         case 'x':
             if (status.conflicted) {
-                std::string count = c.args.git_count ? std::to_string(status.conflicted) : "";
+                std::string count = c.git.count ? std::to_string(status.conflicted) : "";
                 module.emplace_back(
                     module::id::git_conflicted,
-                    count + c.symbols.git_conflicted,
-                    c.theme.git_conflicted
+                    count + c.git.symbol_conflicted,
+                    c.git.theme_conflicted
                 );
             }
         break;

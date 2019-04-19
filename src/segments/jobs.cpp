@@ -4,7 +4,7 @@
 
 
 Module
-SegmentJobs(const Config& c)
+SegmentJobs(const config& c)
 {
 	std::string ppid = std::to_string(getpgid(getppid()));
 	int jobs = utils::exec("ps -a -oppid= | grep " + ppid).size() - 1;
@@ -15,17 +15,17 @@ SegmentJobs(const Config& c)
 	}
 
 	std::string content;
-	if (c.args.jobs_count)
+	if (c.jobs.count)
 	{
 		content += std::to_string(jobs);
 	}
-	content += c.symbols.jobs;
+	content += c.jobs.symbol;
 	
 	return Module {
 		{
 			module::id::perms,
 			content,
-			c.theme.jobs
+			c.jobs.theme
 		}
 	};
 }

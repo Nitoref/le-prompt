@@ -8,9 +8,11 @@ This theme is for people that love their good ol' shell, or don't want/can switc
 
 [powerline-go](https://github.com/justjanne/powerline-go) is the closest project from this one, and has heavily influenced it - this project adresses some of its drawbacks by providing better performance (written in C++ with parallelization and libgit2 integration), wider shell support, right prompt support for every shell, extensibility and a better configuration format.
 
-#### Is it overkill ?
+If youre coming from something like powerlevel9k, this theme offers a proper configuration file format and a shrinking system: instead of simply removing the right prompt when short in space, the least prioritized segments are removed from both ends until an acceptable length is reached. Also performance.
 
-Yes, but you know you want it.
+#### It is overkill, right?
+
+Absolutely
 
 #### How do I get it ?
 
@@ -32,8 +34,6 @@ function le_prompt() {
 PROMPT_COMMAND="le_prompt; $PROMPT_COMMAND"
 ```
 
-
-
 ```sh
 #file: .zshrc
 
@@ -48,8 +48,6 @@ function le_prompt() {
 precmd_functions+=(le_prompt)
 ```
 
-
-
 ```sh
 # file: .(t)cshrc
 
@@ -58,9 +56,8 @@ set LE_PROMPT_CONFIG  = "/Users/nitoref/Desktop/powerless/C++/src/presets/minima
 alias precmd 'set prompt="`$LE_PROMPT_EXE csh $? $LE_PROMPT_CONFIG`"'
 ```
 
-
-
 ```sh
+# file: .config.fish
 set -U LE_PROMPT_EXE "/Users/nitoref/Desktop/powerless/C++/build/bin/powerline"
 set -U LE_PROMPT_CONFIG "/Users/nitoref/Desktop/powerless/C++/src/presets/solarized.toml"
 
@@ -86,7 +83,7 @@ PS1='$(echo -ne "$($LE_PROMPT_EXE ksh $? $LE_PROMPT_CONFIG)")'
 
 
 
-### Configuration
+### configuration
 
 The configuration file is a TOML document  with five sections:
 

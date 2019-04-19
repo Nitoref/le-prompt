@@ -11,9 +11,7 @@
 #include <unordered_map>
 
 
-namespace module
-{
-using constructor_t     = std::function<Module(const Config&)>;
+using constructor_t     = std::function<Module(const config&)>;
 using constructor_map_t = std::unordered_map<std::string, constructor_t>;
 
 
@@ -28,7 +26,7 @@ public:
     get(std::string str);
     
     static std::vector<std::future<Module>>
-	spawn(std::vector<std::string>& segments, Config& config);
+	spawn(std::vector<std::string>& segments, config& config);
 
 	static std::vector<Segment>
 	join(std::vector<std::future<Module>>& futures, int duration);
@@ -36,8 +34,6 @@ public:
     static void
     merge(constructor_map_t extension);
 };
-
-}
 
 
 

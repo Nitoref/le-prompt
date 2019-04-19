@@ -1,69 +1,73 @@
-[segments]
-left = [
+segments.left = [
   "size",
   "perms",
   "dir",
   "git"
 ]
-right = [
+segments.right = [
   "time",
   "jobs",
   "status"
 ]
-down = [
+segments.down = [
   "root"
 ]
 
-[args]
-padding_left   = 1
-padding_right  = 1
-padding_end    = 1
-force_newline  = true
-numeric_status = true
-jobs_count     = true
-git_count      = true
-time_format    = "%H:%M  %d/%m/%y"
-dir_fancy      = false
 
-[symbols]
-readonly       = ""
-host           = ""
-root           = "#"
-top_prefix     = "╭─"
-bot_prefix     = "╰─"
-separator2     = ""
-rseparator2    = ""
-prompt         = "$"
-dir_wrap       = "…"
-git_branch     = ""
-git_detached   = "#"
-git_stash      = "."
-git_ahead      = "↑"
-git_behind     = "↓"
-git_staged     = "+"
-git_not_staged = "!"
-git_conflicted = "*"
-git_untracked  = "?"
+global.padding_left   = 1
+global.padding_right  = 1
+global.padding_end    = 1
+global.force_newline  = true
 
-[theme]
-exit_failure   = {fg = 198}
-username       = {fg = 254, bg = 240}
-root           = {fg = 37}
-hostname       = {fg = 254, bg = 235}
-home           = {fg = 230, bg = 24}
-path           = {fg = 254, bg = 24}
-dir            = {fg = 230, bg = 24}
-readonly       = {fg = 234, bg = 166}
-time           = {fg = 234, bg = 245}
-git_clean      = {fg = 250}
-git_dirty      = {fg = 250}
-git_stash      = {fg = 76}
-git_ahead      = {fg = 159}
-git_behind     = {fg = 240}
-git_staged     = {fg = 113}
-git_nstaged    = {fg = 11}
-git_untracked  = {fg = 14}
-git_conflicted = {fg = 9}
+dir_fancy       = false
+dir.symbol.wrap = "…"
+dir.theme.home = {fg = 230, bg = 24}
+dir.theme.path = {fg = 254, bg = 24}
+dir.theme.cwd  = {fg = 230, bg = 24}
+
+root.symbol = "#"
+root.theme  = {fg = 37}
+
+readonly.symbol = ""
+readonly.theme  = {fg = 234, bg = 166}
+
+global.top_prefix  = "╭─"
+global.bot_prefix  = "╰─"
+global.separator2  = ""
+global.rseparator2 = ""
+
+prompt.symbol = "$"
+
+status.numeric = true
+status.theme.failure = {fg = 198}
+
+user.theme    = {fg = 254, bg = 240}
+context.theme = {fg = 254, bg = 235}
+
+time.template = "%H:%M  %d/%m/%y"
+time.theme    = {fg = 234, bg = 245}
+
+jobs.count     = true
+
+git.count      = true
+git.symbol.branch     = ""
+git.symbol.detached   = "#"
+git.symbol.stash      = "."
+git.symbol.ahead      = "↑"
+git.symbol.behind     = "↓"
+git.symbol.staged     = "+"
+git.symbol.not_staged = "!"
+git.symbol.conflicted = "*"
+git.symbol.untracked  = "?"
+git.theme.clean      = {fg = 250}
+git.theme.dirty      = {fg = 250}
+git.theme.stash      = {fg = 76}
+git.theme.ahead      = {fg = 159}
+git.theme.behind     = {fg = 240}
+git.theme.staged     = {fg = 113}
+git.theme.nstaged    = {fg = 11}
+git.theme.untracked  = {fg = 14}
+git.theme.conflicted = {fg = 9}
 
 [[extension]]
 name = "size"

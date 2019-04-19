@@ -1,86 +1,83 @@
-[segments]
-left = [
-  'dir',
-  'git'
-]
-right = [
-  'time',
-  'host',
-  'status',
-  'perms',
-  'root',
-  'jobs',
-]
-down = [
-  'shell'
-]
+segments.left  = ['dir','git']
+segments.right = ['time','host','status','perms','root','jobs']
+segments.down  = ['shell']
 
-[args]
-padding_left  = 1
-padding_right = 1
-padding_end   = 0
-default_user  = 'nitoref'
-jobs_count    = false
-time_format   = '%H:%M:%S'
-git_format    = '@d'
-git_fancy     = false
-git_count     = false
-dir_fancy     = false
-dir_depth     = 3
+global.separator      = ''
+global.separator2     = ''
+global.rseparator     = ''
+global.rseparator2    = ''
 
-[symbols]
-readonly       = ''
-root           = ' '
-jobs           = ' '
-prompt         = '❯'
-dir_wrap       = '…'
-separator      = ''
-separator2     = ''
-rseparator     = ''
-rseparator2    = ''
-git_branch     = ''
-git_hash       = '#'
-git_tag        = '&'
-git_stash      = '*'
-git_ahead      = '⇡'
-git_behind     = '⇣'
-git_staged     = '+'
-git_nstaged    = '!'
-git_conflicted = '×'
-git_untracked  = '?'
+global.padding.left  = 1
+global.padding.right = 1
+global.padding.end   = 0
 
-[theme]
-exit_success   = {fg = 212}
-exit_failure   = {fg = 197}
+user.default  = 'nitoref'
+user.theme    = {fg = 240}
 
-username = {fg = 240}
-root     = {fg = 230}
-hostname = {fg = 240}
-home     = {fg = 74}
-path     = {fg = 223}
-dir      = {fg = 223}
-readonly = {fg = 209}
+prompt.symbol  = '❯'
+prompt.theme.success   = {fg = 212}
+prompt.theme.failure   = {fg = 197}
 
-time        = {fg = 244}
-jobs        = {fg = 151}
-ssh         = {fg = 166}
-aws         = {fg = 22}
-docker      = {fg = 55}
-dot_env     = {fg = 55}
-virtual_env = {fg = 35}
-duration    = {fg = 237}
+status.theme.success   = {fg = 212}
+status.theme.failure   = {fg = 197}
 
-git_clean  = {fg = 242}
-git_dirty  = {fg = 250}
-git_stash  = {fg = 76}
-git_ahead  = {fg = 159}
-git_behind = {fg = 240}
-git_staged = {fg = 113}
-git_nstaged    = {fg = 11}
-git_untracked  = {fg = 14}
-git_conflicted = {fg =  9}
+dir.fancy = false
+dir.depth = 3
+dir.theme.home  = {fg = 74}
+dir.theme.path  = {fg = 223}
+dir.theme.cwd   = {fg = 223}
+dir.symbol.wrap = '…'
+
+readonly.symbol = ''
+readonly.theme  = {fg = 209}
+
+root.symbol= ' '
+root.theme = {fg = 230}
+
+jobs.symbol = ' '
+jobs.count  = false
+
+
+git.template  = '@d'
+git.fancy     = false
+git.count     = false
+
+git.symbol.branch     = ''
+git.symbol.hash       = '#'
+git.symbol.tag        = '&'
+git.symbol.stash      = '*'
+git.symbol.ahead      = '⇡'
+git.symbol.behind     = '⇣'
+git.symbol.staged     = '+'
+git.symbol.nstaged    = '!'
+git.symbol.conflicted = '×'
+git.symbol.untracked  = '?'
+git.theme.clean  = {fg = 242}
+git.theme.dirty  = {fg = 250}
+git.theme.stash  = {fg = 76}
+git.theme.ahead  = {fg = 159}
+git.theme.behind = {fg = 240}
+git.theme.staged = {fg = 113}
+git.theme.nstaged    = {fg = 11}
+git.theme.untracked  = {fg = 14}
+git.theme.conflicted = {fg =  9}
+
+context.theme = {fg = 240}
+
+time.template = '%H:%M:%S'
+time.theme  = {fg = 244}
+
+jobs.theme        = {fg = 151}
+ssh.theme         = {fg = 166}
+aws.theme         = {fg = 22}
+docker.theme      = {fg = 55}
+dot_env.theme     = {fg = 55}
+virtual_env.theme = {fg = 35}
+duration.theme    = {fg = 237}
+
 
 [[extension]]
 name = "yolk"
-command = "echo yolk"
-style = {bg = 25, fg = 230}
+cmd = "echo yolk"
+env = "BAR"
+theme = {bg = 25, fg = 230}

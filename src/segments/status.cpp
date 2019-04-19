@@ -51,17 +51,17 @@ signal_str(int code)
 
 
 Module
-SegmentStatus(const Config& c)
+SegmentStatus(const config& c)
 {
     Segment segment;
 
-    int error = c.shell.error;
-    if (!error)
+    int error  = c._meta.error;
+    if (!error && !c.status.always)
     {
         return Module {};
     }
 
-    if (c.args.numeric_status)
+    if (c.status.numeric)
     {
         segment.content = std::to_string(error);
     }
@@ -70,7 +70,7 @@ SegmentStatus(const Config& c)
         segment.content = signal_str(error);
     }
 
-    segment.style = c.theme.exit_failure;
+    segment.style = c.status.theme_failure;
     segment.id    = module::id::status;
     return Module {segment};
 }

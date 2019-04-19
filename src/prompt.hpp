@@ -10,6 +10,7 @@
 
 #include "printer.hpp"
 #include "modules.hpp"
+#include "utils.hpp"
 
 
 class SubPrompt
@@ -75,10 +76,10 @@ class Prompt
 public:
 
     // Constructor
-    Prompt(Config& config);
+    Prompt(config& config);
 
-    // Configuration
-    Config  options;
+    // configuration
+    config  options;
     
     // Subprompts
     SubPrompt left;
@@ -127,7 +128,7 @@ public:
         module::id::git_conflicted,
         module::id::git_stash,
         module::id::user,
-        module::id::host,
+        module::id::context,
         module::id::ssh,
         module::id::aws,
         module::id::virtual_env,

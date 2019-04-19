@@ -2,16 +2,16 @@
 
 
 Module
-SegmentRoot(const Config& c)
+SegmentRoot(const config& c)
 {
-	if (!c.shell.root)
+	if (!c._meta.root)
 	{
 		return Module {};
 	}
 
 	return Module { {
 		module::id::root,
-		c.symbols.root,
-		c.theme.root
+		c.root.symbol,
+		c.root.theme
 	} };
 }

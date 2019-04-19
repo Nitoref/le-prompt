@@ -1,10 +1,11 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
 
-#include "shell.hpp"
+#include "config.hpp"
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <map>
 
 #define ESCAPE "\u001b["
 #define DEFAULT '9'
@@ -23,26 +24,35 @@ struct Printer
     static inline std::string wrap;
     static inline std::string unwrap;
     static inline std::string endl;
+    static inline std::map<char, std::string> escapes;
     
-    static void mode(Shell::Type id)
+    static void mode(config::shell_t id)
     {
         switch (id)
         {
-        case Shell::bash:
+        case config::bash:
             wrap   = "\\[";
             unwrap = "\\]";
             endl   = "\n";
+            escapes = {{'`', "\\`"}, {'$', "\\`"}};
             break;
 
-        case Shell::csh:
+        case config::csh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = " \\n";
+            escapes = {{'%', "%%" }, {'!', "\\!"}};
             break;
 
-        case Shell::zsh:
+        case config::zsh:
             wrap   = "%{";
             unwrap = "%}";
+            endl   = "\n";
+            escapes = {{'%', "%%" }};
+            break;
+
+        case config::ksh:
+            escapes = {{'!', "!!" }};
             endl   = "\n";
             break;
         

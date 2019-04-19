@@ -8,20 +8,20 @@
 #include <nlohmann/json.hpp>
 
 
-Module SegmentUser   (const Config& c);
-Module SegmentRoot   (const Config& c);
-Module SegmentHost   (const Config& c);
-Module SegmentStatus (const Config& c);
-Module SegmentShell  (const Config& c);
-Module SegmentJobs   (const Config& c);
-Module SegmentTime   (const Config& c);
-Module SegmentPerms  (const Config& c);
-Module SegmentDir    (const Config& c);
-Module SegmentGit    (const Config& c);
-Module SegmentSsh    (const Config& c);
-Module SegmentAws    (const Config& c);
-Module SegmentDocker (const Config& c);
-Module SegmentVirtualEnv (const Config& c);
+Module SegmentUser    (const config& c);
+Module SegmentRoot    (const config& c);
+Module SegmentContext (const config& c);
+Module SegmentStatus  (const config& c);
+Module SegmentShell   (const config& c);
+Module SegmentJobs    (const config& c);
+Module SegmentTime    (const config& c);
+Module SegmentPerms   (const config& c);
+Module SegmentDir     (const config& c);
+Module SegmentGit     (const config& c);
+Module SegmentSsh     (const config& c);
+Module SegmentAws     (const config& c);
+Module SegmentDocker  (const config& c);
+Module SegmentVirtualEnv (const config& c);
 
 
 namespace module
@@ -30,7 +30,7 @@ namespace module
 enum class id: unsigned int {
 	user,
 	root,
-	host,
+	context,
 	status,
 	shell,
 	jobs,
