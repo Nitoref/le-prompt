@@ -67,6 +67,8 @@ down (left)
 std::string
 Prompt::make()
 {
+    printer::mode(conf._meta.shell);
+    
     left.preformat();
     right.preformat();
     down.preformat();
@@ -84,7 +86,7 @@ Prompt::make()
 void
 Prompt::shrink()
 {
-    if (left.length + right.length < 0.7 * conf._meta.width)
+    if (left.length + right.length < conf.global.width_limit * conf._meta.width)
     {
         return;
     }
@@ -102,7 +104,7 @@ Prompt::shrink()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
         ignored_segments.insert(*i);
-        if (left.length + right.length < 0.7 * conf._meta.width)
+        if (left.length + right.length < conf.global.width_limit * conf._meta.width)
         {
             return;
         }

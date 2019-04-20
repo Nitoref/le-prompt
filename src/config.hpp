@@ -52,14 +52,15 @@ struct config
 
 	struct segments
 	{
-		strvec left   = {"pwd", "shell"};
-		strvec right  = {"time"};
+		strvec left   = {"context", "pwd", "shell"};
+		strvec right  = {"time", "git", "status", "jobs", "root"};
 		strvec down   = {};
 	}
 	segments;
 
 	struct global
 	{
+		double width_limit   = 0.7;
 		size_t padding_left  = 1;
 		size_t padding_right = 1;
 		size_t padding_end   = 0;
@@ -77,42 +78,52 @@ struct config
 	
 	struct user
 	{
+		bool   always       = false;
+		string symbol       = "";
 		string default_user = "";
 		Style  theme        = {};
 		Style  theme_root   = {};
-		bool   always       = false;
 	}
 	user;
 
+	struct host
+	{
+		bool   shorten = true;
+		string symbol  = "";
+		Style  theme;
+	}
+	host;
+
 	struct context
 	{	
-		string default_user = "";
-		string format;
-		bool   always = false;
+		string format = "u@h";
 		Style  theme  = {};
+		Style  theme_root  = {};
 	}
 	context;
 
 	struct dir
 	{
-		Style  theme_home = {};
-		Style  theme_path = {};
-		Style  theme_cwd  = {};
+		bool   fancy  = false;
+		size_t depth  = 0;
+		size_t length = 0;
+		strmap alias  = {};
+		Style  theme_home  = {};
+		Style  theme_path  = {};
+		Style  theme_cwd   = {};
 		string symbol_wrap = "…";
 		string symbol_home = "~";
-		bool   fancy;
-		size_t depth;
-		size_t length;
-		strmap alias;
 	}
 	dir;
 
-	struct readonly
+	struct perms
 	{
-		string symbol = " ⃠";
+		bool   verbose = false;
 		Style  theme;
+		string symbol_readonly = " ⃠";
+		Style  theme_readonly ;
 	}
-	readonly;
+	perms;
 
 	struct aws
 	{
@@ -128,6 +139,11 @@ struct config
 
 	struct git
 	{
+		bool   fancy  = true;
+		bool   count  = true;
+		string format = "@.><+!?x";
+		strvec ignore = {};
+
 		string symbol_branch;
 		string symbol_hash  = "#";
 		string symbol_tag   = "&";
@@ -149,19 +165,15 @@ struct config
 		Style theme_nstaged;
 		Style theme_untracked;
 		Style theme_conflicted;
-
-		bool   fancy;
-		bool   count;
-		string format = "@.><+!?x";
-		strvec ignore;
+		Style theme_ignored;
 	}
 	git;
 
 	struct jobs 
 	{
+		bool   count  = true;
+		bool   always = false;
 		string symbol = "…";
-		bool   count;
-		bool   always;
 		Style  theme;
 		Style  theme_none;
 	}
@@ -176,10 +188,10 @@ struct config
 
 	struct status
 	{
-		string symbol_success;
-		string symbol_failure;
-		bool   numeric;
-		bool   always;
+		bool   numeric = false;
+		bool   always  = false;
+		string symbol_success = "";
+		string symbol_failure = "";
 		Style  theme_success;
 		Style  theme_failure;
 	}
@@ -226,9 +238,10 @@ struct config
 	void get_segments   (table_ptr table);
 	void get_global     (table_ptr table);
 	void get_user       (table_ptr table);
+	void get_host       (table_ptr table);
 	void get_context    (table_ptr table);
 	void get_dir        (table_ptr table);
-	void get_readonly   (table_ptr table);
+	void get_perms      (table_ptr table);
 	void get_aws        (table_ptr table);
 	void get_docker     (table_ptr table);
 	void get_git        (table_ptr table);

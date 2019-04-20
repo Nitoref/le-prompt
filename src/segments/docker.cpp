@@ -1,6 +1,6 @@
 #include "modules.hpp"
 #include "utils.hpp"
-
+#include <regex>
 
 Module SegmentDocker(const config& c) {
 
@@ -16,12 +16,14 @@ Module SegmentDocker(const config& c) {
 	}
 
 	segment.content = utils::string(getenv("DOCKER_HOST"));
-	if (segment)
+	if (!segment)
 	{
-		size_t start = segment.content.find("://");
-		size_t stop  = segment.content.find(start, '/');
-		segment.content = segment.content.substr(start, stop);
+		return Module {};
 	}
+
+	// https://tools.ietf.org/html/rfc3986#appendix-B
+	std::regex r (R"(^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)");
+	segment.content = std::regex_replace(segment.content, r, "$4");
 
 	if (segment)
 	{

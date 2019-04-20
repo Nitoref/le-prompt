@@ -1,4 +1,3 @@
-
 segments.left = [
   'perms',
   'root',
@@ -14,18 +13,11 @@ segments.right = [
   'status'
 ]
 
-context.default = ""
-context.template = "u@h"
-context.always = false
-context.theme.default = {fg = 248}
-context.theme.root = {fg = 248}
-
 global.force_newline  = false
 global.native_rprompt = false
-
-global.padding.left  = 1
-global.padding.right = 1
-global.padding.end   = 1
+global.padding.left   = 1
+global.padding.right  = 1
+global.padding.end    = 1
 global.symbol.separator   = ''
 global.symbol.separator2  = ''
 global.symbol.rseparator  = ''
@@ -34,6 +26,12 @@ global.symbol.top_prefix  = ''
 global.symbol.bot_prefix  = ''
 global.theme.separator  = {fg = 254}
 global.theme.background = {fg = 254}
+
+context.default = ""
+context.template = "u@h"
+context.always = false
+context.theme.default = {fg = 248}
+context.theme.root = {fg = 248}
 
 user.default       = 'nitoref'
 user.theme.default = {fg = 254}
@@ -55,11 +53,13 @@ dir.fancy  = true
 dir.depth  = 0
 dir.length = 0
 
-readonly.theme  = {fg = 166}
-readonly.symbol = " ⃠"
+perms.theme.readonly  = {fg = 166}
+perms.symbol.readonly = " ⃠"
 
 aws.theme    = {fg = -1, bg = -1}
+
 docker.theme = {fg = 13,  bg = 55}
+
 
 git.symbol.branch     = ''
 git.symbol.hash       = ''
@@ -69,9 +69,8 @@ git.symbol.ahead      = ''
 git.symbol.behind     = ''
 git.symbol.staged     = ''
 git.symbol.nstaged    = '✎'
-git.symbol.conflicted = '×'
 git.symbol.untracked  = '…'
-
+git.symbol.conflicted = '×'
 git.theme.clean      = {fg = 254, bg = 64}
 git.theme.dirty      = {fg = 254, bg = 125}
 git.theme.stash      = {fg = 33,  bg = 230}
@@ -81,7 +80,6 @@ git.theme.staged     = {fg = 64,  bg = 230}
 git.theme.nstaged    = {fg = 160, bg = 230}
 git.theme.untracked  = {fg = 136, bg = 230}
 git.theme.conflicted = {fg = 166, bg = 230}
-
 git.fancy = true
 git.count = true
 git.template = ""
@@ -102,7 +100,9 @@ status.symbol.failure  = false
 status.theme.success = {fg = 254, bg = 235}
 status.theme.failure = {fg = 254, bg = 160}
 
+
 virtual_env.theme    = {fg = 8,   bg = 6}
+
 
 prompt.symbol = '$'
 prompt.theme.success = {fg = -1, bg = -1}

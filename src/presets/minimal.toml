@@ -1,26 +1,29 @@
 segments.left = [
-  "size",
-  "perms",
-  "dir",
-  "git"
+  'perms',
+  'dir',
+  'git'
 ]
 segments.right = [
-  "time",
-  "jobs",
-  "status"
+  'time',
+  'jobs',
+  'status'
 ]
 segments.down = [
-  "root"
+  'root'
 ]
-
 
 global.padding_left   = 1
 global.padding_right  = 1
 global.padding_end    = 1
 global.force_newline  = true
 
+global.symbol.top_prefix  = '╭─'
+global.symbol.bot_prefix  = '╰─'
+global.symbol.separator2  = ''
+global.symbol.rseparator2 = ''
+
 dir_fancy       = false
-dir.symbol.wrap = "…"
+dir.symbol.wrap = '…'
 dir.theme.home = {fg = 230, bg = 24}
 dir.theme.path = {fg = 254, bg = 24}
 dir.theme.cwd  = {fg = 230, bg = 24}
@@ -29,18 +32,13 @@ dir.alias = [
 	{'Documents' = ''}
 ]
 
-root.symbol = "#"
+root.symbol = '#'
 root.theme  = {fg = 37}
 
-readonly.symbol = ""
-readonly.theme  = {fg = 234, bg = 166}
+perms.verbose = true
+perms.theme.readonly  = {fg = 216}
 
-global.top_prefix  = "╭─"
-global.bot_prefix  = "╰─"
-global.separator2  = ""
-global.rseparator2 = ""
-
-prompt.symbol = "$"
+prompt.symbol = '$'
 
 status.numeric = true
 status.theme.failure = {fg = 198}
@@ -48,21 +46,22 @@ status.theme.failure = {fg = 198}
 user.theme    = {fg = 254, bg = 240}
 context.theme = {fg = 254, bg = 235}
 
-time.template = "%H:%M  %d/%m/%y"
-time.theme    = {fg = 234, bg = 245}
+time.template = '%H:%M  %d/%m/%y'
+# time.theme    = {fg = 234, bg = 245}
+time.theme    = {fg = 245}
 
 jobs.count     = true
 
 git.count      = true
-git.symbol.branch     = ""
-git.symbol.detached   = "#"
-git.symbol.stash      = "."
-git.symbol.ahead      = "↑"
-git.symbol.behind     = "↓"
-git.symbol.staged     = "+"
-git.symbol.not_staged = "!"
-git.symbol.conflicted = "*"
-git.symbol.untracked  = "?"
+git.symbol.branch     = ''
+git.symbol.detached   = '#'
+git.symbol.stash      = '.'
+git.symbol.ahead      = '↑'
+git.symbol.behind     = '↓'
+git.symbol.staged     = '+'
+git.symbol.not_staged = '!'
+git.symbol.conflicted = '*'
+git.symbol.untracked  = '?'
 git.theme.clean      = {fg = 250}
 git.theme.dirty      = {fg = 250}
 git.theme.stash      = {fg = 76}
@@ -73,7 +72,8 @@ git.theme.nstaged    = {fg = 11}
 git.theme.untracked  = {fg = 14}
 git.theme.conflicted = {fg = 9}
 
+
 [[extension]]
-name = "size"
-command = "ls -ld | cut -c 2-11"
+name = 'size'
+command = 'ls -ld | cut -c 2-11'
 style = {fg = -1.0, bg = -1.0}

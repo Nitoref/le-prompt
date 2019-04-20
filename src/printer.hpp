@@ -19,12 +19,14 @@ struct printer
 {
     printer() = delete;
 
+    using replace_map = std::pair<std::string, std::map<char, std::string>>;
+
     static inline std::string init;
     static inline std::string stop;
     static inline std::string wrap;
     static inline std::string unwrap;
     static inline std::string endl;
-    static inline std::map<char, std::string> escapes;
+    static inline replace_map escapes;
     
     static void mode(config::shell_t id)
     {
@@ -34,25 +36,25 @@ struct printer
             wrap   = "\\[";
             unwrap = "\\]";
             endl   = "\n";
-            escapes = {{'`', "\\`"}, {'$', "\\`"}};
+            escapes = {"`$", {{'`', "\\`"}, {'$', "\\$"}}};
             break;
 
         case config::csh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = " \\n";
-            escapes = {{'%', "%%" }, {'!', "\\!"}};
+            escapes = {"%!", {{'%', "%%" }, {'!', "\\!"}}};
             break;
 
         case config::zsh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = "\n";
-            escapes = {{'%', "%%" }};
+            escapes = {"%", {{'%', "%%" }}};
             break;
 
         case config::ksh:
-            escapes = {{'!', "!!" }};
+            escapes = {"!", {{'!', "!!" }}};
             endl   = "\n";
             break;
         
@@ -70,6 +72,27 @@ struct printer
             init.insert(0, wrap);
             stop = unwrap;
         }
+    }
+
+    static inline std::string escape(std::string where)
+    {
+        std::string output;
+        output.reserve(where.length() * 1.5);
+
+        std::string::size_type cursor = 0;
+        std::string::size_type found;
+
+        while((found = where.find_first_of(escapes.first, cursor))
+               != std::string::npos)
+        {
+            output.append(where, cursor, found - cursor);
+            output += escapes.second.at(where[found]);
+            cursor = found + 1;
+        }
+
+        output += where.substr(cursor);
+        // where.swap(output);
+        return output;
     }
 
     static inline std::string bg(int value)
@@ -109,7 +132,10 @@ struct printer
 
     static inline std::string cup(size_t i)
     {
-        return init +(i ? std::to_string(i) : "") + 'G' + stop;
+        if (i <= 0)
+            return init + 'G' + stop;
+        else
+        return init + std::to_string(i) + 'G' + stop;
     }
 
     static inline std::string font(const char* str)

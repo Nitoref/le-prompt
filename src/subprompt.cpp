@@ -33,7 +33,7 @@ SubPrompt::format_segment(Segment s)
     output += printer::bg(s.style.bg);
     output += printer::fg(s.style.fg);
     output += std::string(padding_left, ' ');
-    output += s.content;
+    output += printer::escape(s.content);
     output += std::string(padding_right, ' ');
 
     actual_length += padding_left;

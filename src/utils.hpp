@@ -28,9 +28,6 @@ strlen(std::string s);
 
 void
 strrepl(std::string& where, std::string what, std::string with);
-void
-strrepl(std::string& where, char what, std::string with);
-
 
 void
 str_prepend(std::string& where, std::string what);

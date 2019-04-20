@@ -10,15 +10,16 @@
 #include <unordered_map>
 
 Module SegmentUser    (const config& c);
-Module SegmentRoot    (const config& c);
+Module SegmentHost    (const config& c);
 Module SegmentContext (const config& c);
 Module SegmentStatus  (const config& c);
+Module SegmentRoot    (const config& c);
 Module SegmentShell   (const config& c);
 Module SegmentJobs    (const config& c);
 Module SegmentTime    (const config& c);
-Module SegmentPerms   (const config& c);
 Module SegmentDir     (const config& c);
 Module SegmentGit     (const config& c);
+Module SegmentPerms   (const config& c);
 Module SegmentSsh     (const config& c);
 Module SegmentAws     (const config& c);
 Module SegmentDocker  (const config& c);
@@ -36,6 +37,7 @@ using map_t      = std::unordered_map<string, function_t>;
 
 inline map_t map = {
     {"user",   &SegmentUser},
+    {"host",   &SegmentHost},
     {"context",&SegmentContext},
     {"status", &SegmentStatus},
     {"root",   &SegmentRoot},
@@ -68,9 +70,10 @@ namespace module
 
 enum class id: unsigned int {
 	user,
-	root,
+	host,
 	context,
 	status,
+	root,
 	shell,
 	jobs,
 	time,

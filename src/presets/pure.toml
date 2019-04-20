@@ -1,5 +1,5 @@
-segments.left  = ['dir','git']
-segments.right = ['time','host','status','perms','root','jobs']
+segments.left  = ['dir','git','perms','root']
+segments.right = ['time','status','jobs']
 segments.down  = ['shell']
 
 global.separator      = ''
@@ -32,8 +32,9 @@ dir.alias = [
 	{'Documents' = ''}
 ]
 
-readonly.symbol = ''
-readonly.theme  = {fg = 209}
+perms.symbol.readonly = ' '
+perms.theme.readonly  = {fg = 209}
+
 
 root.symbol= ' '
 root.theme = {fg = 230}
@@ -66,7 +67,7 @@ git.theme.nstaged    = {fg = 11}
 git.theme.untracked  = {fg = 14}
 git.theme.conflicted = {fg =  9}
 
-context.theme = {fg = 240}
+host.theme = {fg = 240}
 
 time.template = '%H:%M:%S'
 time.theme  = {fg = 244}

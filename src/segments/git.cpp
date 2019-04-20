@@ -15,6 +15,7 @@
 struct GitStatus
 {
     std::string name;
+    std::string hash;
     size_t stash  = 0;
     size_t ahead  = 0;
     size_t behind = 0;
@@ -22,12 +23,13 @@ struct GitStatus
     size_t nstaged = 0;
     size_t untracked  = 0;
     size_t conflicted = 0;
+    bool empty    = false;
     bool detached = false;
-    bool good = true;
-    bool empty = false;
+    bool ignored  = false;
 };
 
 
+int status_callback(const char* path, unsigned int status_flags, void* status);
 int get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories);
 int get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head);
 int get_stats(GitStatus& status, git_status_list *status_list);
@@ -84,7 +86,9 @@ SegmentGit(const config& c)
         }
         return Module { {
             module::id::git_branch, content,
-            dirty ? c.git.theme_dirty : c.git.theme_clean
+            status.ignored  ? dirty ? c.git.theme_dirty
+                                   : c.git.theme_clean
+                            : c.git.theme_dirty
         } };
     }
 
@@ -100,7 +104,9 @@ SegmentGit(const config& c)
             module.emplace_back(
                 module::id::git_branch,
                 branch_symbol + status.name,
-                dirty ? c.git.theme_dirty : c.git.theme_clean
+                !status.ignored ? dirty ? c.git.theme_dirty
+                                        : c.git.theme_clean
+                                : c.git.theme_dirty
             );
         break;
         case '.':
@@ -188,8 +194,10 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     git_status_options status_opt  = GIT_STATUS_OPTIONS_INIT;
     git_status_list    *status_list;
  
-    git_libgit2_init();
     git_libgit2_opts(GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION, 0);
+    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
+    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION, 1);
+    git_libgit2_init();
 
     status_opt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 
@@ -207,14 +215,18 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     std::string workdir = utils::string(
         git_repository_workdir(repository)
     );
-    for (auto path: ignored_repositories)
-    {
-        if (workdir == path) return 1;
-    }
 
     if (get_name(status, repository))
     {
         return 1; 
+    }
+
+    for (auto path: ignored_repositories)
+    {
+        if (workdir == path) {
+            status.ignored = true;
+            return 0;
+        }
     }
 
     if (git_repository_is_bare(repository))
@@ -226,6 +238,10 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     {
         return 1;
     }
+
+    // git_status_foreach_ext(
+    //     repository, &status_opt, status_callback, (void*)&status
+    // );
 
     if (get_stats(status, status_list))
     {
@@ -295,13 +311,14 @@ get_name(GitStatus& status, git_repository *repo)
         }
     }
 
+    char *oid_str = (char*)malloc(8*sizeof(char));
+    git_oid_tostr(
+        oid_str, sizeof(oid_str), git_reference_target(head)
+    );
+    status.hash = utils::string(oid_str);
+
     if (git_repository_head_detached(repo))
     {
-        char *branch_cstr = (char*)malloc(8*sizeof(char));
-        git_oid_tostr(
-            branch_cstr, sizeof(branch_cstr), git_reference_target(head)
-        );
-        status.name = branch_cstr;
         status.detached = true;
     }
     else
@@ -360,4 +377,46 @@ get_stats(GitStatus& status, git_status_list *status_list)
         }
     }
     return 0;
+}
+
+
+
+int
+status_callback(const char* path, unsigned int status_flags, void* status)
+{
+
+    if (status_flags == GIT_STATUS_CURRENT 
+    ||  status_flags & GIT_STATUS_IGNORED)
+    {
+        return 0;
+    }
+
+    if (status_flags & GIT_STATUS_CONFLICTED)
+    {
+        ((GitStatus*)status)->conflicted ++;
+    }
+    else
+    if (status_flags & ( GIT_STATUS_WT_RENAMED
+                    | GIT_STATUS_WT_NEW))
+    {
+        ((GitStatus*)status)->untracked++;
+    }
+    else {
+       if (status_flags & ( GIT_STATUS_INDEX_NEW
+                       | GIT_STATUS_INDEX_DELETED
+                       | GIT_STATUS_INDEX_RENAMED
+                       | GIT_STATUS_INDEX_MODIFIED
+                       | GIT_STATUS_INDEX_TYPECHANGE))
+       {
+           ((GitStatus*)status)->staged++;
+       }
+       if (status_flags & ( GIT_STATUS_WT_DELETED
+                       | GIT_STATUS_WT_RENAMED
+                       | GIT_STATUS_WT_MODIFIED
+                       | GIT_STATUS_WT_TYPECHANGE))
+       {
+           ((GitStatus*)status)->nstaged++;
+       }
+    }
+    return 1;
 }

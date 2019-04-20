@@ -56,17 +56,6 @@ strrepl(std::string& where, std::string what, std::string with)
     }
 }
 
-void
-strrepl(std::string& where, char what, std::string with)
-{
-    size_t from = 0;
-    while((from = where.find(what, from)) != std::string::npos)
-    {
-        where.replace(from, 1, with);
-        from += with.length();
-    }
-}
-
 
 void str_prepend(std::string& where, std::string what)
 {

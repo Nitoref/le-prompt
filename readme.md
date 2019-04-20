@@ -85,31 +85,31 @@ PS1='$(echo -ne "$($LE_PROMPT_EXE ksh $? $LE_PROMPT_CONFIG)")'
 
 ### configuration
 
-The configuration file is a TOML document  with five sections:
-
-```toml
-[segments]
-...
-[args]
-...
-[symbols]
-...
-[theme]
-...
-[[extension]]
-...
-```
-
-
+The configuration file is a TOML document with two main sections:
 
 `[segments]` list the modules to draw in your prompt.
 
 ```toml
-[segments]
+segments.left   = ['perms','dir']
+segments.right  = ['time','host','root','jobs','git','status']
+segments.bottom = ['shell']
+```
 
-left   = ['perms','dir']
-right  = ['time','host','root','jobs','git','status']
-bottom = ['shell']
+`[global]` are options that affects the 
+
+```toml
+padding_left"  = 1
+padding_right" = 1
+padding_end"   = 1
+force_newline"  = false
+native_rprompt" = false
+
+symbol.separator"   = ''
+symbol.separator2"  = ''
+symbol.rseparator"  = ''
+symbol.rseparator2" = ''
+symbol.top_prefix"  = ''
+symbol.bot_prefix"  = ''
 ```
 
 Special requirements, or a feature not implemented yet ? Just turn any text, command or environment variable into a segment on your prompt with the `[[extension]]` table array.  If a module is already named that way, it'll get overriden. You may or may not want to call this very software from within an extension. 
@@ -129,18 +129,9 @@ cmd   = 'du -sh | head -c 5'
 style = {"bg":155, "fg": 210}
 ```
 
-
-
-`[args]` holds informations on which modules you want to display and their respective options. 
+Then, each segment has its own configuration table
 
 ```toml
-[args]
-
-# Left aligned, right aligned and newline modules
-left_segments = ['user','perms','pwd','root','exit']
-right_segments = ['time','host','git','jobs']
-down_segments = []
-
 # [0 - 1] , maximum prompt / input ratio allowed
 width_limit = 1
 

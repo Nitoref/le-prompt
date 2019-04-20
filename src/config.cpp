@@ -34,9 +34,10 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("segments"))  { get_segments    (t); } ;
     if (auto t = file -> get_table("global"))    { get_global      (t); } ;
     if (auto t = file -> get_table("user"))      { get_user        (t); } ;
+    if (auto t = file -> get_table("host"))      { get_host        (t); } ;
     if (auto t = file -> get_table("context"))   { get_context     (t); } ;
     if (auto t = file -> get_table("dir") )      { get_dir         (t); } ;
-    if (auto t = file -> get_table("readonly"))  { get_readonly    (t); } ;
+    if (auto t = file -> get_table("perms"))     { get_perms       (t); } ;
     if (auto t = file -> get_table("aws") )      { get_aws         (t); } ;
     if (auto t = file -> get_table("docker"))    { get_docker      (t); } ;
     if (auto t = file -> get_table("git") )      { get_git         (t); } ;
@@ -58,33 +59,41 @@ void config::get_segments(table_ptr table)
 
 void config::get_global(table_ptr table)
 {
+    get(table, "width_limit"   , global.width_limit);
     get(table, "padding_left"  , global.padding_left);
     get(table, "padding_right" , global.padding_right);
     get(table, "padding_end"   , global.padding_end);
-    get(table, "separator"     , global.separator);
-    get(table, "separator2"    , global.separator2);
-    get(table, "separator"     , global.separator);
-    get(table, "separator2"    , global.separator2);
-    get(table, "top_prefix"    , global.top_prefix);
-    get(table, "bot_prefix"    , global.bot_prefix);
     get(table, "force_newline" , global.force_newline);
     get(table, "native_rprompt", global.native_rprompt);
+    get(table, "symbol.separator"   , global.separator);
+    get(table, "symbol.separator2"  , global.separator2);
+    get(table, "symbol.rseparator"  , global.rseparator);
+    get(table, "symbol.rseparator2" , global.rseparator2);
+    get(table, "symbol.top_prefix"  , global.top_prefix);
+    get(table, "symbol.bot_prefix"  , global.bot_prefix);
 }
 
 void config::get_user(table_ptr table)
 {
     get(table, "default_user" , user.default_user);
+    get(table, "symbol"       , user.symbol);
     get(table, "theme"        , user.theme);
     get(table, "theme.root"   , user.theme_root);
     get(table, "always"       , user.always);
 }
 
+void config::get_host(table_ptr table)
+{
+    get(table, "short" , host.shorten);
+    get(table, "symbol", host.symbol);
+    get(table, "theme" , host.theme);
+}
+
 void config::get_context(table_ptr table)
 {   
-    get(table, "default_user", context.default_user);
     get(table, "template"    , context.format);
-    get(table, "always"      , context.always);
     get(table, "theme"       , context.theme);
+    get(table, "theme.root"  , context.theme_root);
 }
 
 void config::get_dir(table_ptr table)
@@ -100,10 +109,12 @@ void config::get_dir(table_ptr table)
     get(table, "alias"      , dir.alias);
 }
 
-void config::get_readonly(table_ptr table)
+void config::get_perms(table_ptr table)
 {
-    get(table, "theme" , readonly.theme);
-    get(table, "symbol", readonly.symbol);
+    get(table, "verbose", perms.verbose);
+    get(table, "theme"  , perms.theme);
+    get(table, "symbol.readonly", perms.symbol_readonly);
+    get(table, "theme.readonly" , perms.theme_readonly);
 }
 
 void config::get_aws(table_ptr table)
@@ -138,6 +149,7 @@ void config::get_git(table_ptr table)
     get(table, "theme.nstaged"   , git.theme_nstaged);
     get(table, "theme.untracked" , git.theme_untracked);
     get(table, "theme.conflicted", git.theme_conflicted);
+    get(table, "theme.ignored"   , git.theme_ignored);
 
     get(table, "fancy"   , git.fancy);
     get(table, "count"   , git.count);
@@ -192,6 +204,7 @@ void config::get_ssh(table_ptr table)
     get(table, "theme", ssh.theme);
 }
 
+
 template<class T>
 void config::get(const table_ptr data, string key, T& t)
 {
@@ -229,6 +242,6 @@ void config::get(const table_ptr data, string key, strmap& t)
         return;
     for (const auto& value: *values)    // for each table_array
     	for (const auto& pair: *value)  // for each pair
-        	// std::cout << pair.first <<  "\n"; //*(pair.second);
-            ;
+            if (const auto& v = pair.second->as<string>())
+                t.emplace(pair.first, v->get());
 }
