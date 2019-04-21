@@ -11,6 +11,7 @@
 #endif
 
 
+
 struct GitStatus
 {
     std::string name;

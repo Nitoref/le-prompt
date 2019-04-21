@@ -6,6 +6,7 @@
 #include <iostream>
 
 
+
 config::config(int argc, char const *argv[])
 {
 	assert(argc >= 2 && "Thou shall provide shell name "

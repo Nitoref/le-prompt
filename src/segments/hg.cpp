@@ -4,6 +4,7 @@
 #include <string>
 
 
+
 struct HgStatus
 {
 	std::string hash;
