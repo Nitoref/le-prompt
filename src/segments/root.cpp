@@ -6,7 +6,7 @@ SegmentRoot(const config& c)
 {
 	if (!c._meta.root)
 	{
-		return Module {};
+		return {};
 	}
 
 	return Module { {

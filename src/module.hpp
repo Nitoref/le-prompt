@@ -10,27 +10,26 @@ namespace module
 enum class id: unsigned int;
 }
 
-struct Style
+struct Theme
 {
     int   fg = -1;
     int   bg = -1;
 };
 
-class Segment
+struct Segment
 {
-public:
     
+    module::id  id;
     std::string content;
-    Style style;
-    module::id id;
+    Theme       theme;
     
-    Segment(module::id c, std::string a, Style b)
-    :content(a),style(b),id(c)
-    {}
-    Segment(std::string a, Style b)
-    :content(a),style(b)
-    {}
-    Segment() = default;
+    // Segment(module::id c, std::string a, Theme b)
+    // :content(a),theme(b),id(c)
+    // {}
+    // Segment(std::string a, Theme b)
+    // :content(a),theme(b)
+    // {}
+    // Segment() = default;
 
     operator bool() { return !content.empty(); }
 };

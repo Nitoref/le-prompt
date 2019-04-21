@@ -30,8 +30,8 @@ SubPrompt::format_segment(Segment s)
 {
     std::string output;
     output.reserve(20);
-    output += printer::bg(s.style.bg);
-    output += printer::fg(s.style.fg);
+    output += printer::bg(s.theme.bg);
+    output += printer::fg(s.theme.fg);
     output += std::string(padding_left, ' ');
     output += printer::escape(s.content);
     output += std::string(padding_right, ' ');
@@ -48,7 +48,7 @@ SubPrompt::make_separator(Segment s)
 {
     std::string output;
     output.reserve(20); // maybe ?
-    if (s.style.bg == prev_color)
+    if (s.theme.bg == prev_color)
     {
         output += printer::fg(160); //options.theme.separator.fg
         output += separator2;
@@ -57,7 +57,7 @@ SubPrompt::make_separator(Segment s)
     else
     if (prev_color == -1)
     {
-        output += printer::fg(s.style.bg);
+        output += printer::fg(s.theme.bg);
         output += printer::bg(prev_color);
         output += printer::font("reversed");
         output += separator;
@@ -68,11 +68,11 @@ SubPrompt::make_separator(Segment s)
     if (prev_color != -2)
     {
         output += printer::fg(prev_color);
-        output += printer::bg(s.style.bg);
+        output += printer::bg(s.theme.bg);
         output += separator;
         actual_length += separator_length;
     }
-    prev_color = s.style.bg;
+    prev_color = s.theme.bg;
     return output;
 }
 
@@ -106,7 +106,7 @@ SubPrompt::preformat()
     {
         id_lookup.at((int)segment.id).push_back(i++);
 
-        if (segment.style.bg == prev_color)
+        if (segment.theme.bg == prev_color)
         {
             subtotal += separator2_length;
             length   += subtotal;
@@ -121,7 +121,7 @@ SubPrompt::preformat()
         subtotal += padding_left;
         subtotal += padding_right;
         
-        prev_color = segment.style.bg;
+        prev_color = segment.theme.bg;
     }
     if (prev_color != - 1)
     {

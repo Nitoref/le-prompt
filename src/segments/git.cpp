@@ -46,7 +46,7 @@ SegmentGit(const config& c)
 
     if (get_git_status(status, c.git.ignore))
     {
-        return Module {};
+        return {};
     };
 
 
@@ -100,91 +100,91 @@ SegmentGit(const config& c)
         switch (ch)
         {
         case '@':
-            module.emplace_back(
+            module.push_back({
                 module::id::git_branch,
                 branch_symbol + status.name,
                 !status.ignored ? (dirty ? c.git.theme_dirty
                                          : c.git.theme_clean)
                                 : c.git.theme_ignored
-            );
+            });
         break;
         case '%':
             if (status.tagged) {
-                module.emplace_back(
+                module.push_back({
                     module::id::git_tag,
                     c.git.symbol_tag + status.tag,
                     c.git.theme_tag
-                );
+                });
             }
         break;
         case '.':
             if (status.stash) {
                 std::string count = c.git.count ? std::to_string(status.stash) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_stash,
                     count + c.git.symbol_stash,
                     c.git.theme_stash
-                );
+                });
             }
         break;
         case '>':
             if (status.ahead) {
                 std::string count = c.git.count ? std::to_string(status.ahead) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_ahead,
                     count + c.git.symbol_ahead,
                     c.git.theme_ahead
-                );
+                });
             }
         break;
         case '<':
             if (status.behind) {
                 std::string count = c.git.count ? std::to_string(status.behind) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_behind,
                     count + c.git.symbol_behind,
                     c.git.theme_behind
-                );
+                });
             }
         break;
         case '+':
             if (status.staged) {
                 std::string count = c.git.count ? std::to_string(status.staged) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_staged,
                     count + c.git.symbol_staged,
                     c.git.theme_staged
-                );
+                });
             }
         break;
         case '!':
             if (status.notstaged) {
                 std::string count = c.git.count ? std::to_string(status.notstaged) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_notstaged,
                     count + c.git.symbol_notstaged,
                     c.git.theme_notstaged
-                );
+                });
             }
         break;
         case '?':
             if (status.untracked) {
                 std::string count = c.git.count ? std::to_string(status.untracked) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_untracked,
                     count + c.git.symbol_untracked,
                     c.git.theme_untracked
-                );
+                });
             }
         break;
         case 'x':
             if (status.conflicted) {
                 std::string count = c.git.count ? std::to_string(status.conflicted) : "";
-                module.emplace_back(
+                module.push_back({
                     module::id::git_conflicted,
                     count + c.git.symbol_conflicted,
                     c.git.theme_conflicted
-                );
+                });
             }
         break;
         default:

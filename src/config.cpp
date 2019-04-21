@@ -229,7 +229,7 @@ void config::get(const table_ptr data, string key, T& t)
         t = *value; 
 }
 
-void config::get(const table_ptr data, string key, Style& s)
+void config::get(const table_ptr data, string key, Theme& s)
 {
     auto table = data -> get_table_qualified(key);
     if (!table)

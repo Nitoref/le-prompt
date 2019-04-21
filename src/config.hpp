@@ -83,8 +83,8 @@ struct config
 		bool   always       = false;
 		string symbol       = "";
 		string default_user = "";
-		Style  theme        = {};
-		Style  theme_root   = {};
+		Theme  theme        = {};
+		Theme  theme_root   = {};
 	}
 	user;
 
@@ -92,15 +92,15 @@ struct config
 	{
 		bool   shorten = true;
 		string symbol  = "";
-		Style  theme;
+		Theme  theme;
 	}
 	host;
 
 	struct context
 	{	
 		string format = "u@h";
-		Style  theme  = {};
-		Style  theme_root  = {};
+		Theme  theme  = {};
+		Theme  theme_root  = {};
 	}
 	context;
 
@@ -110,9 +110,9 @@ struct config
 		size_t depth  = 0;
 		size_t length = 0;
 		strmap alias  = {};
-		Style  theme_home  = {};
-		Style  theme_path  = {};
-		Style  theme_cwd   = {};
+		Theme  theme_home  = {};
+		Theme  theme_path  = {};
+		Theme  theme_cwd   = {};
 		string symbol_wrap = "…";
 		string symbol_home = "~";
 	}
@@ -122,21 +122,21 @@ struct config
 	{
 		bool   verbose = false;
 		string symbol_readonly = " ⃠";
-		Style  theme_readonly  = {};
-		Style  theme = {};
+		Theme  theme_readonly  = {};
+		Theme  theme = {};
 	}
 	perms;
 
 	struct aws
 	{
-		Style theme;
+		Theme theme;
 	}
 	aws;
 
 	struct docker
 	{
 		string symbol;
-		Style  theme;
+		Theme  theme;
 	}
 	docker;
 
@@ -144,7 +144,7 @@ struct config
 	{
 		string symbol_branch;
 		string symbol_hash;
-		Style  theme;
+		Theme  theme;
 	}
 	hg;
 
@@ -168,17 +168,17 @@ struct config
 		string symbol_conflicted = "×";
 		string symbol_untracked  = "?";
 
-		Style theme_clean;
-		Style theme_dirty;
-		Style theme_tag;
-		Style theme_stash;
-		Style theme_ahead;
-		Style theme_behind;
-		Style theme_staged;
-		Style theme_notstaged;
-		Style theme_untracked;
-		Style theme_conflicted;
-		Style theme_ignored;
+		Theme theme_clean;
+		Theme theme_dirty;
+		Theme theme_tag;
+		Theme theme_stash;
+		Theme theme_ahead;
+		Theme theme_behind;
+		Theme theme_staged;
+		Theme theme_notstaged;
+		Theme theme_untracked;
+		Theme theme_conflicted;
+		Theme theme_ignored;
 	}
 	git;
 
@@ -187,15 +187,15 @@ struct config
 		bool   count  = true;
 		bool   always = false;
 		string symbol = "…";
-		Style  theme;
-		Style  theme_none;
+		Theme  theme;
+		Theme  theme_none;
 	}
 	jobs;
 
 	struct root
 	{
 		string symbol = "#";
-		Style  theme;
+		Theme  theme;
 	}
 	root;
 
@@ -205,35 +205,35 @@ struct config
 		bool   always  = false;
 		string symbol_success = "";
 		string symbol_failure = "";
-		Style  theme_success;
-		Style  theme_failure;
+		Theme  theme_success;
+		Theme  theme_failure;
 	}
 	status;
 
 	struct venv
 	{
-		Style theme;
+		Theme theme;
 	}
 	venv;
 
 	struct prompt
 	{
 		string symbol = "$";
-		Style  theme_success;
-		Style  theme_failure;
+		Theme  theme_success;
+		Theme  theme_failure;
 	}
 	prompt;
 
 	struct time
 	{
 		string format = "%T";
-		Style  theme;
+		Theme  theme;
 	}
 	time;
 
 	struct ssh
 	{
-		Style theme;
+		Theme theme;
 	}
 	ssh;
 
@@ -241,7 +241,7 @@ struct config
 	struct load
 	{
 		string symbol;
-		Style  theme;
+		Theme  theme;
 	}
 	load;
 
@@ -252,7 +252,7 @@ struct config
 
 	template<class T>
 	void get(const table_ptr data, string key, T& t);
-	void get(const table_ptr data, string key, Style& s);
+	void get(const table_ptr data, string key, Theme& s);
 	void get(const table_ptr data, string key, strvec& t);
 	void get(const table_ptr data, string key, strmap& t);
 

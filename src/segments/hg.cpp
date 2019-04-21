@@ -33,13 +33,12 @@ Module SegmentHg (const config& c)
 	}
 
 	if (!found)
-		return Module {};
+		return {};
 
 
 	std::string branch = "default";
 
-	std::ifstream i;
-	i.open((path / hg / "branch").c_str());
+	std::ifstream i((path / hg / "branch").c_str());
 	if (i.good())
 	{
 		i >> branch;

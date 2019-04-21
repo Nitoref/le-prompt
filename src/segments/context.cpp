@@ -22,7 +22,7 @@ SegmentContext(const config& c)
 
     if (host.empty() && user.empty())
     {
-        return Module {};
+        return {};
     }
 
 

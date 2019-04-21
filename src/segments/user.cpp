@@ -6,23 +6,19 @@
 Module
 SegmentUser(const config& c)
 {
-	Segment segment;
-    segment.content = utils::string(std::getenv("USER"));
+    std::string content = utils::string(std::getenv("USER"));
 
-    if(segment.content == c.user.default_user
-    && !c.user.always)
+    if(!c.user.always && content == c.user.default_user)
     {
-    	return {Segment{}};
+    	return {};
     }
 
-    if (c._meta.root)
-    {
-        segment.style = c.user.theme_root;
-    }
-    else
-    {
-        segment.style = c.user.theme;
-    }
-    segment.id = module::id::user;
-    return Module {segment};
+    return Module {
+        {
+            module::id::user,
+            content,
+            c._meta.root ? c.user.theme_root
+                         : c.user.theme
+        }
+    };
 }

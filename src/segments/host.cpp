@@ -17,11 +17,11 @@ SegmentHost(const config& c)
 
     char* hostname = (char*)malloc(HOSTNAME_MAX);
     gethostname(hostname, HOSTNAME_MAX);
+    
     if (!hostname)
     {
-    	return Module {};
+    	return {};
     }
-
 
     std::string content = hostname;
     if (c.host.shorten)

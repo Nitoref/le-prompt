@@ -11,7 +11,7 @@ SegmentJobs(const config& c)
 
 	if (!jobs)
 	{
-		return Module {};
+		return {};
 	}
 
 	std::string content;

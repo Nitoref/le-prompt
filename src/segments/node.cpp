@@ -4,5 +4,5 @@
 
 Module SegmentNode (config& c)
 {
-	return Module {};
+	return {};
 }
