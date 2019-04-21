@@ -1,6 +1,6 @@
-A no-latency fully featured theme with left, right and multi-line prompt support.
+A no-latency fully featured theme with left, right and multi-line prompt support for bash, zsh, fish, ksh, tcsh.
 
-Working with bash, ksh, tcsh, zsh and fish.
+No subprocess, no pipes to grep and perl, no hidden python interpreter, it's just plain C++.
 
 #### Yet another one ?
 

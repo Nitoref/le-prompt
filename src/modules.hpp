@@ -37,7 +37,7 @@ using strvec = std::vector<string>;
 using function_t = std::function<Module(const config&)>;
 using map_t      = std::unordered_map<string, function_t>;
 
-inline map_t map = {
+inline map_t functions = {
     {"user",   &SegmentUser},
     {"host",   &SegmentHost},
     {"context",&SegmentContext},
@@ -60,7 +60,7 @@ inline map_t map = {
 inline function_t*
 get(string str)
 {
-    if (auto s = map.find(str); s != map.end()) {
+    if (auto s = functions.find(str); s != functions.end()) {
         return &s->second;
     }
     return nullptr;

@@ -1,5 +1,6 @@
 #include "modules.hpp"
 #include "utils.hpp"
+#include <cstdlib>
 #include <regex>
 
 Module SegmentDocker(const config& c) {
@@ -8,14 +9,14 @@ Module SegmentDocker(const config& c) {
 
 	segment.id      = module::id::docker;
 	segment.style   = c.docker.theme;
-	segment.content = utils::string(getenv("DOCKER_MACHINE_NAME"));
+	segment.content = utils::string(std::getenv("DOCKER_MACHINE_NAME"));
 
 	if (segment)
 	{
 		return Module {segment};
 	}
 
-	segment.content = utils::string(getenv("DOCKER_HOST"));
+	segment.content = utils::string(std::getenv("DOCKER_HOST"));
 	if (!segment)
 	{
 		return Module {};

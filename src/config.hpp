@@ -5,8 +5,11 @@
 #include <cpptoml.hpp>
 #include <memory>
 
+#include <variant>
 #include <map>
 #include <vector>
+#include <unordered_map>
+
 
 
 
@@ -137,6 +140,14 @@ struct config
 	}
 	docker;
 
+	struct hg
+	{
+		string symbol_branch;
+		string symbol_hash;
+		Style  theme;
+	}
+	hg;
+
 	struct git
 	{
 		bool   fancy  = true;
@@ -254,6 +265,7 @@ struct config
 	void get_perms      (table_ptr table);
 	void get_aws        (table_ptr table);
 	void get_docker     (table_ptr table);
+	void get_hg         (table_ptr table);
 	void get_git        (table_ptr table);
 	void get_jobs       (table_ptr table);
 	void get_root       (table_ptr table);

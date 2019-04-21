@@ -17,7 +17,7 @@ SegmentContext(const config& c)
 
     
     std::string host = utils::string(host_c_str);
-    std::string user = utils::string(getenv("USER"));
+    std::string user = utils::string(std::getenv("USER"));
     
 
     if (host.empty() && user.empty())

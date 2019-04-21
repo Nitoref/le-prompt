@@ -14,6 +14,7 @@ segments.right = [
   'host',
   # 'jobs',
   'git',
+  'hg',
   'status',
 ]
 
@@ -56,6 +57,7 @@ ssh.theme      = {fg = 8,   bg = 9}
 docker.theme   = {fg = 13,  bg = 55}
 venv.theme     = {fg = 8,   bg = 6}
 
+hg.symbol.branch = ' '
 
 git.symbol.branch     = ' '
 git.symbol.hash       = ' '

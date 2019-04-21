@@ -1,5 +1,5 @@
-segments.left  = ['dir','git']
-segments.right = ['time','status','jobs','perms','root']
+segments.left  = ['dir','git', 'hg']
+segments.right = ['time','status','perms','root']
 segments.down  = ['shell']
 
 global.symbol.separator      = ''
@@ -40,7 +40,7 @@ root.symbol= ' '
 root.theme = {fg = 230}
 
 jobs.symbol = ' '
-jobs.count  = false
+jobs.count  = true
 
 
 git.template  = '@d'

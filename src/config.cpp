@@ -40,6 +40,7 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("perms"))     { get_perms       (t); } ;
     if (auto t = file -> get_table("aws") )      { get_aws         (t); } ;
     if (auto t = file -> get_table("docker"))    { get_docker      (t); } ;
+    if (auto t = file -> get_table("hg") )       { get_hg          (t); } ;
     if (auto t = file -> get_table("git") )      { get_git         (t); } ;
     if (auto t = file -> get_table("jobs"))      { get_jobs        (t); } ;
     if (auto t = file -> get_table("root"))      { get_root        (t); } ;
@@ -131,6 +132,13 @@ void config::get_load(table_ptr table)
 {
     get(table, "theme",  load.theme);
     get(table, "symbol", load.symbol);
+}
+
+void config::get_hg(table_ptr table)
+{
+    get(table, "theme", hg.theme);
+    get(table, "symbol.branch", hg.symbol_branch);
+    get(table, "symbol.hash"  , hg.symbol_hash);
 }
 
 void config::get_git(table_ptr table)
@@ -253,3 +261,4 @@ void config::get(const table_ptr data, string key, strmap& t)
             if (const auto& v = pair.second->as<string>())
                 t.emplace(pair.first, v->get());
 }
+

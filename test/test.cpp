@@ -2,7 +2,12 @@
 #include "unistd.h"
 #include "sys/types.h"
 #include "sys/resource.h"
-
+#include <sys/cdefs.h>
+#include <IOKit/IOTypes.h>
+#include <IOKit/IOKitKeys.h>
+#include <IOKit/OSMessageNotification.h>
+#include <sys/cdefs.h>
+#include <IOKit/ps/IOPowerSources.h>
 
 #include "sys/sysctl.h"
 #include <algorithm>
@@ -25,25 +30,37 @@ using namespace std;
 int main(int argc, char **argv, char **envp)
 {
 
-    vm_size_t page_size;
-    mach_port_t mach_port;
-    mach_msg_type_number_t count;
-    vm_statistics64_data_t vm_stats;
+	auto blob = IOPSCopyPowerSourcesInfo();
+	auto ps   = IOPSCopyPowerSourcesList(blob);
+	auto dict = IOPSGetPowerSourceDescription(blob, ps);
+	
 
-    mach_port = mach_host_self();
-    count = sizeof(vm_stats) / sizeof(natural_t);
-    if (KERN_SUCCESS == host_page_size(mach_port, &page_size) &&
-        KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO,
-                                        (host_info64_t)&vm_stats, &count))
-    {
-        long long free_memory = (int64_t)vm_stats.free_count * (int64_t)page_size;
+	std::cout << *dict[kIOPSACPowerValue] << "\n";
 
-        long long used_memory = ((int64_t)vm_stats.active_count +
-                                 (int64_t)vm_stats.inactive_count +
-                                 (int64_t)vm_stats.wire_count) *  (int64_t)page_size;
-        printf("free memory: %lld\nused memory: %lld\n", free_memory, used_memory);
-    }
 
+
+
+
+
+
+    // vm_size_t page_size;
+    // mach_port_t mach_port;
+    // mach_msg_type_number_t count;
+    // vm_statistics64_data_t vm_stats;
+
+    // mach_port = mach_host_self();
+    // count = sizeof(vm_stats) / sizeof(natural_t);
+    // if (KERN_SUCCESS == host_page_size(mach_port, &page_size) &&
+    //     KERN_SUCCESS == host_statistics64(mach_port, HOST_VM_INFO,
+    //                                     (host_info64_t)&vm_stats, &count))
+    // {
+    //     long long free_memory = (int64_t)vm_stats.free_count * (int64_t)page_size;
+
+    //     long long used_memory = ((int64_t)vm_stats.active_count +
+    //                              (int64_t)vm_stats.inactive_count +
+    //                              (int64_t)vm_stats.wire_count) *  (int64_t)page_size;
+    //     printf("free memory: %lld\nused memory: %lld\n", free_memory, used_memory);
+    // }
 
 
 	// struct sysinfo memInfo;
@@ -67,36 +84,18 @@ int main(int argc, char **argv, char **envp)
 	// std::cout << sysctl(val, 1, &info, &size, NULL, 0) << "\n";
 	// std::cout << sysctlbyname("ncpu", (void*)&i, &a, NULL, 0) << "\n";
 
-	// std::cout << a << "\n";
-	// std::cout << b << "\n";
-	// std::cout << c << "\n";
+	// int mib[4];
+	// size_t len;
 
- 
-	// sysctlbyname("ncpu", )
-	// sysctlbyname("physmem", )
-	// sysctlbyname("usermem", )
-	// sysctlbyname("diskstats", )
-	// sysctlbyname("memsize", )
-	// sysctlbyname("availcpu", )
+ //    /* Fill out the first three components of the mib */
+	// struct kinfo_proc kp;
+	// len = 4;
+	// sysctlnametomib("kern.proc.pid", mib, &len);
 
-
-	int mib[4];
-	size_t len;
-
-    /* Fill out the first three components of the mib */
-	struct kinfo_proc kp;
-	len = 4;
-	sysctlnametomib("kern.proc.pid", mib, &len);
-
-	mib[3] = getppid();
-	len = sizeof(kp);
-	if (sysctl(mib, 4, &kp, &len, NULL, 0) == -1)
-		perror("sysctl");
-	else if (len > 0)
-		std::cout << "";
-
-	double load[3];
-	getloadavg(load, 3);
-	std::cout << load[0] << ", " << load[0] << ", "  << load[0] << "\n" ;
-
+	// mib[3] = getppid();
+	// len = sizeof(kp);
+	// if (sysctl(mib, 4, &kp, &len, NULL, 0) == -1)
+	// 	perror("sysctl");
+	// else if (len > 0)
+	// 	std::cout << kp.kp_eproc.e_jobc;
 }

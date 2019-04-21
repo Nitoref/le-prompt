@@ -4,7 +4,6 @@
 #include <tuple>
 #include <git2.h>
 #include <string.h>
-#include <stdio.h>
 #ifdef _WIN32
 # include <Windows.h>
 #else
@@ -73,7 +72,7 @@ SegmentGit(const config& c)
         {
             switch (ch) {
                 case '@': if (!status.name.empty()) content += branch_symbol + status.name; break;
-                case '%': if (!status.tag.empty() ) content += c.git.symbol_tag + status.tag; break;
+                case '%': if (!status.tag.empty())  content += c.git.symbol_tag + status.tag; break;
                 case '.': if (status.stash      ) content += c.git.symbol_stash; break;
                 case '>': if (status.ahead      ) content += c.git.symbol_ahead; break;
                 case '<': if (status.behind     ) content += c.git.symbol_behind; break;
@@ -250,19 +249,19 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
         }
     }
 
-    if (git_status_list_new(&status_list, repository, &status_opt))
-    {
-        return 1;
-    }
+    // if (git_status_list_new(&status_list, repository, &status_opt))
+    // {
+    //     return 1;
+    // }
 
-    // git_status_foreach_ext(
-    //     repository, &status_opt, status_callback, (void*)&status
-    // );
+    git_status_foreach_ext(
+        repository, &status_opt, status_callback, (void*)&status
+    );
 
-    if (get_stats(status, status_list))
-    {
-        return 1;
-    }
+    // if (get_stats(status, status_list))
+    // {
+    //     return 1;
+    // }
     git_stash_foreach(repository, &get_stash, (void*)&status);
 
     git_status_list_free(status_list);
