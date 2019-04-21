@@ -14,7 +14,7 @@ struct HgStatus
 Module SegmentHg (const config& c)
 {
 	auto path = std::filesystem::current_path();
-	auto hg = std::filesystem::path(".hg/");
+	auto hg = std::filesystem::path(".hg");
 	bool found = false;
 
 	for (;;)
@@ -36,7 +36,7 @@ Module SegmentHg (const config& c)
 		return Module {};
 
 
-	std::string branch;
+	std::string branch = "default";
 
 	std::ifstream i;
 	i.open((path / hg / "branch").c_str());
