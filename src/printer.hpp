@@ -49,8 +49,8 @@ struct printer
             endl   = " \\n";
             escapes = {"%!", {
                 {'%', "%%" },
-                {'!', "\\!"}}
-            };
+                {'!', "\\!"}
+            }};
             break;
 
         case config::zsh:
@@ -58,14 +58,14 @@ struct printer
             unwrap = "%}";
             endl   = "\n";
             escapes = {"%", {
-                {'%', "%%" }}
-            };
+                {'%', "%%" }
+            }};
             break;
 
         case config::ksh:
             escapes = {"!", {
-                {'!', "!!" }}
-            };
+                {'!', "!!" }
+            }};
             endl   = "\n";
             break;
         

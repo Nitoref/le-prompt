@@ -87,9 +87,9 @@ SegmentGit(const config& c)
         }
         return Module { {
             module::id::git_branch, content,
-            status.ignored  ? dirty ? c.git.theme_dirty
-                                   : c.git.theme_clean
-                            : c.git.theme_dirty
+            !status.ignored ? (dirty ? c.git.theme_dirty
+                                     : c.git.theme_clean)
+                            : c.git.theme_ignored
         } };
     }
 
@@ -104,9 +104,9 @@ SegmentGit(const config& c)
             module.emplace_back(
                 module::id::git_branch,
                 branch_symbol + status.name,
-                !status.ignored ? dirty ? c.git.theme_dirty
-                                        : c.git.theme_clean
-                                : c.git.theme_dirty
+                !status.ignored ? (dirty ? c.git.theme_dirty
+                                         : c.git.theme_clean)
+                                : c.git.theme_ignored
             );
         break;
         case '%':

@@ -60,6 +60,7 @@ public:
         module::id::time,
         module::id::perms,
         module::id::git_branch,
+        module::id::hg,
         module::id::dir,
         module::id::path,
         module::id::home,

@@ -3,19 +3,19 @@
 // draggable(elementToDrag);
 
 
-var prompt = document.querySelectorAll('.prompt');
-var draggable = new window.Draggable.Sortable(prompt, {
+var left = document.querySelectorAll('.left');
+var draggable = new window.Draggable.Sortable(left, {
   draggable: '.drag-item',
-  appendTo: '.prompt',
+  appendTo: '.left',
   classes: {
     body: 'draggable-container--is-dragging',
   },
 });
 
-var rprompt = document.querySelectorAll('.rprompt');
-var rdraggable = new window.Draggable.Sortable(rprompt, {
+var right = document.querySelectorAll('.right');
+var rdraggable = new window.Draggable.Sortable(right, {
   draggable: '.drag-item',
-  appendTo: '.rprompt',
+  appendTo: '.right',
   classes: {
     body: 'draggable-container--is-dragging',
   },

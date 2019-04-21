@@ -19,12 +19,13 @@ Module SegmentJobs    (const config& c);
 Module SegmentTime    (const config& c);
 Module SegmentPerms   (const config& c);
 Module SegmentDir     (const config& c);
+Module SegmentHg      (const config& c);
 Module SegmentGit     (const config& c);
 Module SegmentSsh     (const config& c);
 Module SegmentAws     (const config& c);
 Module SegmentLoad    (const config& c);
+Module SegmentVenv    (const config& c);
 Module SegmentDocker  (const config& c);
-Module SegmentVirtualEnv (const config& c);
 
 
 namespace constructor
@@ -48,6 +49,7 @@ inline map_t map = {
     {"perms",  &SegmentPerms},
     {"dir",    &SegmentDir},
     {"git",    &SegmentGit},
+    {"hg",     &SegmentHg},
     {"ssh",    &SegmentSsh},
     {"aws",    &SegmentAws},
     {"load",   &SegmentLoad},
@@ -83,6 +85,7 @@ enum class id: unsigned int {
 	dir,
 	path,
 	home,
+	hg,
 	git_branch,
 	git_tag,
 	git_ahead,
