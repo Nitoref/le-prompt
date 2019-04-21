@@ -16,7 +16,8 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto")
 # set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lc++fs")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lstdc++fs")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L /usr/local/Cellar/llvm/8.0.0/lib/")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I /Users/nitoref/Downloads/libgit2-0.28.1/include")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I /Users/nitoref/libgit2/include")
+# set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I /Users/nitoref/Downloads/libgit2-0.28.1/include")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I /usr/local/Cellar/rapidjson/1.1.0/include")
 
 

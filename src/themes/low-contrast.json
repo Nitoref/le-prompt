@@ -16,17 +16,17 @@
     "ssh":            { "fg": 166, "bg" : 254},
     "aws":            { "fg":  -1, "bg" :  -1},
     "docker":         { "fg":  55, "bg" : 177},
-    "virtual_env":    { "fg":  35, "bg" : 254},
+    "venv":           { "fg":  35, "bg" : 254},
     "dot_env":        { "fg":  15, "bg" :  55},
     "duration":       { "fg":  -1, "bg" :  -1},
 
-    "git_clean":     { "fg": 232, "bg" : 230},
-    "git_dirty":     { "fg": 232, "bg" : 223},
+    "git_clean":      { "fg": 232, "bg" : 230},
+    "git_dirty":      { "fg": 232, "bg" : 223},
     "git_stash":      { "fg":  15, "bg" :  20},
     "git_ahead":      { "fg": 240, "bg" : 250},
     "git_behind":     { "fg": 240, "bg" : 251},
     "git_staged":     { "fg":  22, "bg" :  15},
-    "git_nstaged":    { "fg": 130, "bg" :  15},
+    "git_notstaged":  { "fg": 130, "bg" :  15},
     "git_untracked":  { "fg":  52, "bg" :  15},
     "git_conflicted": { "fg":   9, "bg" :  15}
 }

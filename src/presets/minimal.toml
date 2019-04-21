@@ -59,7 +59,7 @@ git.symbol.stash      = '.'
 git.symbol.ahead      = '↑'
 git.symbol.behind     = '↓'
 git.symbol.staged     = '+'
-git.symbol.not_staged = '!'
+git.symbol.notstaged  = '!'
 git.symbol.conflicted = '*'
 git.symbol.untracked  = '?'
 git.theme.clean      = {fg = 250}
@@ -68,7 +68,7 @@ git.theme.stash      = {fg = 76}
 git.theme.ahead      = {fg = 159}
 git.theme.behind     = {fg = 240}
 git.theme.staged     = {fg = 113}
-git.theme.nstaged    = {fg = 11}
+git.theme.notstaged  = {fg = 11}
 git.theme.untracked  = {fg = 14}
 git.theme.conflicted = {fg = 9}
 

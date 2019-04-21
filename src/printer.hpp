@@ -36,25 +36,36 @@ struct printer
             wrap   = "\\[";
             unwrap = "\\]";
             endl   = "\n";
-            escapes = {"`$", {{'`', "\\`"}, {'$', "\\$"}}};
+            escapes = {"$`\\", {
+                {'`', "\\`"},
+                {'$', "\\$"},
+                {'\\', "\\\\"}
+            }};
             break;
 
         case config::csh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = " \\n";
-            escapes = {"%!", {{'%', "%%" }, {'!', "\\!"}}};
+            escapes = {"%!", {
+                {'%', "%%" },
+                {'!', "\\!"}}
+            };
             break;
 
         case config::zsh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = "\n";
-            escapes = {"%", {{'%', "%%" }}};
+            escapes = {"%", {
+                {'%', "%%" }}
+            };
             break;
 
         case config::ksh:
-            escapes = {"!", {{'!', "!!" }}};
+            escapes = {"!", {
+                {'!', "!!" }}
+            };
             endl   = "\n";
             break;
         
@@ -74,24 +85,23 @@ struct printer
         }
     }
 
-    static inline std::string escape(std::string where)
+    static inline std::string escape(std::string what)
     {
         std::string output;
-        output.reserve(where.length() * 1.5);
+        output.reserve(what.length() * 1.5);
 
         std::string::size_type cursor = 0;
-        std::string::size_type found;
+        std::string::size_type item;
 
-        while((found = where.find_first_of(escapes.first, cursor))
+        while((item = what.find_first_of(escapes.first, cursor))
                != std::string::npos)
         {
-            output.append(where, cursor, found - cursor);
-            output += escapes.second.at(where[found]);
-            cursor = found + 1;
+            output.append(what, cursor, item - cursor);
+            output += escapes.second.at(what[item]);
+            cursor = item + 1;
         }
 
-        output += where.substr(cursor);
-        // where.swap(output);
+        output += what.substr(cursor);
         return output;
     }
 

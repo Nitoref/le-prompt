@@ -11,14 +11,14 @@
     "dir"      : {"fg" : 254, "bg" : 237},
     "readonly" : {"fg" : 254, "bg" : 124},
     
-    "time"    : {"fg" : 15,  "bg" : 236},
-    "jobs"    : {"fg" : 39,  "bg" : 238},
-    "ssh"     : {"fg" : 254, "bg" : 166},
-    "aws"     : {"fg" : 15,  "bg" : 22},
-    "docker"  : {"fg" : 177, "bg" : 55},
-    "dot_env" : {"fg" : 15,  "bg" : 55},
-    "virtual_env" : { "fg" : 0,   "bg" : 35},
-    "duration"    : { "fg" : 250, "bg" : 237},
+    "time"     : {"fg" : 15,  "bg" : 236},
+    "jobs"     : {"fg" : 39,  "bg" : 238},
+    "ssh"      : {"fg" : 254, "bg" : 166},
+    "aws"      : {"fg" : 15,  "bg" : 22},
+    "docker"   : {"fg" : 177, "bg" : 55},
+    "dot_env"  : {"fg" : 15,  "bg" : 55},
+    "venv"     : { "fg" : 0,   "bg" : 35},
+    "duration" : { "fg" : 250, "bg" : 237},
     
     "git_clean"      : {"fg" : 0,   "bg" : 148},
     "git_dirty"      : {"fg" : 15,  "bg" : 161},
@@ -26,7 +26,7 @@
     "git_ahead"      : {"fg" : 250, "bg" : 240},
     "git_behind"     : {"fg" : 250, "bg" : 240},
     "git_staged"     : {"fg" : 15,  "bg" : 22},
-    "git_nstaged"    : {"fg" : 15,  "bg" : 130},
+    "git_notstaged"  : {"fg" : 15,  "bg" : 130},
     "git_untracked"  : {"fg" : 15,  "bg" : 52},
     "git_conflicted" : {"fg" : 15,  "bg" : 9}
 }

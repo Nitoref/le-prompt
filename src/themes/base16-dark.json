@@ -17,7 +17,7 @@
     "aws":            { "fg":  -1, "bg" :  -1},
     "docker":         { "fg":  13, "bg" :   5},
     "dot_env":        { "fg":  15, "bg" :   5},
-    "virtual_env":    { "fg":   8, "bg" :   6},
+    "venv":           { "fg":   8, "bg" :   6},
     "duration":       { "fg":  -1, "bg" :  -1},
 
     "git_clean":      { "fg":  15, "bg" :   3},
@@ -26,7 +26,7 @@
     "git_ahead":      { "fg":  14, "bg" :  10},
     "git_behind":     { "fg":  14, "bg" :  10},
     "git_staged":     { "fg":  15, "bg" :   2},
-    "git_nstaged":    { "fg":  15, "bg" :   9},
+    "git_notstaged":  { "fg":  15, "bg" :   9},
     "git_untracked":  { "fg":  15, "bg" :   1},
     "git_conflicted": { "fg":  15, "bg" :   1}
 }

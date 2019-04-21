@@ -18,7 +18,6 @@ struct config
 	using strvec = std::vector<string>;
 	using strmap = std::map<string, string>;
 
-
 	config(int argc, char const *argv[]);
 
 	static shell_t
@@ -119,9 +118,9 @@ struct config
 	struct perms
 	{
 		bool   verbose = false;
-		Style  theme;
 		string symbol_readonly = " ⃠";
-		Style  theme_readonly ;
+		Style  theme_readonly  = {};
+		Style  theme = {};
 	}
 	perms;
 
@@ -133,7 +132,8 @@ struct config
 
 	struct docker
 	{
-		Style theme;
+		string symbol;
+		Style  theme;
 	}
 	docker;
 
@@ -141,6 +141,7 @@ struct config
 	{
 		bool   fancy  = true;
 		bool   count  = true;
+		bool   hash_fallback = true;
 		string format = "@.><+!?x";
 		strvec ignore = {};
 
@@ -152,17 +153,18 @@ struct config
 		string symbol_ahead   = "↑";
 		string symbol_behind  = "↓"; 
 		string symbol_staged  = "+";
-		string symbol_nstaged = "!"; 
+		string symbol_notstaged  = "!"; 
 		string symbol_conflicted = "×";
 		string symbol_untracked  = "?";
 
 		Style theme_clean;
 		Style theme_dirty;
+		Style theme_tag;
 		Style theme_stash;
 		Style theme_ahead;
 		Style theme_behind;
 		Style theme_staged;
-		Style theme_nstaged;
+		Style theme_notstaged;
 		Style theme_untracked;
 		Style theme_conflicted;
 		Style theme_ignored;
@@ -197,11 +199,11 @@ struct config
 	}
 	status;
 
-	struct virtual_env
+	struct venv
 	{
 		Style theme;
 	}
-	virtual_env;
+	venv;
 
 	struct prompt
 	{
@@ -223,6 +225,14 @@ struct config
 		Style theme;
 	}
 	ssh;
+
+
+	struct load
+	{
+		string symbol;
+		Style  theme;
+	}
+	load;
 
 
 	using table_ptr = std::shared_ptr<cpptoml::table>;
@@ -248,10 +258,11 @@ struct config
 	void get_jobs       (table_ptr table);
 	void get_root       (table_ptr table);
 	void get_status     (table_ptr table);
-	void get_virtual_env(table_ptr table);
+	void get_venv       (table_ptr table);
 	void get_prompt     (table_ptr table);
 	void get_time       (table_ptr table);
 	void get_ssh        (table_ptr table);
+	void get_load       (table_ptr table);
 };
 
 

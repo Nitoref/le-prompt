@@ -6,12 +6,13 @@ segments.left = [
   'ssh',
   'aws',
   'docker',
-  'virtual_env'
+  'venv'
 ]
 segments.right = [
   'time',
+  'load',
   'host',
-  'jobs',
+  # 'jobs',
   'git',
   'status',
 ]
@@ -42,30 +43,30 @@ dir.symbol.wrap       = '…'
 global.theme.separator   = {fg = 254}
 status.theme.success     = {fg = 254, bg = 235}
 status.theme.failure     = {fg = 254, bg = 160}
-user.theme               = {fg = 254}
-root.theme               = {fg = 37}
-host.theme               = {fg = 248, bg = 234}
-dir.theme.home           = {fg = 254, bg = 61}
-dir.theme.path           = {fg = 254, bg = 61}
-dir.theme.cwd            = {fg = 230, bg = 61}
-perms.theme.readonly     = {fg = 166}
-time.theme           = {fg = 252, bg= 235}
-jobs.theme           = {fg = 136, bg = 235}
-ssh.theme            = {fg = 8,   bg = 9}
-docker.theme         = {fg = 13,  bg = 55}
-virtual_env.theme    = {fg = 8,   bg = 6}
+perms.theme.readonly = {fg = 166}
+dir.theme.home = {fg = 254, bg = 61}
+dir.theme.path = {fg = 254, bg = 61}
+dir.theme.cwd  = {fg = 230, bg = 61}
+user.theme     = {fg = 254}
+root.theme     = {fg = 37}
+host.theme     = {fg = 248, bg = 234}
+time.theme     = {fg = 252, bg= 235}
+jobs.theme     = {fg = 136, bg = 235}
+ssh.theme      = {fg = 8,   bg = 9}
+docker.theme   = {fg = 13,  bg = 55}
+venv.theme     = {fg = 8,   bg = 6}
 
 
-git.symbol.branch     = ''
-git.symbol.hash       = ''
-git.symbol.tag        = ''
+git.symbol.branch     = ' '
+git.symbol.hash       = ' '
+git.symbol.tag        = ' '
 git.symbol.stash      = '⚑'
 git.symbol.ahead      = ''
 git.symbol.behind     = ''
 git.symbol.staged     = ''
-git.symbol.nstaged    = '✎'
+git.symbol.notstaged  = '✎'
 git.symbol.conflicted = '×'
-git.symbol.untracked  = '…'
+git.symbol.untracked  = ''
 
 git.theme.clean      = {fg = 64, bg = 230}
 git.theme.dirty      = {fg = 125, bg = 230}
@@ -73,8 +74,8 @@ git.theme.stash      = {fg = 33,  bg = 230}
 git.theme.ahead      = {fg = 37,  bg = 230}
 git.theme.behind     = {fg = 37,  bg = 230}
 git.theme.staged     = {fg = 64,  bg = 230}
-git.theme.nstaged    = {fg = 160, bg = 230}
+git.theme.notstaged  = {fg = 160, bg = 230}
 git.theme.untracked  = {fg = 136, bg = 230}
 git.theme.conflicted = {fg = 166, bg = 230}
 git.theme.ignored    = {fg = 166, bg = 230}
-git.ignore = ["/Users/nitoref/freebsd-ports/"]
+# git.ignore = ["/Users/nitoref/freebsd-ports/"]

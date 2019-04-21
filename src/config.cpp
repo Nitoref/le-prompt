@@ -15,7 +15,7 @@ config::config(int argc, char const *argv[])
     _meta.shell = config::shell(argv[1]);
     _meta.error = std::stoi(argv[2]);
     _meta.width = utils::term_width();
-    _meta.root  = getuid() == 0;
+    _meta.root  = !getuid();
 
     if (argc > 3) try
     {
@@ -44,7 +44,7 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("jobs"))      { get_jobs        (t); } ;
     if (auto t = file -> get_table("root"))      { get_root        (t); } ;
     if (auto t = file -> get_table("status"))    { get_status      (t); } ;
-    if (auto t = file -> get_table("virtualenv")){ get_virtual_env (t); } ;
+    if (auto t = file -> get_table("venv"))      { get_venv        (t); } ;
     if (auto t = file -> get_table("prompt"))    { get_prompt      (t); } ;
     if (auto t = file -> get_table("time"))      { get_time        (t); } ;
     if (auto t = file -> get_table("ssh") )      { get_ssh         (t); } ;
@@ -127,26 +127,33 @@ void config::get_docker(table_ptr table)
     get(table, "theme", docker.theme);
 }
 
+void config::get_load(table_ptr table)
+{
+    get(table, "theme",  load.theme);
+    get(table, "symbol", load.symbol);
+}
+
 void config::get_git(table_ptr table)
 {
     get(table, "symbol.branch"    , git.symbol_branch);
-    get(table, "symbol.hash"      , git.symbol_hash);
     get(table, "symbol.tag"       , git.symbol_tag);
+    get(table, "symbol.hash"      , git.symbol_hash);
     get(table, "symbol.stash"     , git.symbol_stash);
     get(table, "symbol.ahead"     , git.symbol_ahead);
     get(table, "symbol.behind"    , git.symbol_behind);
     get(table, "symbol.staged"    , git.symbol_staged);
-    get(table, "symbol.nstaged"   , git.symbol_nstaged);
+    get(table, "symbol.notstaged" , git.symbol_notstaged);
     get(table, "symbol.conflicted", git.symbol_conflicted);
     get(table, "symbol.untracked" , git.symbol_untracked);
 
+    get(table, "theme.tag"       , git.theme_tag);
     get(table, "theme.clean"     , git.theme_clean);
     get(table, "theme.dirty"     , git.theme_dirty);
     get(table, "theme.stash"     , git.theme_stash);
     get(table, "theme.ahead"     , git.theme_ahead);
     get(table, "theme.behind"    , git.theme_behind);
     get(table, "theme.staged"    , git.theme_staged);
-    get(table, "theme.nstaged"   , git.theme_nstaged);
+    get(table, "theme.notstaged" , git.theme_notstaged);
     get(table, "theme.untracked" , git.theme_untracked);
     get(table, "theme.conflicted", git.theme_conflicted);
     get(table, "theme.ignored"   , git.theme_ignored);
@@ -155,6 +162,7 @@ void config::get_git(table_ptr table)
     get(table, "count"   , git.count);
     get(table, "template", git.format);
     get(table, "ignore"  , git.ignore);
+    get(table, "hash_fallback", git.hash_fallback);
 }
 
 void config::get_jobs(table_ptr table)
@@ -181,9 +189,9 @@ void config::get_status(table_ptr table)
     get(table, "theme.failure" , status.theme_failure);
 }
 
-void config::get_virtual_env(table_ptr table)
+void config::get_venv(table_ptr table)
 {
-    get(table, "theme", virtual_env.theme);
+    get(table, "theme", venv.theme);
 }
 
 void config::get_prompt(table_ptr table)

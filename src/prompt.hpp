@@ -63,11 +63,13 @@ public:
         module::id::dir,
         module::id::path,
         module::id::home,
+        module::id::load,
         module::id::docker,
+        module::id::git_tag,
         module::id::git_ahead,
         module::id::git_behind,
         module::id::git_staged,
-        module::id::git_nstaged,
+        module::id::git_notstaged,
         module::id::git_untracked,
         module::id::git_conflicted,
         module::id::git_stash,
@@ -76,7 +78,7 @@ public:
         module::id::context,
         module::id::ssh,
         module::id::aws,
-        module::id::virtual_env,
+        module::id::venv,
     };
 };
 #endif

@@ -35,7 +35,7 @@
     // c.git.symbol_ahead    = "↑"; // ""
     // c.git.symbol_behind   = "↓"; // ""
     // c.git.symbol_staged   = "+"; // ""
-    // c.git.symbol_nstaged  = "!"; // "✎"
+    // c.git.symbol_notstaged  = "!"; // "✎"
     // c.git.symbol_conflicted = "×"; // "×"
     // c.git.symbol_untracked  = "?"; // "…"
 // }

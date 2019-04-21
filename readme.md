@@ -85,31 +85,31 @@ PS1='$(echo -ne "$($LE_PROMPT_EXE ksh $? $LE_PROMPT_CONFIG)")'
 
 ### configuration
 
-The configuration file is a TOML document with two main sections:
+The configuration file is a TOML document  with five sections:
+
+```toml
+[segments]
+...
+[args]
+...
+[symbols]
+...
+[theme]
+...
+[[extension]]
+...
+```
+
+
 
 `[segments]` list the modules to draw in your prompt.
 
 ```toml
-segments.left   = ['perms','dir']
-segments.right  = ['time','host','root','jobs','git','status']
-segments.bottom = ['shell']
-```
+[segments]
 
-`[global]` are options that affects the 
-
-```toml
-padding_left"  = 1
-padding_right" = 1
-padding_end"   = 1
-force_newline"  = false
-native_rprompt" = false
-
-symbol.separator"   = ''
-symbol.separator2"  = ''
-symbol.rseparator"  = ''
-symbol.rseparator2" = ''
-symbol.top_prefix"  = ''
-symbol.bot_prefix"  = ''
+left   = ['perms','dir']
+right  = ['time','host','root','jobs','git','status']
+bottom = ['shell']
 ```
 
 Special requirements, or a feature not implemented yet ? Just turn any text, command or environment variable into a segment on your prompt with the `[[extension]]` table array.  If a module is already named that way, it'll get overriden. You may or may not want to call this very software from within an extension. 
@@ -129,13 +129,22 @@ cmd   = 'du -sh | head -c 5'
 style = {"bg":155, "fg": 210}
 ```
 
-Then, each segment has its own configuration table
+
+
+`[args]` holds informations on which modules you want to display and their respective options. 
 
 ```toml
+[args]
+
+
+left_segments = ['user','perms','pwd','root','exit']
+right_segments = ['time','host','git','jobs']
+down_segments = []
+
 # [0 - 1] , maximum prompt / input ratio allowed
 width_limit = 1
 
-# Margins between each segment, and cursor offset
+# Margins between each segment, and cursor offset from the prompt
 padding_left =   = 1
 padding_right =  = 1
 padding_end =    = 1
@@ -144,20 +153,6 @@ padding_end =    = 1
 force_newline  = false
 native_rprompt = false
 
-# Show last exit status as integer instead of string interpretation
-numeric_status = false
-
-# Show the number of background jobs
-jobs_count = true
-
-# Disable user module under that condition
-default_user = ""
-
-# Disable host module under that condition
-default_host = ""
-
-# Time module format
-time_format = "%H:%M:%S"
 
 # Amount of parent directories allowed in dir module before truncation
 dir_depth = 4
@@ -219,7 +214,7 @@ git_stash    = "*"
 git_ahead    = "↑"
 git_behind   = "↓"
 git_staged   = "+"
-git_nstaged  = "!"
+git_notstaged  = "!"
 git_conflicted = "×"
 git_untracked  = "?"
 ```

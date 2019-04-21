@@ -1,5 +1,4 @@
 #include <cstdlib>
-#include <unistd.h>
 #include "../modules.hpp"
 #include "../utils.hpp"
 
@@ -8,7 +7,7 @@ Module
 SegmentUser(const config& c)
 {
 	Segment segment;
-    segment.content = utils::string(getenv("USER"));
+    segment.content = utils::string(std::getenv("USER"));
 
     if(segment.content == c.user.default_user
     && !c.user.always)

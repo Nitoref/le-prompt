@@ -1,3 +1,7 @@
+#include "modules.hpp"
+#include "utils.hpp"
+#include <string>
+#include <tuple>
 #include <git2.h>
 #include <string.h>
 #include <stdio.h>
@@ -6,23 +10,21 @@
 #else
 # include <unistd.h>
 #endif
-#include "modules.hpp"
-#include "utils.hpp"
-#include <string>
-#include <tuple>
 
 
 struct GitStatus
 {
     std::string name;
+    std::string tag;
     std::string hash;
     size_t stash  = 0;
     size_t ahead  = 0;
     size_t behind = 0;
     size_t staged = 0;
-    size_t nstaged = 0;
+    size_t notstaged = 0;
     size_t untracked  = 0;
     size_t conflicted = 0;
+    bool tagged   = false;
     bool empty    = false;
     bool detached = false;
     bool ignored  = false;
@@ -49,21 +51,19 @@ SegmentGit(const config& c)
     };
 
 
-    if (status.name.empty())
-    {
-        return Module {};
-    }
-
     bool dirty = status.ahead     || status.behind
-              || status.staged    || status.nstaged
+              || status.staged    || status.notstaged
               || status.untracked || status.conflicted;
 
 
     std::string branch_symbol;
-    if (status.detached)
+    if (status.detached && c.git.hash_fallback){
+        status.name   = status.hash;
         branch_symbol = c.git.symbol_hash;
-    else
+    }
+    else{
         branch_symbol = c.git.symbol_branch;
+    }
 
 
     if (!c.git.fancy)
@@ -72,15 +72,16 @@ SegmentGit(const config& c)
         for (char ch: c.git.format)
         {
             switch (ch) {
-                case '@': content += branch_symbol + status.name; break;
+                case '@': if (!status.name.empty()) content += branch_symbol + status.name; break;
+                case '%': if (!status.tag.empty() ) content += c.git.symbol_tag + status.tag; break;
+                case '.': if (status.stash      ) content += c.git.symbol_stash; break;
+                case '>': if (status.ahead      ) content += c.git.symbol_ahead; break;
+                case '<': if (status.behind     ) content += c.git.symbol_behind; break;
+                case '+': if (status.staged     ) content += c.git.symbol_staged; break;
+                case '!': if (status.notstaged  ) content += c.git.symbol_notstaged; break;
+                case '?': if (status.untracked  ) content += c.git.symbol_untracked; break;
+                case 'x': if (status.conflicted ) content += c.git.symbol_conflicted; break;
                 case 'd': content += dirty ? c.git.symbol_dirty : ""; break;
-                case '.': content += status.stash ? c.git.symbol_stash : ""; break;
-                case '>': content += status.ahead ? c.git.symbol_ahead : ""; break;
-                case '<': content += status.behind ? c.git.symbol_behind : ""; break;
-                case '+': content += status.staged ? c.git.symbol_staged : ""; break;
-                case '!': content += status.nstaged ? c.git.symbol_nstaged : ""; break;
-                case '?': content += status.untracked ? c.git.symbol_untracked : ""; break;
-                case 'x': content += status.conflicted ? c.git.symbol_conflicted : ""; break;
                 default: break;
             }
         }
@@ -94,7 +95,6 @@ SegmentGit(const config& c)
 
     
     Module    module;
-    // Segment  segment;
     
     for (char ch: c.git.format)
     {
@@ -108,6 +108,15 @@ SegmentGit(const config& c)
                                         : c.git.theme_clean
                                 : c.git.theme_dirty
             );
+        break;
+        case '%':
+            if (status.tagged) {
+                module.emplace_back(
+                    module::id::git_tag,
+                    c.git.symbol_tag + status.tag,
+                    c.git.theme_tag
+                );
+            }
         break;
         case '.':
             if (status.stash) {
@@ -150,12 +159,12 @@ SegmentGit(const config& c)
             }
         break;
         case '!':
-            if (status.nstaged) {
-                std::string count = c.git.count ? std::to_string(status.nstaged) : "";
+            if (status.notstaged) {
+                std::string count = c.git.count ? std::to_string(status.notstaged) : "";
                 module.emplace_back(
-                    module::id::git_nstaged,
-                    count + c.git.symbol_nstaged,
-                    c.git.theme_nstaged
+                    module::id::git_notstaged,
+                    count + c.git.symbol_notstaged,
+                    c.git.theme_notstaged
                 );
             }
         break;
@@ -195,8 +204,8 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     git_status_list    *status_list;
  
     git_libgit2_opts(GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION, 0);
-    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
-    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION, 1);
+    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
+    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION, 1);
     git_libgit2_init();
 
     status_opt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
@@ -212,26 +221,33 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
         return 1;
     }
 
-    std::string workdir = utils::string(
-        git_repository_workdir(repository)
-    );
+
+    if (git_repository_is_empty(repository))
+    {
+        status.empty = true;
+        return 0;
+    }
+
 
     if (get_name(status, repository))
     {
         return 1; 
     }
 
+    if (git_repository_is_bare(repository))
+    {
+        return 0;
+    }
+
+    std::string workdir = utils::string(
+        git_repository_workdir(repository)
+    );
     for (auto path: ignored_repositories)
     {
         if (workdir == path) {
             status.ignored = true;
             return 0;
         }
-    }
-
-    if (git_repository_is_bare(repository))
-    {
-        return 0;
     }
 
     if (git_status_list_new(&status_list, repository, &status_opt))
@@ -276,6 +292,8 @@ get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head)
         return error;
     }
 
+    // std::cout << git_reference_name(upstream) << "\n";
+
     git_graph_ahead_behind(
         &status.ahead, &status.behind,
         repo,
@@ -294,21 +312,18 @@ get_name(GitStatus& status, git_repository *repo)
     int error = git_repository_head(&head, repo);
     if (error)
     {
-        if (error == GIT_ENOTFOUND)
+        if (error == GIT_ENOTFOUND || error == GIT_EUNBORNBRANCH)
         {
-            status.name = "HEAD (no branch)";
-        }
-        else 
-        if (error == GIT_EUNBORNBRANCH)
-        {
-            status.name  = "HEAD (no commit)";
-            status.empty = true;
-            return 1;
+            status.name  = "HEAD (no branch)";
         }
         else
         {
             return 1;
         }
+    }
+    else
+    {
+        status.name = git_reference_shorthand(head);
     }
 
     char *oid_str = (char*)malloc(8*sizeof(char));
@@ -317,13 +332,16 @@ get_name(GitStatus& status, git_repository *repo)
     );
     status.hash = utils::string(oid_str);
 
+    if (git_reference_is_tag(head))
+    {
+        git_tag *tag;
+        git_tag_lookup(&tag, repo, git_reference_target(head));
+        status.tag = utils::string(git_tag_name(tag));
+    }
+
     if (git_repository_head_detached(repo))
     {
         status.detached = true;
-    }
-    else
-    {
-        status.name = git_reference_shorthand(head);
     }
 
     get_ahead_behind(status, repo, head);
@@ -372,7 +390,7 @@ get_stats(GitStatus& status, git_status_list *status_list)
                            | GIT_STATUS_WT_MODIFIED
                            | GIT_STATUS_WT_TYPECHANGE))
            {
-               status.nstaged++;
+               status.notstaged++;
            }
         }
     }
@@ -415,7 +433,7 @@ status_callback(const char* path, unsigned int status_flags, void* status)
                        | GIT_STATUS_WT_MODIFIED
                        | GIT_STATUS_WT_TYPECHANGE))
        {
-           ((GitStatus*)status)->nstaged++;
+           ((GitStatus*)status)->notstaged++;
        }
     }
     return 1;

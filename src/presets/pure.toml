@@ -1,11 +1,11 @@
-segments.left  = ['dir','git','perms','root']
-segments.right = ['time','status','jobs']
+segments.left  = ['dir','git']
+segments.right = ['time','status','jobs','perms','root']
 segments.down  = ['shell']
 
-global.separator      = ''
-global.separator2     = ''
-global.rseparator     = ''
-global.rseparator2    = ''
+global.symbol.separator      = ''
+global.symbol.separator2     = ''
+global.symbol.rseparator     = ''
+global.symbol.rseparator2    = ''
 
 global.padding.left  = 1
 global.padding.right = 1
@@ -54,7 +54,7 @@ git.symbol.stash      = '*'
 git.symbol.ahead      = '⇡'
 git.symbol.behind     = '⇣'
 git.symbol.staged     = '+'
-git.symbol.nstaged    = '!'
+git.symbol.notstaged  = '!'
 git.symbol.conflicted = '×'
 git.symbol.untracked  = '?'
 git.theme.clean  = {fg = 242}
@@ -63,7 +63,7 @@ git.theme.stash  = {fg = 76}
 git.theme.ahead  = {fg = 159}
 git.theme.behind = {fg = 240}
 git.theme.staged = {fg = 113}
-git.theme.nstaged    = {fg = 11}
+git.theme.notstaged  = {fg = 11}
 git.theme.untracked  = {fg = 14}
 git.theme.conflicted = {fg =  9}
 
@@ -77,7 +77,7 @@ ssh.theme         = {fg = 166}
 aws.theme         = {fg = 22}
 docker.theme      = {fg = 55}
 dot_env.theme     = {fg = 55}
-virtual_env.theme = {fg = 35}
+venv.theme = {fg = 35}
 duration.theme    = {fg = 237}
 
 

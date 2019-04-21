@@ -17,11 +17,12 @@ Module SegmentRoot    (const config& c);
 Module SegmentShell   (const config& c);
 Module SegmentJobs    (const config& c);
 Module SegmentTime    (const config& c);
+Module SegmentPerms   (const config& c);
 Module SegmentDir     (const config& c);
 Module SegmentGit     (const config& c);
-Module SegmentPerms   (const config& c);
 Module SegmentSsh     (const config& c);
 Module SegmentAws     (const config& c);
+Module SegmentLoad    (const config& c);
 Module SegmentDocker  (const config& c);
 Module SegmentVirtualEnv (const config& c);
 
@@ -44,13 +45,14 @@ inline map_t map = {
     {"shell",  &SegmentShell},
     {"jobs",   &SegmentJobs},
     {"time",   &SegmentTime},
+    {"perms",  &SegmentPerms},
     {"dir",    &SegmentDir},
     {"git",    &SegmentGit},
-    {"perms",  &SegmentPerms},
     {"ssh",    &SegmentSsh},
     {"aws",    &SegmentAws},
-    {"docker", &SegmentDocker},
-    {"venv",   &SegmentVirtualEnv}
+    {"load",   &SegmentLoad},
+    {"venv",   &SegmentVenv},
+    {"docker", &SegmentDocker}
 };
 
 inline function_t*
@@ -82,17 +84,19 @@ enum class id: unsigned int {
 	path,
 	home,
 	git_branch,
+	git_tag,
 	git_ahead,
 	git_behind,
 	git_staged,
-	git_nstaged,
+	git_notstaged,
 	git_untracked,
 	git_conflicted,
 	git_stash,
 	ssh,
 	aws,
+	load,
+	venv,
 	docker,
-	virtual_env,
 	extension,
 	__count
 };

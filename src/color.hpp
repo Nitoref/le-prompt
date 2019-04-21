@@ -1,8 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <unordered_map>
-
 
 enum class font
 {

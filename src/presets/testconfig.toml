@@ -68,7 +68,7 @@ git.symbol.stash      = '⚑'
 git.symbol.ahead      = ''
 git.symbol.behind     = ''
 git.symbol.staged     = ''
-git.symbol.nstaged    = '✎'
+git.symbol.notstaged  = '✎'
 git.symbol.untracked  = '…'
 git.symbol.conflicted = '×'
 git.theme.clean      = {fg = 254, bg = 64}
@@ -77,7 +77,7 @@ git.theme.stash      = {fg = 33,  bg = 230}
 git.theme.ahead      = {fg = 37,  bg = 230}
 git.theme.behind     = {fg = 37,  bg = 230}
 git.theme.staged     = {fg = 64,  bg = 230}
-git.theme.nstaged    = {fg = 160, bg = 230}
+git.theme.notstaged  = {fg = 160, bg = 230}
 git.theme.untracked  = {fg = 136, bg = 230}
 git.theme.conflicted = {fg = 166, bg = 230}
 git.fancy = true
@@ -101,7 +101,7 @@ status.theme.success = {fg = 254, bg = 235}
 status.theme.failure = {fg = 254, bg = 160}
 
 
-virtual_env.theme    = {fg = 8,   bg = 6}
+venv.theme = {fg = 8,   bg = 6}
 
 
 prompt.symbol = '$'
