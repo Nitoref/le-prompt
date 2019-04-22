@@ -31,7 +31,6 @@ struct GitStatus
 };
 
 
-int status_callback(const char* path, unsigned int status_flags, void* status);
 int get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories);
 int get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head);
 int get_stats(GitStatus& status, git_status_list *status_list);
@@ -86,7 +85,7 @@ SegmentGit(const config& c)
             }
         }
         return Module { {
-            module::id::git_branch, content,
+            segment::id::git_branch, content,
             !status.ignored ? (dirty ? c.git.theme_dirty
                                      : c.git.theme_clean)
                             : c.git.theme_ignored
@@ -102,92 +101,92 @@ SegmentGit(const config& c)
         {
         case '@':
             module.push_back({
-                module::id::git_branch,
+                segment::id::git_branch,
                 branch_symbol + status.name,
                 !status.ignored ? (dirty ? c.git.theme_dirty
                                          : c.git.theme_clean)
                                 : c.git.theme_ignored
             });
-        break;
+            break;
         case '%':
             if (status.tagged) {
                 module.push_back({
-                    module::id::git_tag,
+                    segment::id::git_tag,
                     c.git.symbol_tag + status.tag,
                     c.git.theme_tag
                 });
             }
-        break;
+            break;
         case '.':
             if (status.stash) {
                 std::string count = c.git.count ? std::to_string(status.stash) : "";
                 module.push_back({
-                    module::id::git_stash,
+                    segment::id::git_stash,
                     count + c.git.symbol_stash,
                     c.git.theme_stash
                 });
             }
-        break;
+            break;
         case '>':
             if (status.ahead) {
                 std::string count = c.git.count ? std::to_string(status.ahead) : "";
                 module.push_back({
-                    module::id::git_ahead,
+                    segment::id::git_ahead,
                     count + c.git.symbol_ahead,
                     c.git.theme_ahead
                 });
             }
-        break;
+            break;
         case '<':
             if (status.behind) {
                 std::string count = c.git.count ? std::to_string(status.behind) : "";
                 module.push_back({
-                    module::id::git_behind,
+                    segment::id::git_behind,
                     count + c.git.symbol_behind,
                     c.git.theme_behind
                 });
             }
-        break;
+            break;
         case '+':
             if (status.staged) {
                 std::string count = c.git.count ? std::to_string(status.staged) : "";
                 module.push_back({
-                    module::id::git_staged,
+                    segment::id::git_staged,
                     count + c.git.symbol_staged,
                     c.git.theme_staged
                 });
             }
-        break;
+            break;
         case '!':
             if (status.notstaged) {
                 std::string count = c.git.count ? std::to_string(status.notstaged) : "";
                 module.push_back({
-                    module::id::git_notstaged,
+                    segment::id::git_notstaged,
                     count + c.git.symbol_notstaged,
                     c.git.theme_notstaged
                 });
             }
-        break;
+            break;
         case '?':
             if (status.untracked) {
                 std::string count = c.git.count ? std::to_string(status.untracked) : "";
                 module.push_back({
-                    module::id::git_untracked,
+                    segment::id::git_untracked,
                     count + c.git.symbol_untracked,
                     c.git.theme_untracked
                 });
             }
-        break;
+            break;
         case 'x':
             if (status.conflicted) {
                 std::string count = c.git.count ? std::to_string(status.conflicted) : "";
                 module.push_back({
-                    module::id::git_conflicted,
+                    segment::id::git_conflicted,
                     count + c.git.symbol_conflicted,
                     c.git.theme_conflicted
                 });
             }
-        break;
+            break;
         default:
             break;
         }
@@ -250,19 +249,15 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
         }
     }
 
-    // if (git_status_list_new(&status_list, repository, &status_opt))
-    // {
-    //     return 1;
-    // }
+    if (git_status_list_new(&status_list, repository, &status_opt))
+    {
+        return 1;
+    }
 
-    git_status_foreach_ext(
-        repository, &status_opt, status_callback, (void*)&status
-    );
-
-    // if (get_stats(status, status_list))
-    // {
-    //     return 1;
-    // }
+    if (get_stats(status, status_list))
+    {
+        return 1;
+    }
     git_stash_foreach(repository, &get_stash, (void*)&status);
 
     git_status_list_free(status_list);
@@ -395,46 +390,4 @@ get_stats(GitStatus& status, git_status_list *status_list)
         }
     }
     return 0;
-}
-
-
-
-int
-status_callback(const char* path, unsigned int status_flags, void* status)
-{
-
-    if (status_flags == GIT_STATUS_CURRENT 
-    ||  status_flags & GIT_STATUS_IGNORED)
-    {
-        return 0;
-    }
-
-    if (status_flags & GIT_STATUS_CONFLICTED)
-    {
-        ((GitStatus*)status)->conflicted ++;
-    }
-    else
-    if (status_flags & ( GIT_STATUS_WT_RENAMED
-                    | GIT_STATUS_WT_NEW))
-    {
-        ((GitStatus*)status)->untracked++;
-    }
-    else {
-       if (status_flags & ( GIT_STATUS_INDEX_NEW
-                       | GIT_STATUS_INDEX_DELETED
-                       | GIT_STATUS_INDEX_RENAMED
-                       | GIT_STATUS_INDEX_MODIFIED
-                       | GIT_STATUS_INDEX_TYPECHANGE))
-       {
-           ((GitStatus*)status)->staged++;
-       }
-       if (status_flags & ( GIT_STATUS_WT_DELETED
-                       | GIT_STATUS_WT_RENAMED
-                       | GIT_STATUS_WT_MODIFIED
-                       | GIT_STATUS_WT_TYPECHANGE))
-       {
-           ((GitStatus*)status)->notstaged++;
-       }
-    }
-    return 1;
 }

@@ -1,5 +1,9 @@
-#include <unistd.h>
-#include <pwd.h>
+#ifdef _WIN32
+#   include <windows.h>
+#else
+#   include <pwd.h>
+#   include <unistd.h>
+#endif
 #include <regex>
 #include <string>
 #include <string_view>
@@ -10,14 +14,22 @@
 #include "utils.hpp"
 
 
-
 int
 remove_home(std::string& path, std::string symbol)
 {
+
+#ifdef _WIN32
+    std::string home = utils::string(std::getenv("USERPROFILE"));
+    if (home.empty()) {
+        home =  std::getenv("HOMEDRIVE");
+        home += std::getenv("HOMEPATH");
+    }
+#else
     std::string home = utils::string(std::getenv("HOME"));
     if (home.empty()) {
         home = utils::string(getpwuid(getuid())->pw_dir);
     }
+#endif
     if (home.empty()) {
         return 0;
     }
@@ -65,20 +77,20 @@ SegmentDir(const config& c)
     if (c.dir.fancy == false)
     {
         auto style = at_home ? c.dir.theme_home : c.dir.theme_path;
-        return Module { {module::id::dir, path, style } };
+        return Module { {segment::id::dir, path, style } };
     }
     return {};
 
     // Module module;
     // for (auto dir: std::filesystem::path(path))
     // {
-    //     module.emplace_back(module::id::path, dir, c.theme.path);
+    //     module.emplace_back(segment::id::path, dir, c.theme.path);
     // }
     // module.back().style = c.theme.dir;
-    // module.back().id = module::id::dir;
+    // module.back().id = segment::id::dir;
     // if (at_home)
     // {
-    //     module.front().id = module::id::home;
+    //     module.front().id = segment::id::home;
     //     module.front().style = c.theme.home;
     // }
 

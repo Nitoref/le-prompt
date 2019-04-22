@@ -21,12 +21,21 @@ var rdraggable = new window.Draggable.Sortable(right, {
   },
 });
 
-draggable.on('sortable:sorted', function() {
-  console.log('sorted!');
+var buttons = document.querySelectorAll('buttons');
+var dragbuttons = new window.Draggable.Sortable(buttons, {
+  draggable: '.drag-item',
+  appendTo: '.buttons',
+  classes: {
+    body: 'draggable-container--is-dragging',
+  },
 });
-rdraggable.on('sortable:sorted', function() {
-  console.log('sorted!');
-});
-draggable.on('drag:start', () => console.log('drag:start'));
-draggable.on('drag:move', () => console.log('drag:move'));
-draggable.on('drag:stop', () => console.log('drag:stop'));
+
+// draggable.on('sortable:sorted', function() {
+//   console.log('sorted!');
+// });
+// rdraggable.on('sortable:sorted', function() {
+//   console.log('sorted!');
+// });
+// draggable.on('drag:start', () => console.log('drag:start'));
+// draggable.on('drag:move', () => console.log('drag:move'));
+// draggable.on('drag:stop', () => console.log('drag:stop'));

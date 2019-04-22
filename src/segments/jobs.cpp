@@ -23,7 +23,7 @@ SegmentJobs(const config& c)
 	
 	return Module {
 		{
-			module::id::jobs,
+			segment::id::jobs,
 			content,
 			c.jobs.theme
 		}

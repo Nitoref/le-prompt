@@ -1,11 +1,11 @@
 #ifndef COLORUTILS_H
 #define COLORUTILS_H
 
-#include "config.hpp"
-#include <iostream>
 #include <cstring>
 #include <string>
 #include <map>
+#include "config.hpp"
+#include <iostream>
 
 #define ESCAPE "\u001b["
 #define DEFAULT '9'
@@ -68,7 +68,9 @@ struct printer
             }};
             endl   = "\n";
             break;
-        
+
+        case config::fish:
+        case config::ps:
         default:
             endl   = "\n";
             break;

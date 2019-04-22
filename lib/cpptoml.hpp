@@ -53,7 +53,7 @@ using string_to_base_map
 
 // if defined, `base` will retain type information in form of an enum class
 // such that static_cast can be used instead of dynamic_cast
-// #define CPPTOML_NO_RTTI
+#define CPPTOML_NO_RTTI
 
 template <class T>
 class option

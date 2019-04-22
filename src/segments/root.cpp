@@ -10,7 +10,7 @@ SegmentRoot(const config& c)
 	}
 
 	return Module { {
-		module::id::root,
+		segment::id::root,
 		c.root.symbol,
 		c.root.theme
 	} };

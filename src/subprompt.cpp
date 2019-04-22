@@ -1,11 +1,9 @@
 #include "subprompt.hpp"
 
-// #include <algorithm>
-
 
 
 std::string
-SubPrompt::format_without(std::unordered_set<module::id>& ignored)
+SubPrompt::format_without(std::unordered_set<segment::id>& ignored)
 {
     std::string output;
     output.reserve(20 * segments.size());
@@ -100,7 +98,7 @@ SubPrompt::preformat()
     prev_color = -2;
     size_t subtotal = 0;
 
-    id_lookup.resize((int)module::id::__count);
+    id_lookup.resize((int)segment::id::__count);
 
     size_t i = 0;
     for (auto& segment: segments)

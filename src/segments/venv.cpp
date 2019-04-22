@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <cstdlib>
 #include "modules.hpp"
 #include "utils.hpp"
@@ -5,21 +6,28 @@
 
 Module SegmentVenv(const config& c)
 {
-    std::string content;;
-    
-    content = utils::string(std::getenv("VIRTUAL_ENV"));
-    if (content.empty())
+    char* content_cstr = std::getenv("VIRTUAL_ENV");
+    if (!content_cstr)
     {
-        content = utils::string(std::getenv("CONDA_ENV_PATH"));
+        content_cstr = std::getenv("CONDA_ENV_PATH");
     }
-    if (content.empty())
+    if (!content_cstr)
     {
-        content = utils::string(std::getenv("CONDA_DEFAULT_ENV"));
+        content_cstr = std::getenv("CONDA_DEFAULT_ENV");
     }
+
+    if (!content_cstr)
+        return {};
     
+    std::string content = c.venv.symbol;
+    if (c.venv.verbose)
+    {
+        content += std::filesystem::path(content_cstr).filename();
+    }
+
     return Module {
         {
-            module::id::venv,
+            segment::id::venv,
             content,
             c.venv.theme
         }

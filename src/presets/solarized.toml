@@ -11,8 +11,8 @@ segments.left = [
 segments.right = [
   'time',
   'load',
-  'host',
-  # 'jobs',
+  'context',
+  'jobs',
   'git',
   'hg',
   'status',
@@ -51,7 +51,6 @@ dir.theme.cwd  = {fg = 230, bg = 61}
 user.theme     = {fg = 254}
 root.theme     = {fg = 37}
 host.theme     = {fg = 248, bg = 234}
-time.theme     = {fg = 252, bg= 235}
 jobs.theme     = {fg = 136, bg = 235}
 ssh.theme      = {fg = 8,   bg = 9}
 docker.theme   = {fg = 13,  bg = 55}

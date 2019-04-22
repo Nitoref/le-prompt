@@ -69,7 +69,7 @@ get(string str)
 
 }
 
-namespace module
+namespace segment
 {
 
 enum class id: unsigned int {

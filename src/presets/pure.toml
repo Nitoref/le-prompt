@@ -14,7 +14,7 @@ global.padding.end   = 0
 user.default  = 'nitoref'
 user.theme    = {fg = 240}
 
-prompt.symbol  = '❯'
+prompt.symbol.bash  = '❯'
 prompt.theme.success   = {fg = 212}
 prompt.theme.failure   = {fg = 197}
 

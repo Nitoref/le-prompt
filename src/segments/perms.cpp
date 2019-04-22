@@ -1,6 +1,11 @@
-#include <unistd.h>
 #include <filesystem>
 #include "modules.hpp"
+
+#ifdef _WIN32
+#   include <windows.h>
+#else
+#   include <unistd.h>
+#endif
 
 
 Module
@@ -8,8 +13,13 @@ SegmentPerms(const config& c)
 {
     namespace fs = std::filesystem;
     auto path = fs::current_path();
-    bool write_access = !access(path.c_str(), W_OK);
 
+#ifdef _WIN32
+    bool write_access = !_access(path.c_str(), W_OK);
+#else
+    bool write_access = !access(path.c_str(), W_OK);
+#endif
+    
     std::string content;
 
     if (c.perms.verbose)
@@ -33,7 +43,7 @@ SegmentPerms(const config& c)
 
     return Module {
     	{
-	    	module::id::perms,
+	    	segment::id::perms,
 	    	content,
 	    	write_access ? c.perms.theme
                          : c.perms.theme_readonly

@@ -1,9 +1,15 @@
+#ifdef _WIN32
+#   include <windows.h>
+#else
+#   include <unistd.h>
+#endif
+
+#include <vector>
+#include <iostream>
+
 #include "config.hpp"
 #include "utils.hpp"
 
-#include <unistd.h>
-#include <vector>
-#include <iostream>
 
 
 
@@ -14,9 +20,14 @@ config::config(int argc, char const *argv[])
 						"as first arguments.\n");
 
     _meta.shell = config::shell(argv[1]);
-    _meta.error = std::stoi(argv[2]);
     _meta.width = utils::term_width();
-    _meta.root  = !getuid();
+    _meta.error = std::stoi(argv[2]);
+
+#ifdef _WIN32
+    _meta.root =IsUserAnAdmin();
+#else
+    _meta.root = !getuid();
+#endif
 
     if (argc > 3) try
     {
@@ -200,14 +211,21 @@ void config::get_status(table_ptr table)
 
 void config::get_venv(table_ptr table)
 {
-    get(table, "theme", venv.theme);
+    get(table, "verbose" , venv.verbose);
+    get(table, "theme"   , venv.theme);
+    get(table, "symbol"  , venv.symbol);
 }
 
 void config::get_prompt(table_ptr table)
 {
-    get(table, "symbol"       , prompt.symbol);
-    get(table, "theme.success", prompt.theme_success);
-    get(table, "theme.failure", prompt.theme_failure);
+    get(table , "symbol.bash"   , prompt.symbol_bash);
+    get(table , "symbol.csh"    , prompt.symbol_csh);
+    get(table , "symbol.zsh"    , prompt.symbol_zsh);
+    get(table , "symbol.ksh"    , prompt.symbol_ksh);
+    get(table , "symbol.fish"   , prompt.symbol_fish);
+    get(table , "symbol.ps"     , prompt.symbol_ps);
+    get(table , "theme.success" , prompt.theme_success);
+    get(table , "theme.failure" , prompt.theme_failure);
 }
 
 void config::get_time(table_ptr table)
@@ -218,7 +236,9 @@ void config::get_time(table_ptr table)
 
 void config::get_ssh(table_ptr table)
 {
-    get(table, "theme", ssh.theme);
+    get(table, "verbose", ssh.verbose);
+    get(table, "symbol" , ssh.symbol);
+    get(table, "theme"  , ssh.theme);
 }
 
 

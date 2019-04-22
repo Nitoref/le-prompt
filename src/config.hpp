@@ -15,7 +15,7 @@
 
 struct config
 {
-	enum shell_t {bash, csh, fish, ksh, zsh};
+	enum shell_t {bash, csh, fish, ksh, zsh, ps, other};
 
 	using string = std::string;
 	using strvec = std::vector<string>;
@@ -36,11 +36,12 @@ struct config
 	        {"sh",   shell_t::bash},
 	        {"tcsh", shell_t::csh},
 	        {"zsh",  shell_t::zsh},
+	        {"ps",   shell_t::ps},
     	};
     	auto found = map.find(name);
     	if (found != map.end())
     		return found->second;
-    	return shell_t::bash;
+    	return shell_t::other;
 	}
 
 	struct _meta
@@ -212,13 +213,20 @@ struct config
 
 	struct venv
 	{
-		Theme theme;
+		bool   verbose = true;
+		string symbol;
+		Theme  theme;
 	}
 	venv;
 
 	struct prompt
 	{
-		string symbol = "$";
+		string symbol_bash = "$";
+		string symbol_csh  = "%";
+		string symbol_zsh  = "%";
+		string symbol_ksh  = "$";
+		string symbol_fish = ">";
+		string symbol_ps   = ">";
 		Theme  theme_success;
 		Theme  theme_failure;
 	}
@@ -233,7 +241,9 @@ struct config
 
 	struct ssh
 	{
-		Theme theme;
+		bool   verbose = true;
+		string symbol;
+		Theme  theme;
 	}
 	ssh;
 

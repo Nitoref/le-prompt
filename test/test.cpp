@@ -1,13 +1,24 @@
-#include <stdio.h>
-#include "unistd.h"
-#include "sys/types.h"
-#include "sys/resource.h"
-#include <sys/cdefs.h>
 #include <IOKit/IOTypes.h>
 #include <IOKit/IOKitKeys.h>
 #include <IOKit/OSMessageNotification.h>
 #include <sys/cdefs.h>
 #include <IOKit/ps/IOPowerSources.h>
+
+
+#include <stdio.h>
+#include "unistd.h"
+#include "sys/types.h"
+#include "sys/resource.h"
+#include <sys/cdefs.h>
+#include <sys/cdefs.h>
+
+#include <mach/mach.h>
+#include <mach/processor_info.h>
+#include <mach/mach_host.h>
+#include <mach/vm_statistics.h>
+#include <mach/mach_types.h>
+#include <mach/mach_init.h>
+#include <mach/mach_host.h>
 
 #include "sys/sysctl.h"
 #include <algorithm>
@@ -17,29 +28,55 @@
 #include <functional>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <regex>
 
 using namespace std;
 
-#include <mach/vm_statistics.h>
-#include <mach/mach_types.h>
-#include <mach/mach_init.h>
-#include <mach/mach_host.h>
+// struct cpusample {
+//     uint64_t totalSystemTime;
+//     uint64_t totalUserTime;
+//     uint64_t totalIdleTime;
+// };
+
+void cpusample()
+{
+    kern_return_t kr;
+    mach_msg_type_number_t count;
+    host_cpu_load_info_data_t r_load;
+
+    // uint64_t totalSystemTime = 0, totalUserTime = 0, totalIdleTime = 0;
+    count = HOST_CPU_LOAD_INFO_COUNT;
+    kr = host_statistics(mach_host_self(), HOST_CPU_LOAD_INFO, (int *)&r_load, &count);
+    if (kr != KERN_SUCCESS) {
+        printf("oops: %s\n", mach_error_string(kr));
+        return;
+    }
+
+    std::cout << "totalSystemTime = " << r_load.cpu_ticks[CPU_STATE_SYSTEM];
+    std::cout << "totalUserTime = "   << r_load.cpu_ticks[CPU_STATE_USER] + r_load.cpu_ticks[CPU_STATE_NICE];
+    std::cout << "totalIdleTime = "   << r_load.cpu_ticks[CPU_STATE_IDLE];
+
+
+
+}
+
+
+
 
 
 int main(int argc, char **argv, char **envp)
 {
 
-	auto blob = IOPSCopyPowerSourcesInfo();
-	auto ps   = IOPSCopyPowerSourcesList(blob);
-	auto dict = IOPSGetPowerSourceDescription(blob, ps);
+	std::cout << std::filesystem::current_path().filename() << "\n";
+	std::cout << std::filesystem::current_path().filename() << "\n";
+
+	// auto blob = IOPSCopyPowerSourcesInfo();
+	// auto ps   = IOPSCopyPowerSourcesList(blob);
+	// auto dict = IOPSGetPowerSourceDescription(blob, ps);
+	// std::cout << *dict[kIOPSACPowerValue] << "\n";
 	
-
-	std::cout << *dict[kIOPSACPowerValue] << "\n";
-
-
-
-
+	// cpusample();
 
 
 

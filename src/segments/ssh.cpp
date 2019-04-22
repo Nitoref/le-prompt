@@ -4,10 +4,27 @@
 
 Module SegmentSsh(const config& c)
 {
+	char* content_cstr = std::getenv("SSH_CLIENT");
+	if (!content_cstr)
+	{
+		content_cstr =  std::getenv("SSH_TTY");
+	}
+
+	if (!content_cstr)
+	{
+		return Module {};
+	}
+
+	std::string content = c.ssh.symbol;
+	if (c.ssh.verbose)
+	{
+		content += content_cstr;
+	}
+
     return Module {
     	{
-	    	module::id::ssh,
-	    	utils::string(std::getenv("SSH_CLIENT")),
+	    	segment::id::ssh,
+	    	content,
 	    	c.ssh.theme
     	}
     };

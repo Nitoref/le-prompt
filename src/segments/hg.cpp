@@ -47,7 +47,7 @@ Module SegmentHg (const config& c)
 
 	return Module {
 		{
-			module::id::hg,
+			segment::id::hg,
 			c.hg.symbol_branch + branch,
 			c.hg.theme
 		}

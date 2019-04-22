@@ -9,7 +9,7 @@ Module SegmentDocker(const config& c) {
 
 	Segment segment;
 
-	segment.id      = module::id::docker;
+	segment.id      = segment::id::docker;
 	segment.theme   = c.docker.theme;
 	segment.content = utils::string(std::getenv("DOCKER_MACHINE_NAME"));
 

@@ -1,8 +1,10 @@
 #include <map>
 #include <string> 
-#include "../modules.hpp"
+#include "modules.hpp"
 
 
+
+#ifndef _WIN32
 
 std::string
 signal_str(int code)
@@ -51,6 +53,7 @@ signal_str(int code)
         : std::to_string(code);
 }
 
+#endif
 
 Module
 SegmentStatus(const config& c)
@@ -63,6 +66,9 @@ SegmentStatus(const config& c)
         return {};
     }
 
+#ifdef _WIN32
+    content = std::to_string(error);
+#else
     if (c.status.numeric)
     {
         content = std::to_string(error);
@@ -71,10 +77,11 @@ SegmentStatus(const config& c)
     {
         content = signal_str(error);
     }
+#endif
 
     return Module {
         {
-            module::id::status,
+            segment::id::status,
             content,
             c.status.theme_failure
         }

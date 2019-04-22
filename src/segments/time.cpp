@@ -14,7 +14,7 @@ SegmentTime(const config& c)
 
 	return Module {
 		{
-			module::id::time,
+			segment::id::time,
 			s.str(),
 			c.time.theme
 		}

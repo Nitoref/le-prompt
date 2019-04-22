@@ -30,7 +30,7 @@ public:
     SubPrompt down;
     
     // Ignored segments
-    std::unordered_set<module::id> ignored_segments;
+    std::unordered_set<segment::id> ignored_segments;
 
     // 
     std::string
@@ -51,35 +51,35 @@ public:
 
     int prev_color_  = -2;
 
-    std::vector<module::id> priority_list
+    std::vector<segment::id> priority_list
     {
-        module::id::extension,
-        module::id::shell,
-        module::id::status,
-        module::id::jobs,
-        module::id::time,
-        module::id::perms,
-        module::id::git_branch,
-        module::id::hg,
-        module::id::dir,
-        module::id::path,
-        module::id::home,
-        module::id::load,
-        module::id::docker,
-        module::id::git_tag,
-        module::id::git_ahead,
-        module::id::git_behind,
-        module::id::git_staged,
-        module::id::git_notstaged,
-        module::id::git_untracked,
-        module::id::git_conflicted,
-        module::id::git_stash,
-        module::id::host,
-        module::id::user,
-        module::id::context,
-        module::id::ssh,
-        module::id::aws,
-        module::id::venv,
+        segment::id::extension,
+        segment::id::shell,
+        segment::id::status,
+        segment::id::jobs,
+        segment::id::time,
+        segment::id::perms,
+        segment::id::git_branch,
+        segment::id::hg,
+        segment::id::dir,
+        segment::id::path,
+        segment::id::home,
+        segment::id::load,
+        segment::id::docker,
+        segment::id::git_tag,
+        segment::id::git_ahead,
+        segment::id::git_behind,
+        segment::id::git_staged,
+        segment::id::git_notstaged,
+        segment::id::git_untracked,
+        segment::id::git_conflicted,
+        segment::id::git_stash,
+        segment::id::host,
+        segment::id::user,
+        segment::id::context,
+        segment::id::ssh,
+        segment::id::aws,
+        segment::id::venv,
     };
 };
 #endif

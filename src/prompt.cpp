@@ -47,6 +47,24 @@ join(std::vector<std::future<Module>>& futures, int duration)
 }
 
 
+std::vector<Segment>
+parse(std::vector<std::string>& strings, config& config)
+{
+    std::vector<Segment> segments;
+    segments.reserve(strings.size());
+    
+    for (auto& str: strings) {
+        if (auto fun = constructor::get(str)) {
+            for (auto& segment: (*fun)(config)) {
+                if (segment)
+                    segments.push_back(segment);
+            }
+        }
+    }
+    return segments;
+}
+
+
 
 Prompt::Prompt(config& c):
 conf(c),
@@ -61,6 +79,10 @@ down (left)
     left.segments  = join(left_futures, conf.global.timeout);
     right.segments = join(right_futures, conf.global.timeout);
     down.segments  = join(down_futures, conf.global.timeout);
+
+    // left.segments  = parse(conf.segments.left, conf);
+    // right.segments = parse(conf.segments.right, conf);
+    // down.segments  = parse(conf.segments.down, conf);
 }
 
 
@@ -73,13 +95,15 @@ Prompt::make()
     right.preformat();
     down.preformat();
     shrink();
+    
     switch (conf._meta.shell)
     {
         case config::zsh:
         case config::fish:    
             return print_native();
+        default:
+            return print_emulated();
     }
-    return print_emulated();
 }
 
 

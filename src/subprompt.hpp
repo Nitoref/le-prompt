@@ -54,7 +54,7 @@ public:
     preformat();
     
     std::string
-    format_without(std::unordered_set<module::id>& ignored);
+    format_without(std::unordered_set<segment::id>& ignored);
 
     inline std::string
     format_segment(Segment s);

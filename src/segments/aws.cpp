@@ -7,7 +7,7 @@ Module SegmentAws(const config& c)
 {
     return Module {
     	{
-    		module::id::aws,
+    		segment::id::aws,
 			utils::string(std::getenv("AWS_PROFILE")),
 			c.aws.theme
     	}

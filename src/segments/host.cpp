@@ -1,7 +1,3 @@
-#define HOSTNAME_MAX 256
-
-#include "modules.hpp"
-
 #include <string>
 #ifdef _WIN32
 # include <Windows.h>
@@ -9,14 +5,15 @@
 # include <unistd.h>
 #endif
 
+#include "modules.hpp"
+
 
 
 Module
 SegmentHost(const config& c)
 {
-
-    char* hostname = (char*)malloc(HOSTNAME_MAX);
-    gethostname(hostname, HOSTNAME_MAX);
+    char* hostname = (char*)malloc(256);
+    gethostname(hostname, 256);
     
     if (!hostname)
     {
@@ -35,7 +32,7 @@ SegmentHost(const config& c)
 
 	return Module {
 		{
-			module::id::home,
+			segment::id::home,
 			content,
 			c.host.theme
 		}

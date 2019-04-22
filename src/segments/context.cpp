@@ -1,23 +1,35 @@
-#define HOSTNAME_MAX 256
+#ifdef _WIN32
+#   include <windows.h>
+#else
+#   include <unistd.h>
+#endif
+#include <string>
+#include <cstdlib>
 
 #include "modules.hpp"
 #include "utils.hpp"
-
-#include <string>
-#include <cstdlib>
-#include <unistd.h>
 
 
 
 Module
 SegmentContext(const config& c)
 {
-    char* host_c_str = (char*)malloc(HOSTNAME_MAX);
-    gethostname(host_c_str, HOSTNAME_MAX);
 
-    
-    std::string host = utils::string(host_c_str);
+#ifdef _WIN32
+    char user_cstr[UNLEN+1];
+    DWORD user_name_size = sizeof(user_cstr);
+    if (GetUserName(user_cstr, &user_name_size))
+    {
+        username_cstr = std::getenv("USERNAME");
+    }
+    std::string user = utils::string(user_cstr);
+#else
     std::string user = utils::string(std::getenv("USER"));
+#endif
+    
+    char host_c_str[256];
+    gethostname(host_c_str, 256);
+    std::string host = utils::string(host_c_str);
     
 
     if (host.empty() && user.empty())
@@ -64,7 +76,7 @@ SegmentContext(const config& c)
 
     return Module {
     	{
-    		module::id::context,
+    		segment::id::context,
     		content,
             c._meta.root ? c.context.theme_root
                          : c.context.theme
