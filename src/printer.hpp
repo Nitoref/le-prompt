@@ -108,6 +108,15 @@ struct printer
         return output;
     }
 
+    static inline std::string escape(char c)
+    {
+        if (escapes.first.find(c) != std::string::npos)
+        {
+            return escapes.second[c];
+        }
+        return std::string(1, c);
+    }
+
     static inline std::string bg(int value)
     {
         std::string s(init);

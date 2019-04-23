@@ -12,7 +12,7 @@
 
 
 
-Module
+Segment
 SegmentUser(const config& c)
 {
     
@@ -40,15 +40,12 @@ SegmentUser(const config& c)
     	return {};
     }
 
-    auto content = c.user.symbol;
-    content += utils::string(content_cstr);
-
-    return Module {
-        {
-            segment::id::user,
-            content,
-            c._meta.root ? c.user.theme_root
-                         : c.user.theme
-        }
-    };
+    Segment segment(segment::id::user);
+    if (c._meta.root)
+        segment.theme(c.user.theme_root);
+    else
+        segment.theme(c.user.theme);
+    segment.append(c.user.symbol);
+    segment.append(utils::string(content_cstr));
+    return segment;
 }

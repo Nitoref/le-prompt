@@ -5,32 +5,29 @@
 
 
 
-Module SegmentDocker(const config& c) {
+Segment
+SegmentDocker(const config& c)
+{
 
-	Segment segment;
+	Segment segment(segment::id::docker);
+	segment.theme(c.docker.theme);
 
-	segment.id      = segment::id::docker;
-	segment.theme   = c.docker.theme;
-	segment.content = utils::string(std::getenv("DOCKER_MACHINE_NAME"));
-
-	if (segment)
+	char* content_cstr = std::getenv("DOCKER_MACHINE_NAME");
+	if (content_cstr)
 	{
-		return Module {segment};
+		segment.append(content_cstr);
+		return segment;
 	}
 
-	segment.content = utils::string(std::getenv("DOCKER_HOST"));
-	if (!segment)
+	content_cstr = std::getenv("DOCKER_HOST");
+	if (!content_cstr)
 	{
 		return {};
 	}
 
 	// https://tools.ietf.org/html/rfc3986#appendix-B
 	std::regex r (R"(^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)");
-	segment.content = std::regex_replace(segment.content, r, "$4");
-
-	if (segment)
-	{
-		return Module {segment};
-	}
-	return {};
+	auto content = utils::string(content_cstr);
+	segment.append(std::regex_replace(content, r, "$4"));
+	return segment;
 }

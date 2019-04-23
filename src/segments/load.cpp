@@ -12,27 +12,26 @@
 
 
 
-Module SegmentLoad(const config& c)
+Segment
+SegmentLoad(const config& c)
 {
+
 #ifdef _WIN32
 	return {}
 #else
 	double load[3];
 	getloadavg(load, 3);
 	
-	std::string output = c.load.symbol;
-	output += std::to_string(load[0]).substr(0, 4); 
-	output += ' ';
-	output += std::to_string(load[1]).substr(0, 4);
-	output += ' ';
-	output += std::to_string(load[2]).substr(0, 4); 
+	Segment segment(segment::id::aws);
+	segment.theme(c.load.theme);
+	segment.append(c.load.symbol);
+
+	segment.append(std::to_string(load[0]).substr(0, 4));
+	segment.append(' ');
+	segment.append(std::to_string(load[1]).substr(0, 4));
+	segment.append(' ');
+	segment.append(std::to_string(load[2]).substr(0, 4));
     
-    return Module {
-    	{
-    		segment::id::aws,
-			output,
-			c.load.theme
-    	}
-    };
+    return segment;
 #endif
 }

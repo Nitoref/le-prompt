@@ -10,10 +10,10 @@
 #include <unordered_map>
 
 
-std::vector<std::future<Module>>
+std::vector<std::future<Segment>>
 spawn(std::vector<std::string>& segments, config& config)
 {
-    std::vector<std::future<Module>> futures;
+    std::vector<std::future<Segment>> futures;
     futures.reserve(segments.size());
     for (auto str: segments) {
         if (auto fun = constructor::get(str)) {
@@ -28,7 +28,7 @@ spawn(std::vector<std::string>& segments, config& config)
 }
 
 std::vector<Segment>
-join(std::vector<std::future<Module>>& futures, int duration)
+join(std::vector<std::future<Segment>>& futures, int duration)
 {
     using milliseconds = std::chrono::milliseconds;
     std::vector<Segment> segments;
@@ -36,11 +36,8 @@ join(std::vector<std::future<Module>>& futures, int duration)
     
     for (auto& future: futures) {
         future.wait_for(milliseconds(duration));
-        if (auto module = future.get()) {
-            for (auto&& segment: module) {
-                if (segment)
-                    segments.emplace_back(segment);
-            }
+        if (auto segment = future.get()) {
+            segments.emplace_back(segment);
         }
     }
     return segments;
@@ -52,9 +49,9 @@ conf(c),
 left (c.global.separator , c.global.separator2 , c.global.padding_left, c.global.padding_right, utils::str_append),
 right(c.global.rseparator, c.global.rseparator2, c.global.padding_left, c.global.padding_right, utils::str_prepend),
 down (left)
-{    
+{
     printer::mode(conf._meta.shell);
-    
+
     auto left_futures  = spawn(conf.segments.left , conf);
     auto right_futures = spawn(conf.segments.right, conf);
     auto down_futures  = spawn(conf.segments.down , conf);
@@ -97,12 +94,12 @@ Prompt::shrink()
     {
         for (auto index: left.id_lookup.at((int)*i))
         {
-            left.length -= utils::strlen(left.segments.at(index).content)
+            left.length -= left.segments.at(index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
         for (auto index: right.id_lookup.at((int)*i))
         {
-            right.length -= utils::strlen(right.segments.at(index).content)
+            right.length -= right.segments.at(index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
         ignored_segments.insert(*i);

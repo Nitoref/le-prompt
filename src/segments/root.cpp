@@ -1,7 +1,7 @@
 #include "../modules.hpp"
 
 
-Module
+Segment
 SegmentRoot(const config& c)
 {
 	if (!c._meta.root)
@@ -9,9 +9,8 @@ SegmentRoot(const config& c)
 		return {};
 	}
 
-	return Module { {
-		segment::id::root,
-		c.root.symbol,
-		c.root.theme
-	} };
+	Segment segment(segment::id::root);
+	segment.append(c.root.symbol);
+	segment.theme(c.root.theme);
+	return segment;
 }

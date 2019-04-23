@@ -9,7 +9,7 @@ SubPrompt::format_without(std::unordered_set<segment::id>& ignored)
     output.reserve(20 * segments.size());
     for (auto &segment : segments)
     {
-        auto found = ignored.find(segment.id);
+        auto found = ignored.find(segment.id());
         if (found != ignored.end())
             continue;
         append(output, make_separator(segment));
@@ -29,15 +29,15 @@ SubPrompt::format_segment(Segment s)
 {
     std::string output;
     output.reserve(20);
-    output += printer::bg(s.theme.bg);
-    output += printer::fg(s.theme.fg);
+    output += printer::fg(s.theme().fg);
+    output += printer::bg(s.theme().bg);
     output += std::string(padding_left, ' ');
-    output += printer::escape(s.content);
+    output += s.content();
     output += std::string(padding_right, ' ');
 
     actual_length += padding_left;
     actual_length += padding_right;
-    actual_length += utils::strlen(s.content);
+    actual_length += s.length();
     return output;
 }
 
@@ -47,7 +47,7 @@ SubPrompt::make_separator(Segment s)
 {
     std::string output;
     output.reserve(20); // maybe ?
-    if (s.theme.bg == prev_color)
+    if (s.theme().bg == prev_color)
     {
         output += printer::fg(250); //options.theme.separator.fg
         output += separator2;
@@ -56,7 +56,7 @@ SubPrompt::make_separator(Segment s)
     else
     if (prev_color == -1)
     {
-        output += printer::fg(s.theme.bg);
+        output += printer::fg(s.theme().bg);
         output += printer::bg(prev_color);
         output += printer::font("reversed");
         output += separator;
@@ -67,11 +67,11 @@ SubPrompt::make_separator(Segment s)
     if (prev_color != -2)
     {
         output += printer::fg(prev_color);
-        output += printer::bg(s.theme.bg);
+        output += printer::bg(s.theme().bg);
         output += separator;
         actual_length += separator_length;
     }
-    prev_color = s.theme.bg;
+    prev_color = s.theme().bg;
     return output;
 }
 
@@ -103,9 +103,9 @@ SubPrompt::preformat()
     size_t i = 0;
     for (auto& segment: segments)
     {
-        id_lookup.at((int)segment.id).push_back(i++);
+        id_lookup.at((int)segment.id()).push_back(i++);
 
-        if (segment.theme.bg == prev_color)
+        if (segment.theme().bg == prev_color)
         {
             subtotal += separator2_length;
             length   += subtotal;
@@ -116,11 +116,11 @@ SubPrompt::preformat()
             length   += subtotal;
         }
         subtotal = 0;
-        subtotal += utils::strlen(segment.content);
+        subtotal += segment.length();
         subtotal += padding_left;
         subtotal += padding_right;
         
-        prev_color = segment.theme.bg;
+        prev_color = segment.theme().bg;
     }
     if (prev_color != - 1)
     {

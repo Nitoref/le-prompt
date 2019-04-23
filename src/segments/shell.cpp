@@ -2,7 +2,7 @@
 #include "modules.hpp"
 
 
-Module
+Segment
 SegmentShell(const config& c)
 {
 	std::string symbol;
@@ -17,13 +17,12 @@ SegmentShell(const config& c)
 		{shell_t::other , c.shell.symbol_bash },
 	};
 
-    return Module {
-        {
-            segment::id::shell,
-            shell_symbols.at(c._meta.shell),
-            c._meta.error ? c.shell.theme_failure
-                          : c.shell.theme_success
+	Segment segment(segment::id::shell);
+	segment.append(shell_symbols.at(c._meta.shell));
+	if (c._meta.error)
+		segment.theme(c.shell.theme_failure);
+	else
+		segment.theme(c.shell.theme_success);
 
-        }
-    };
+	return segment;
 }

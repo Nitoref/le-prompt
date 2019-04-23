@@ -2,7 +2,7 @@
 #include "modules.hpp"
 #include "utils.hpp"
 
-Module SegmentSsh(const config& c)
+Segment SegmentSsh(const config& c)
 {
 	char* content_cstr = std::getenv("SSH_CLIENT");
 	if (!content_cstr)
@@ -12,20 +12,15 @@ Module SegmentSsh(const config& c)
 
 	if (!content_cstr)
 	{
-		return Module {};
+		return {};
 	}
 
-	std::string content = c.ssh.symbol;
+	Segment segment(segment::id::ssh);
+	segment.theme(c.ssh.theme);
+	segment.append(c.ssh.symbol);
 	if (c.ssh.verbose)
 	{
-		content += content_cstr;
+		segment.append(content_cstr);
 	}
-
-    return Module {
-    	{
-	    	segment::id::ssh,
-	    	content,
-	    	c.ssh.theme
-    	}
-    };
+	return segment;
 }

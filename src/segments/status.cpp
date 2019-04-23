@@ -55,35 +55,36 @@ signal_str(int code)
 
 #endif
 
-Module
+Segment
 SegmentStatus(const config& c)
 {
-    std::string content;
+    Segment segment(segment::id::status);
 
     int error  = c._meta.error;
-    if (!error && !c.status.always)
+    if (!error)
     {
-        return {};
+        if (!c.status.always)
+        {
+            return {};
+        }
+        segment.theme(c.status.theme_success);
+        segment.append(c.status.symbol_success);
+        return segment;
     }
 
 #ifdef _WIN32
-    content = std::to_string(error);
+    segment.append(std::to_string(error));
 #else
     if (c.status.numeric)
     {
-        content = std::to_string(error);
+        segment.append(std::to_string(error));
     }
     else
     {
-        content = signal_str(error);
+        segment.append(signal_str(error));
     }
 #endif
 
-    return Module {
-        {
-            segment::id::status,
-            content,
-            c.status.theme_failure
-        }
-    };
+    segment.theme(c.status.theme_failure);
+    return segment;
 }

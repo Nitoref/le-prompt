@@ -12,10 +12,11 @@ struct HgStatus
 };
 
 
-Module SegmentHg (const config& c)
+Segment
+SegmentHg (const config& c)
 {
 	auto path = std::filesystem::current_path();
-	auto hg = std::filesystem::path(".hg");
+	auto hg   = std::filesystem::path(".hg");
 	bool found = false;
 
 	for (;;)
@@ -38,7 +39,6 @@ Module SegmentHg (const config& c)
 		return {};
 	}
 
-
 	std::string branch = "default";
 
 	std::ifstream i((path / hg / "branch").c_str());
@@ -47,11 +47,9 @@ Module SegmentHg (const config& c)
 		i >> branch;
 	}
 
-	return Module {
-		{
-			segment::id::hg,
-			c.hg.symbol_branch + branch,
-			c.hg.theme
-		}
-	};
+	Segment segment(segment::id::hg);
+	segment.theme(c.hg.theme);
+	segment.append(c.hg.symbol_branch);
+	segment.append(branch);
+	return segment;
 }

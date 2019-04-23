@@ -12,7 +12,7 @@
 
 
 
-Module
+Segment
 SegmentContext(const config& c)
 {
 
@@ -43,7 +43,6 @@ SegmentContext(const config& c)
         return {};
     }
 
-
     std::string host_short;
     if (auto dot = host.find('.'); dot != std::string::npos )
     {
@@ -52,40 +51,37 @@ SegmentContext(const config& c)
     
 
 
-    std::string content;
+    Segment segment(segment::id::context);
+    if (c._meta.root)
+        segment.theme(c.context.theme_root);
+    else
+        segment.theme(c.context.theme);
+
     bool escaped = false;
     for (char ch: c.context.format)
     {
         if (escaped) {
-            content += ch;
+            segment.append(ch);
         	escaped = false;
         	continue;
         }
         switch(ch)
         {
             case 'u':
-                content += user;
+                segment.append(user);
             break;
             case 'h':
-                content += host_short;
+                segment.append(host_short);
             break;
             case 'H':
-                content += host;
+                segment.append(host);
                 break;
             case '\\':
                 escaped = true;
             break;
             default:
-                content += ch;
+                segment.append(ch);
         }
     }
-
-    return Module {
-    	{
-    		segment::id::context,
-    		content,
-            c._meta.root ? c.context.theme_root
-                         : c.context.theme
-    	}
-    };
+    return segment;
 }

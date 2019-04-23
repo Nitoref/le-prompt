@@ -4,7 +4,7 @@
 #include <sstream>
 
 
-Module
+Segment
 SegmentTime(const config& c)
 {
 	auto time  = std::chrono::system_clock::now();
@@ -12,11 +12,8 @@ SegmentTime(const config& c)
     std::stringstream s;
     s << std::put_time(std::localtime(&ctime), c.time.format.data());
 
-	return Module {
-		{
-			segment::id::time,
-			s.str(),
-			c.time.theme
-		}
-	};
+    Segment segment(segment::id::time);
+    segment.theme(c.time.theme);
+    segment.append(s.str());
+    return segment;
 }

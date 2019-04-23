@@ -63,9 +63,10 @@ truncate_depth(std::filesystem::path& path, int max_depth, std::string symbol)
 }
 
 
-Module
+Segment
 SegmentDir(const config& c)
 {
+
     auto path    = c._meta.cwd;
     bool at_home = truncate_home(path, c.dir.symbol_home);
 
@@ -84,32 +85,11 @@ SegmentDir(const config& c)
         truncate_depth(path, c.dir.depth, c.dir.symbol_wrap);
     }
 
-    if (c.dir.fancy == false)
-    {
-        return Module {{
-            segment::id::dir_path,
-            path.c_str(),
-            at_home ? c.dir.theme_home
-                    : c.dir.theme_path
-        }};
-    }
-
-    Module module;
-
-    for (auto folder: path)
-    {
-        module.push_back({
-            segment::id::dir_path,
-            folder, c.dir.theme_path
-        });
-    }
-    module.back().theme = c.dir.theme_cwd;
-    module.back().id = segment::id::dir_cwd;
+    Segment segment(segment::id::dir);
+    segment.append(path.string());
     if (at_home)
-    {
-        module.front().id = segment::id::dir_home;
-        module.front().theme = c.dir.theme_home;
-    }
-
-    return module;
+        segment.theme(c.dir.theme_home);
+    else
+        segment.theme(c.dir.theme_path);
+    return segment;
 }

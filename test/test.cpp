@@ -60,17 +60,22 @@ void cpusample()
     std::cout << "totalUserTime = "   << r_load.cpu_ticks[CPU_STATE_USER] + r_load.cpu_ticks[CPU_STATE_NICE];
     std::cout << "totalIdleTime = "   << r_load.cpu_ticks[CPU_STATE_IDLE];
 
-
-
 }
 
 
+struct A {};
+struct B: public A{};
+struct C: public A{};
 
 
 int main(int argc, char **argv, char **envp)
 {
 
-
+	std::map<int, A> a {
+		{1, A()},
+		{2, B()},
+		{3, C()},
+	};
 
 
 

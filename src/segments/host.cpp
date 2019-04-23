@@ -10,7 +10,7 @@
 
 
 
-Module
+Segment
 SegmentHost(const config& c)
 {
     char* content_cstr = (char*)malloc(256);
@@ -21,23 +21,18 @@ SegmentHost(const config& c)
     	return {};
     }
 
-    auto content = c.host.symbol;
-    content += content_cstr;
-
     if (c.host.shorten)
     {
-	    if (size_t dot  = content.find('.');
-	    	       dot != std::string::npos)
+	    if (char* dot  = strchr(content_cstr, '.');
+	    	      dot != NULL)
 	    {
-	    	content = content.substr(dot);
+	    	content_cstr = dot;
 	    }
     }
 
-	return Module {
-		{
-			segment::id::host,
-			content,
-			c.host.theme
-		}
-	};
+    Segment segment(segment::id::host);
+    segment.theme(c.host.theme);
+    segment.append(c.host.symbol);
+    segment.append(content_cstr);
+    return segment;
 }

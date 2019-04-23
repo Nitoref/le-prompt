@@ -3,7 +3,7 @@
 #include <cstdlib>
 
 
-Module SegmentAws(const config& c)
+Segment SegmentAws(const config& c)
 {
 
 	char* content_cstr = std::getenv("AWS_PROFILE");
@@ -16,14 +16,9 @@ Module SegmentAws(const config& c)
 		return {};
 	}
 
-	auto content = c.aws.symbol;
-	content += utils::string(content_cstr);
-
-    return Module {
-    	{
-    		segment::id::aws,
-			content,
-			c.aws.theme
-    	}
-    };
+	Segment segment(segment::id::aws);
+	segment.theme(c.aws.theme);
+	segment.append(c.aws.symbol);
+	segment.append(utils::string(content_cstr));
+	return segment;
 }

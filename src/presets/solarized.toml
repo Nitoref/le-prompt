@@ -58,9 +58,9 @@ venv.theme     = {fg = 8,   bg = 6}
 
 hg.symbol.branch = ' '
 
-git.symbol.branch     = ' '
-git.symbol.hash       = ' '
-git.symbol.tag        = ' '
+git.symbol.branch     = ''
+git.symbol.hash       = ''
+git.symbol.tag        = ''
 git.symbol.stash      = '⚑'
 git.symbol.ahead      = ''
 git.symbol.behind     = ''

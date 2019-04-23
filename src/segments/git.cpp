@@ -38,17 +38,16 @@ int get_stash(size_t index, const char *message, const git_oid *stash_id, void *
 int get_name(GitStatus& status, git_repository *repo);
 
 
-Module
+
+Segment
 SegmentGit(const config& c)
 {
-    GitStatus status;
- 
+    GitStatus status; 
 
     if (get_git_status(status, c.git.ignore))
     {
         return {};
     };
-
 
     bool dirty = status.ahead     || status.behind
               || status.staged    || status.notstaged
@@ -65,133 +64,35 @@ SegmentGit(const config& c)
     }
 
 
-    if (!c.git.fancy)
-    {
-        std::string content;
-        for (char ch: c.git.format)
-        {
-            switch (ch) {
-                case '@': if (!status.name.empty()) content += branch_symbol + status.name; break;
-                case '%': if (!status.tag.empty())  content += c.git.symbol_tag + status.tag; break;
-                case '.': if (status.stash      ) content += c.git.symbol_stash; break;
-                case '>': if (status.ahead      ) content += c.git.symbol_ahead; break;
-                case '<': if (status.behind     ) content += c.git.symbol_behind; break;
-                case '+': if (status.staged     ) content += c.git.symbol_staged; break;
-                case '!': if (status.notstaged  ) content += c.git.symbol_notstaged; break;
-                case '?': if (status.untracked  ) content += c.git.symbol_untracked; break;
-                case 'x': if (status.conflicted ) content += c.git.symbol_conflicted; break;
-                case 'd': content += dirty ? c.git.symbol_dirty : ""; break;
-                default: break;
-            }
-        }
-        return Module { {
-            segment::id::git_branch, content,
-            !status.ignored ? (dirty ? c.git.theme_dirty
-                                     : c.git.theme_clean)
-                            : c.git.theme_ignored
-        } };
-    }
 
-    
-    Module    module;
-    
+    Segment segment(segment::id::git);
+
     for (char ch: c.git.format)
     {
-        switch (ch)
-        {
-        case '@':
-            module.push_back({
-                segment::id::git_branch,
-                branch_symbol + status.name,
-                !status.ignored ? (dirty ? c.git.theme_dirty
-                                         : c.git.theme_clean)
-                                : c.git.theme_ignored
-            });
-            break;
-        case '%':
-            if (status.tagged) {
-                module.push_back({
-                    segment::id::git_tag,
-                    c.git.symbol_tag + status.tag,
-                    c.git.theme_tag
-                });
-            }
-            break;
-        case '.':
-            if (status.stash) {
-                std::string count = c.git.count ? std::to_string(status.stash) : "";
-                module.push_back({
-                    segment::id::git_stash,
-                    count + c.git.symbol_stash,
-                    c.git.theme_stash
-                });
-            }
-            break;
-        case '>':
-            if (status.ahead) {
-                std::string count = c.git.count ? std::to_string(status.ahead) : "";
-                module.push_back({
-                    segment::id::git_ahead,
-                    count + c.git.symbol_ahead,
-                    c.git.theme_ahead
-                });
-            }
-            break;
-        case '<':
-            if (status.behind) {
-                std::string count = c.git.count ? std::to_string(status.behind) : "";
-                module.push_back({
-                    segment::id::git_behind,
-                    count + c.git.symbol_behind,
-                    c.git.theme_behind
-                });
-            }
-            break;
-        case '+':
-            if (status.staged) {
-                std::string count = c.git.count ? std::to_string(status.staged) : "";
-                module.push_back({
-                    segment::id::git_staged,
-                    count + c.git.symbol_staged,
-                    c.git.theme_staged
-                });
-            }
-            break;
-        case '!':
-            if (status.notstaged) {
-                std::string count = c.git.count ? std::to_string(status.notstaged) : "";
-                module.push_back({
-                    segment::id::git_notstaged,
-                    count + c.git.symbol_notstaged,
-                    c.git.theme_notstaged
-                });
-            }
-            break;
-        case '?':
-            if (status.untracked) {
-                std::string count = c.git.count ? std::to_string(status.untracked) : "";
-                module.push_back({
-                    segment::id::git_untracked,
-                    count + c.git.symbol_untracked,
-                    c.git.theme_untracked
-                });
-            }
-            break;
-        case 'x':
-            if (status.conflicted) {
-                std::string count = c.git.count ? std::to_string(status.conflicted) : "";
-                module.push_back({
-                    segment::id::git_conflicted,
-                    count + c.git.symbol_conflicted,
-                    c.git.theme_conflicted
-                });
-            }
-            break;
-        default:
-            break;
+        switch (ch) {
+            case '@': if (!status.name.empty()) segment.append(branch_symbol           + status.name); break;
+            case '%': if (!status.tag.empty() ) segment.append(c.git.symbol_tag        + status.tag); break;
+            case '.': if (status.stash        ) segment.append(c.git.symbol_stash      + (c.git.count ? std::to_string(status.stash     ) : "")); break;
+            case '>': if (status.ahead        ) segment.append(c.git.symbol_ahead      + (c.git.count ? std::to_string(status.ahead     ) : "")); break;
+            case '<': if (status.behind       ) segment.append(c.git.symbol_behind     + (c.git.count ? std::to_string(status.behind    ) : "")); break;
+            case '+': if (status.staged       ) segment.append(c.git.symbol_staged     + (c.git.count ? std::to_string(status.staged    ) : "")); break;
+            case '!': if (status.notstaged    ) segment.append(c.git.symbol_notstaged  + (c.git.count ? std::to_string(status.notstaged ) : "")); break;
+            case '?': if (status.untracked    ) segment.append(c.git.symbol_untracked  + (c.git.count ? std::to_string(status.untracked ) : "")); break;
+            case 'x': if (status.conflicted   ) segment.append(c.git.symbol_conflicted + (c.git.count ? std::to_string(status.conflicted) : "")); break;
+            case 'd': if (dirty) segment.append(c.git.symbol_dirty); break;
+            default: break;
         }
     }
-    return module;
+
+    if (status.ignored)
+        segment.theme(c.git.theme_ignored);
+    else
+    if (dirty)
+        segment.theme(c.git.theme_dirty);
+    else
+        segment.theme(c.git.theme_clean);
+
+    return segment;
 }
 
 

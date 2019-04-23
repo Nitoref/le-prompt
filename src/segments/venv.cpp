@@ -4,24 +4,20 @@
 #include "utils.hpp"
 
 
-Module SegmentVenv(const config& c)
+Segment
+SegmentVenv(const config& c)
 {
     char* content_cstr = std::getenv("VIRTUAL_ENV");
 
     if (!content_cstr)
         return {};
     
-    std::string content = c.venv.symbol;
+    Segment segment(segment::id::venv);
+    segment.theme(c.venv.theme);
+    segment.append(c.venv.symbol);
     if (c.venv.verbose)
     {
-        content += std::filesystem::path(content_cstr).filename();
+        segment.append(std::filesystem::path(content_cstr).filename());
     }
-
-    return Module {
-        {
-            segment::id::venv,
-            content,
-            c.venv.theme
-        }
-    };
+    return segment;
 }
