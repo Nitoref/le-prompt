@@ -1,14 +1,14 @@
-#include "modules.hpp"
-#include "utils.hpp"
-#include <string>
-#include <tuple>
-#include <git2.h>
-#include <string.h>
 #ifdef _WIN32
 # include <Windows.h>
 #else
 # include <unistd.h>
 #endif
+#include <string>
+#include <tuple>
+#include <git2.h>
+#include <string.h>
+#include "modules.hpp"
+#include "utils.hpp"
 
 
 

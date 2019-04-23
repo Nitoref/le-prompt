@@ -6,23 +6,23 @@ Module
 SegmentShell(const config& c)
 {
 	std::string symbol;
-	std::map <config::shell_t, std::string> shell_symbols
+	std::map <shell_t, std::string> shell_symbols
 	{
-		{config::bash  , c.prompt.symbol_bash },
-		{config::csh   , c.prompt.symbol_csh  },
-		{config::zsh   , c.prompt.symbol_zsh  },
-		{config::ksh   , c.prompt.symbol_ksh  },
-		{config::fish  , c.prompt.symbol_fish },
-		{config::ps    , c.prompt.symbol_ps   },
-		{config::other , c.prompt.symbol_bash },
+		{shell_t::bash  , c.shell.symbol_bash },
+		{shell_t::csh   , c.shell.symbol_csh  },
+		{shell_t::zsh   , c.shell.symbol_zsh  },
+		{shell_t::ksh   , c.shell.symbol_ksh  },
+		{shell_t::fish  , c.shell.symbol_fish },
+		{shell_t::ps    , c.shell.symbol_ps   },
+		{shell_t::other , c.shell.symbol_bash },
 	};
 
     return Module {
         {
             segment::id::shell,
             shell_symbols.at(c._meta.shell),
-            c._meta.error ? c.prompt.theme_failure
-                          : c.prompt.theme_success
+            c._meta.error ? c.shell.theme_failure
+                          : c.shell.theme_success
 
         }
     };

@@ -47,62 +47,40 @@ join(std::vector<std::future<Module>>& futures, int duration)
 }
 
 
-std::vector<Segment>
-parse(std::vector<std::string>& strings, config& config)
-{
-    std::vector<Segment> segments;
-    segments.reserve(strings.size());
-    
-    for (auto& str: strings) {
-        if (auto fun = constructor::get(str)) {
-            for (auto& segment: (*fun)(config)) {
-                if (segment)
-                    segments.push_back(segment);
-            }
-        }
-    }
-    return segments;
-}
-
-
-
 Prompt::Prompt(config& c):
 conf(c),
-left (c.global.separator,  c.global.separator2,  c.global.padding_left, c.global.padding_right, utils::str_append),
+left (c.global.separator , c.global.separator2 , c.global.padding_left, c.global.padding_right, utils::str_append),
 right(c.global.rseparator, c.global.rseparator2, c.global.padding_left, c.global.padding_right, utils::str_prepend),
 down (left)
 {    
-    auto left_futures  = spawn(conf.segments.left, conf);
+    printer::mode(conf._meta.shell);
+    
+    auto left_futures  = spawn(conf.segments.left , conf);
     auto right_futures = spawn(conf.segments.right, conf);
-    auto down_futures  = spawn(conf.segments.down, conf);
+    auto down_futures  = spawn(conf.segments.down , conf);
 
-    left.segments  = join(left_futures, conf.global.timeout);
+    left.segments  = join(left_futures , conf.global.timeout);
     right.segments = join(right_futures, conf.global.timeout);
-    down.segments  = join(down_futures, conf.global.timeout);
-
-    // left.segments  = parse(conf.segments.left, conf);
-    // right.segments = parse(conf.segments.right, conf);
-    // down.segments  = parse(conf.segments.down, conf);
+    down.segments  = join(down_futures , conf.global.timeout);
 }
 
 
 std::string
 Prompt::make()
 {
-    printer::mode(conf._meta.shell);
-    
     left.preformat();
     right.preformat();
     down.preformat();
     shrink();
-    
+
     switch (conf._meta.shell)
     {
-        case config::zsh:
-        case config::fish:    
+        case shell_t::zsh:
+        case shell_t::fish:
             return print_native();
         default:
             return print_emulated();
+        break;
     }
 }
 
@@ -134,6 +112,7 @@ Prompt::shrink()
         }
     }
 }
+
 
 std::string
 Prompt::print_native()
@@ -207,7 +186,7 @@ Prompt::print_emulated()
     }
     output += std::string(conf.global.padding_end, ' ');
     
-    if (conf._meta.shell == config::shell_t::csh)
+    if (conf._meta.shell == shell_t::csh)
         output += "%{\x1b[D%}";
 
     return output;

@@ -4,8 +4,9 @@
 #include <cstring>
 #include <string>
 #include <map>
-#include "config.hpp"
+#include "shell.hpp"
 #include <iostream>
+#include <unordered_map>
 
 #define ESCAPE "\u001b["
 #define DEFAULT '9'
@@ -28,11 +29,11 @@ struct printer
     static inline std::string endl;
     static inline replace_map escapes;
     
-    static void mode(config::shell_t id)
+    static void mode(shell_t id)
     {
         switch (id)
         {
-        case config::bash:
+        case shell_t::bash:
             wrap   = "\\[";
             unwrap = "\\]";
             endl   = "\n";
@@ -43,7 +44,7 @@ struct printer
             }};
             break;
 
-        case config::csh:
+        case shell_t::csh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = " \\n";
@@ -53,7 +54,7 @@ struct printer
             }};
             break;
 
-        case config::zsh:
+        case shell_t::zsh:
             wrap   = "%{";
             unwrap = "%}";
             endl   = "\n";
@@ -62,15 +63,15 @@ struct printer
             }};
             break;
 
-        case config::ksh:
+        case shell_t::ksh:
             escapes = {"!", {
                 {'!', "!!" }
             }};
             endl   = "\n";
             break;
 
-        case config::fish:
-        case config::ps:
+        case shell_t::fish:
+        case shell_t::ps:
         default:
             endl   = "\n";
             break;
@@ -169,6 +170,25 @@ struct printer
             return init + std::to_string(code->second) + 'm' + stop;
         return "";
     }
+    // static inline std::string disable(const char* str)
+    // {
+    //     static
+    //     std::unordered_map<std::string, int> y =
+    //     {
+    //         {"bold",      22},
+    //         {"faint",     22},
+    //         {"italic",    23},
+    //         {"underline", 4},
+    //         {"blink",     5},
+    //         {"rblink",    6},
+    //         {"reversed",  7},
+    //         {"conceal",   8},
+    //         {"crossed",   9},
+    //     };
+    //     if (auto code = y.find(str); code != y.end())
+    //         return init + std::to_string(code->second) + 'm' + stop;
+    //     return "";
+    // }
 };
 
 

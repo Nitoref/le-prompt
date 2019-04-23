@@ -1,6 +1,7 @@
 #ifdef _WIN32
 #   include <windows.h>
 #else
+#   include <pwd.h>
 #   include <unistd.h>
 #endif
 #include <string>
@@ -20,12 +21,17 @@ SegmentContext(const config& c)
     DWORD user_name_size = sizeof(user_cstr);
     if (GetUserName(user_cstr, &user_name_size))
     {
-        username_cstr = std::getenv("USERNAME");
+        user_cstr = std::getenv("USERNAME");
     }
-    std::string user = utils::string(user_cstr);
 #else
-    std::string user = utils::string(std::getenv("USER"));
+    char* user_cstr = std::getenv("USER");
+    if (!user_cstr)
+    {
+        user_cstr = getpwuid(getuid())->pw_name;
+    }
 #endif
+    std::string user = utils::string(user_cstr);
+    
     
     char host_c_str[256];
     gethostname(host_c_str, 256);

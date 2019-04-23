@@ -87,18 +87,6 @@ str_append(std::string& where, std::string what)
     where.append(what);
 }
 
-size_t
-strrnfind (std::string& s, char c, size_t n)
-{
-    if (n != 0  && !s.empty())
-        for (int i = s.length() - 1; i >= 0; --i)
-            if (s.at(i) == c)
-                if (--n == 0)
-                    return i;
-    return std::string::npos;
-}
-
-
 
 size_t
 strlen(std::string s)

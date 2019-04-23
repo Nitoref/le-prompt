@@ -8,18 +8,22 @@
 
 #include "utils.hpp"
 #include "modules.hpp"
+#include "printer.hpp"
 
 
 
 Module SegmentLoad(const config& c)
 {
+#ifdef _WIN32
+	return {}
+#else
 	double load[3];
 	getloadavg(load, 3);
 	
 	std::string output = c.load.symbol;
 	output += std::to_string(load[0]).substr(0, 4); 
 	output += ' ';
-	output += std::to_string(load[1]).substr(0, 4); 
+	output += std::to_string(load[1]).substr(0, 4);
 	output += ' ';
 	output += std::to_string(load[2]).substr(0, 4); 
     
@@ -30,4 +34,5 @@ Module SegmentLoad(const config& c)
 			c.load.theme
     	}
     };
+#endif
 }

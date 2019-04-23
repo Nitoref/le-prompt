@@ -5,10 +5,24 @@
 
 Module SegmentAws(const config& c)
 {
+
+	char* content_cstr = std::getenv("AWS_PROFILE");
+	if (!content_cstr)
+	{
+		return {};
+	}
+	if (!c.aws.always && content_cstr == c.aws.ignore)
+	{
+		return {};
+	}
+
+	auto content = c.aws.symbol;
+	content += utils::string(content_cstr);
+
     return Module {
     	{
     		segment::id::aws,
-			utils::string(std::getenv("AWS_PROFILE")),
+			content,
 			c.aws.theme
     	}
     };

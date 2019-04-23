@@ -6,8 +6,6 @@
 #endif
 #include <regex>
 #include <string>
-#include <string_view>
-#include <iostream>
 #include <filesystem>
 
 #include "modules.hpp"
@@ -15,7 +13,7 @@
 
 
 int
-remove_home(std::string& path, std::string symbol)
+truncate_home(std::filesystem::path& path, std::string symbol)
 {
 
 #ifdef _WIN32
@@ -33,66 +31,85 @@ remove_home(std::string& path, std::string symbol)
     if (home.empty()) {
         return 0;
     }
-    if (path.find(home) != std::string::npos)
+    if (path.string().find(home) != std::string::npos)
     {
-        path.replace(0, home.length(), symbol);
+        std::filesystem::path output ("~" + path.string().substr(home.length()));
+        path.swap(output);
         return 1;
     }
     return 0;
 }
 
-void
-fold(std::string& path, int max_depth, std::string symbol)
-{
-    size_t stop = utils::strrnfind(path, '/', max_depth);
-    if (stop == std::string::npos)
-    {
-        return;
-    }
 
-    size_t start = path.find('/');
-    if (start == std::string::npos || start == stop)
+void
+truncate_depth(std::filesystem::path& path, int max_depth, std::string symbol)
+{
+    size_t path_depth = std::distance(path.begin(), path.end());
+    if (path_depth - 1 > max_depth)
     {
-        return;
+        auto path_iterator = path.begin();
+        auto output = *path_iterator / symbol;
+        for (int i = 0; i < path_depth - max_depth; i++) 
+        {
+            path_iterator++;
+        }
+
+        for (; path_iterator != path.end(); ++path_iterator)
+        {
+            output /= *path_iterator;
+        }
+        path.swap(output);
     }
-    path.replace(start + 1, stop - start - 1, symbol);
-    return;
 }
 
 
 Module
 SegmentDir(const config& c)
 {
-    auto path = utils::string(getenv("PWD"));
-    bool at_home = remove_home(path, c.dir.symbol_home);
+    auto path    = c._meta.cwd;
+    bool at_home = truncate_home(path, c.dir.symbol_home);
 
-    for (auto& [what, with]: c.dir.alias)
+    if (!c.dir.alias.empty())
     {
-        utils::strrepl(path, what, with);
-    };
+        std::string output = path.string();
+        for (auto& [what, with]: c.dir.alias)
+        {
+            utils::strrepl(output, what, with);
+        };
+        path = output;
+    }
 
-    fold(path, c.dir.depth, c.dir.symbol_wrap);
-
+    if (c.dir.depth > 0)
+    {
+        truncate_depth(path, c.dir.depth, c.dir.symbol_wrap);
+    }
 
     if (c.dir.fancy == false)
     {
-        auto style = at_home ? c.dir.theme_home : c.dir.theme_path;
-        return Module { {segment::id::dir, path, style } };
+        return Module {{
+            segment::id::dir_path,
+            path.c_str(),
+            at_home ? c.dir.theme_home
+                    : c.dir.theme_path
+        }};
     }
-    return {};
 
-    // Module module;
-    // for (auto dir: std::filesystem::path(path))
-    // {
-    //     module.emplace_back(segment::id::path, dir, c.theme.path);
-    // }
-    // module.back().style = c.theme.dir;
-    // module.back().id = segment::id::dir;
-    // if (at_home)
-    // {
-    //     module.front().id = segment::id::home;
-    //     module.front().style = c.theme.home;
-    // }
+    Module module;
 
-    // return module;
+    for (auto folder: path)
+    {
+        module.push_back({
+            segment::id::dir_path,
+            folder, c.dir.theme_path
+        });
+    }
+    module.back().theme = c.dir.theme_cwd;
+    module.back().id = segment::id::dir_cwd;
+    if (at_home)
+    {
+        module.front().id = segment::id::dir_home;
+        module.front().theme = c.dir.theme_home;
+    }
+
+    return module;
 }

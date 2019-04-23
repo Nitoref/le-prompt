@@ -1,55 +1,40 @@
 #ifndef PROMPT_CONFIG_H
 #define PROMPT_CONFIG_H
 
-#include "module.hpp"
+#include "shell.hpp"
+#include "theme.hpp"
 #include <cpptoml.hpp>
-#include <memory>
 
-#include <variant>
 #include <map>
 #include <vector>
-#include <unordered_map>
+#include <memory>
+#include <filesystem>
 
 
+
+namespace fs = std::filesystem;
 
 
 struct config
 {
-	enum shell_t {bash, csh, fish, ksh, zsh, ps, other};
 
 	using string = std::string;
 	using strvec = std::vector<string>;
 	using strmap = std::map<string, string>;
+	
+	using parse_exception = cpptoml::parse_exception;
+
 
 	config(int argc, char const *argv[]);
 
-	static shell_t
-	shell(string name)
-	{
-		std::map<string, shell_t>
-    	map {
-	        {"bash", shell_t::bash},
-	        {"csh",  shell_t::csh},
-	        {"dash", shell_t::bash},
-	        {"fish", shell_t::fish},
-	        {"ksh",  shell_t::ksh},
-	        {"sh",   shell_t::bash},
-	        {"tcsh", shell_t::csh},
-	        {"zsh",  shell_t::zsh},
-	        {"ps",   shell_t::ps},
-    	};
-    	auto found = map.find(name);
-    	if (found != map.end())
-    		return found->second;
-    	return shell_t::other;
-	}
 
 	struct _meta
 	{
-		shell_t shell;
-		size_t  width;
-		bool    root;
-		int     error;
+		fs::path cwd;
+		shell_t  shell;
+		size_t   width;
+		bool     root;
+		int      error;
 	}
 	_meta;
 
@@ -76,16 +61,18 @@ struct config
 		bool   force_newline  = false;
 		bool   native_rprompt = false;
 		int    timeout = 100;
+		Theme  theme_background;
+		Theme  theme_separator;
 	}
 	global;
 	
 	struct user
 	{
-		bool   always       = false;
-		string symbol       = "";
-		string default_user = "";
-		Theme  theme        = {};
-		Theme  theme_root   = {};
+		bool   always = false;
+		string ignore = "";
+		string symbol = "";
+		Theme  theme      = {};
+		Theme  theme_root = {};
 	}
 	user;
 
@@ -101,14 +88,14 @@ struct config
 	{	
 		string format = "u@h";
 		Theme  theme  = {};
-		Theme  theme_root  = {};
+		Theme  theme_root = {};
 	}
 	context;
 
 	struct dir
 	{
 		bool   fancy  = false;
-		size_t depth  = 0;
+		size_t depth  = 5;
 		size_t length = 0;
 		strmap alias  = {};
 		Theme  theme_home  = {};
@@ -130,6 +117,9 @@ struct config
 
 	struct aws
 	{
+		bool   always;
+		string ignore;
+		string symbol;
 		Theme theme;
 	}
 	aws;
@@ -154,7 +144,7 @@ struct config
 		bool   fancy  = true;
 		bool   count  = true;
 		bool   hash_fallback = true;
-		string format = "@.><+!?x";
+		string format = "@%.><+!?x";
 		strvec ignore = {};
 
 		string symbol_branch;
@@ -219,7 +209,7 @@ struct config
 	}
 	venv;
 
-	struct prompt
+	struct shell
 	{
 		string symbol_bash = "$";
 		string symbol_csh  = "%";
@@ -230,7 +220,7 @@ struct config
 		Theme  theme_success;
 		Theme  theme_failure;
 	}
-	prompt;
+	shell;
 
 	struct time
 	{
@@ -281,7 +271,7 @@ struct config
 	void get_root       (table_ptr table);
 	void get_status     (table_ptr table);
 	void get_venv       (table_ptr table);
-	void get_prompt     (table_ptr table);
+	void get_shell      (table_ptr table);
 	void get_time       (table_ptr table);
 	void get_ssh        (table_ptr table);
 	void get_load       (table_ptr table);

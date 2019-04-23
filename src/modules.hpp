@@ -1,6 +1,7 @@
 #ifndef MODULES_H
 #define MODULES_H
 
+#include "segment.hpp"
 #include "module.hpp"
 #include "config.hpp"
 
@@ -82,9 +83,9 @@ enum class id: unsigned int {
 	jobs,
 	time,
 	perms,
-	dir,
-	path,
-	home,
+	dir_home,
+	dir_path,
+	dir_cwd,
 	hg,
 	git_branch,
 	git_tag,

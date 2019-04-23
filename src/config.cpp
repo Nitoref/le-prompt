@@ -19,9 +19,11 @@ config::config(int argc, char const *argv[])
 						"and $? ($status for fish)"
 						"as first arguments.\n");
 
-    _meta.shell = config::shell(argv[1]);
+    _meta.shell = parse_shell(argv[1]);
     _meta.width = utils::term_width();
     _meta.error = std::stoi(argv[2]);
+    _meta.cwd   = fs::current_path();
+
 
 #ifdef _WIN32
     _meta.root =IsUserAnAdmin();
@@ -33,8 +35,9 @@ config::config(int argc, char const *argv[])
     {
         parse(argv[3]);
     }
-    catch (...) {
-        std::cout << "<!config>" << "\n";
+    catch (parse_exception e) {
+        std::cout << e.what() << "\n";
+        exit(1);
     }
 }
 
@@ -58,7 +61,7 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("root"))      { get_root        (t); } ;
     if (auto t = file -> get_table("status"))    { get_status      (t); } ;
     if (auto t = file -> get_table("venv"))      { get_venv        (t); } ;
-    if (auto t = file -> get_table("prompt"))    { get_prompt      (t); } ;
+    if (auto t = file -> get_table("shell"))     { get_shell       (t); } ;
     if (auto t = file -> get_table("time"))      { get_time        (t); } ;
     if (auto t = file -> get_table("ssh") )      { get_ssh         (t); } ;
 };
@@ -88,11 +91,11 @@ void config::get_global(table_ptr table)
 
 void config::get_user(table_ptr table)
 {
-    get(table, "default_user" , user.default_user);
-    get(table, "symbol"       , user.symbol);
-    get(table, "theme"        , user.theme);
-    get(table, "theme.root"   , user.theme_root);
-    get(table, "always"       , user.always);
+    get(table, "ignore"    , user.ignore);
+    get(table, "symbol"    , user.symbol);
+    get(table, "theme"     , user.theme);
+    get(table, "theme.root", user.theme_root);
+    get(table, "always"    , user.always);
 }
 
 void config::get_host(table_ptr table)
@@ -132,12 +135,16 @@ void config::get_perms(table_ptr table)
 
 void config::get_aws(table_ptr table)
 {
-    get(table, "theme", aws.theme);
+    get(table, "theme" , aws.theme);
+    get(table, "symbol", aws.symbol);
+    get(table, "ignore", aws.ignore);
+    get(table, "always", aws.always);
 }
 
 void config::get_docker(table_ptr table)
 {
-    get(table, "theme", docker.theme);
+    get(table, "theme" , docker.theme);
+    get(table, "symbol", docker.symbol);
 }
 
 void config::get_load(table_ptr table)
@@ -216,16 +223,16 @@ void config::get_venv(table_ptr table)
     get(table, "symbol"  , venv.symbol);
 }
 
-void config::get_prompt(table_ptr table)
+void config::get_shell(table_ptr table)
 {
-    get(table , "symbol.bash"   , prompt.symbol_bash);
-    get(table , "symbol.csh"    , prompt.symbol_csh);
-    get(table , "symbol.zsh"    , prompt.symbol_zsh);
-    get(table , "symbol.ksh"    , prompt.symbol_ksh);
-    get(table , "symbol.fish"   , prompt.symbol_fish);
-    get(table , "symbol.ps"     , prompt.symbol_ps);
-    get(table , "theme.success" , prompt.theme_success);
-    get(table , "theme.failure" , prompt.theme_failure);
+    get(table , "symbol.bash"   , shell.symbol_bash);
+    get(table , "symbol.csh"    , shell.symbol_csh);
+    get(table , "symbol.zsh"    , shell.symbol_zsh);
+    get(table , "symbol.ksh"    , shell.symbol_ksh);
+    get(table , "symbol.fish"   , shell.symbol_fish);
+    get(table , "symbol.ps"     , shell.symbol_ps);
+    get(table , "theme.success" , shell.theme_success);
+    get(table , "theme.failure" , shell.theme_failure);
 }
 
 void config::get_time(table_ptr table)

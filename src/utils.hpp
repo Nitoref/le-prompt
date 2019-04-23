@@ -14,10 +14,8 @@ exec(const std::string& cmd);
 size_t
 term_width();
 
-
 inline std::string
 string(const char* s) {return s ? s : "";}
-
 
 size_t
 strlen(const char * s_);
@@ -34,9 +32,6 @@ str_prepend(std::string& where, std::string what);
 
 void
 str_append(std::string& where, std::string what);
-
-size_t
-strrnfind (std::string& s, char c, size_t n);
 
 }
 

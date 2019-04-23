@@ -1,3 +1,5 @@
+One prompt to rule theme all.
+
 A no-latency fully featured theme with right and multi-line prompt support for bash, zsh, fish, ksh, tcsh and powerline.
 
 Linux, Mac and Windows compatible.
@@ -6,15 +8,15 @@ No subprocess, no pipes to grep and perl, no hidden python interpreter, just pla
 
 #### Yet another one ?
 
-This theme is for people that love their good ol' shell, or don't want/can switch to zsh - but still want a wonderfull looking shell like all the cool kids. It's also a theme for people that have to work in different environements, but want a unifying experience.
+This theme is for people that love their good ol' shell, or don't want/can switch to zsh - but still want a wonderfull looking shell like all the cool kids. It's also a theme for people that have to work in different environements, but want a unifying experience. Finally it's a prompt for you windows users.
 
 [powerline-go](https://github.com/justjanne/powerline-go) is the closest project from this one, and has heavily influenced it - this project adresses some of its drawbacks by providing better performance (written in C++ with parallelization and libgit2 integration), wider shell support, right prompt support for every shell, extensibility and a better configuration format.
 
-If youre coming from something like powerlevel9k, this theme offers a proper configuration file format and a shrinking system: instead of simply removing the right prompt when short in space, the least prioritized segments are removed from both ends until an acceptable length is reached. Also performance.
+If youre coming from something like powerlevel9k, apart from lower lattency this theme offers dynamic segment printing thanks to a shrinking system: instead of completely removing the right prompt when short in space, the least prioritized segments are removed until an acceptable length is reached. Also performance.
 
-#### It is overkill, right?
+#### This is going too far right
 
-Absolutely
+Yes, and you know you want it
 
 #### How do I get it ?
 

@@ -6,11 +6,11 @@ segments.left = [
   'ssh',
   'aws',
   'docker',
-  'venv'
+  'venv',
+  'load',
 ]
 segments.right = [
   'time',
-  'load',
   'context',
   'jobs',
   'git',
@@ -28,18 +28,18 @@ global.padding_end = 1
 jobs.count = true
 time.format = '%H:%M:%S'
 
-dir.fancy = false
+# dir.fancy = true
 dir.depth = 3
 dir.alias = [
   {'Documents' = ''}
 ]
 
 
-host.symbol           = '@'
-root.symbol           = ''
-jobs.symbol           = ''
-prompt.symbol         = '$'
-dir.symbol.wrap       = '…'
+dir.symbol.wrap  = '…'
+host.symbol      = '@'
+root.symbol      = ''
+jobs.symbol      = ''
+shell.symbol     = '$'
 
 global.theme.separator   = {fg = 254}
 status.theme.success     = {fg = 254, bg = 235}

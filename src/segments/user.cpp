@@ -1,6 +1,9 @@
 #include <string>
 #ifdef _WIN32
-# include <Windows.h>
+#   include <Windows.h>
+#else
+#   include <pwd.h>
+#   include <unistd.h>
 #endif
 #include <cstdlib>
 
@@ -12,27 +15,38 @@
 Module
 SegmentUser(const config& c)
 {
+    
 #ifdef _WIN32
-    char  username_cstr[UNLEN+1];
-    DWORD user_name_size = sizeof(username_cstr);
-    if (GetUserName(username_cstr, &user_name_size))
+    char  content_cstr[UNLEN+1];
+    DWORD user_name_size = sizeof(content_cstr);
+    if (GetUserName(content_cstr, &user_name_size))
     {
-        username_cstr = std::getenv("USERNAME");
+        content_cstr = std::getenv("USERNAME");
     }
-    std::string username = utils::string(username_cstr);
 #else
-    std::string username = utils::string(std::getenv("USER"));
+    char* content_cstr = std::getenv("USER");
+    if (!content_cstr)
+    {
+        content_cstr = getpwuid(getuid())->pw_name;
+    }
 #endif
 
-    if(!c.user.always && username == c.user.default_user)
+    if (!content_cstr)
+    {
+        return {};
+    }
+    if(!c.user.always && content_cstr == c.user.ignore)
     {
     	return {};
     }
 
+    auto content = c.user.symbol;
+    content += utils::string(content_cstr);
+
     return Module {
         {
             segment::id::user,
-            username,
+            content,
             c._meta.root ? c.user.theme_root
                          : c.user.theme
         }

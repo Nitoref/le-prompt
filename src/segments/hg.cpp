@@ -34,7 +34,9 @@ Module SegmentHg (const config& c)
 	}
 
 	if (!found)
+	{
 		return {};
+	}
 
 
 	std::string branch = "default";

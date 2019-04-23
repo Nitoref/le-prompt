@@ -7,14 +7,6 @@
 Module SegmentVenv(const config& c)
 {
     char* content_cstr = std::getenv("VIRTUAL_ENV");
-    if (!content_cstr)
-    {
-        content_cstr = std::getenv("CONDA_ENV_PATH");
-    }
-    if (!content_cstr)
-    {
-        content_cstr = std::getenv("CONDA_DEFAULT_ENV");
-    }
 
     if (!content_cstr)
         return {};

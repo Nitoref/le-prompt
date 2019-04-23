@@ -23,12 +23,15 @@
 #include "sys/sysctl.h"
 #include <algorithm>
 #include <vector>
+#include <map>
+#include <string>
 #include <iostream>
 #include <iterator>
+#include <iterator>
 #include <functional>
+#include <filesystem>
 #include <iostream>
 #include <fstream>
-#include <filesystem>
 #include <regex>
 
 using namespace std;
@@ -64,12 +67,17 @@ void cpusample()
 
 
 
-
 int main(int argc, char **argv, char **envp)
 {
 
-	std::cout << std::filesystem::current_path().filename() << "\n";
-	std::cout << std::filesystem::current_path().filename() << "\n";
+
+
+
+
+
+
+
+
 
 	// auto blob = IOPSCopyPowerSourcesInfo();
 	// auto ps   = IOPSCopyPowerSourcesList(blob);
@@ -78,6 +86,14 @@ int main(int argc, char **argv, char **envp)
 	
 	// cpusample();
 
+	// auto path =  std::filesystem::current_path();
+	// auto path = std::filesystem::path("");
+
+    // std::string output;
+    // if (folders.size() > 2)
+    // {
+    // 	output = 
+    // }
 
 
     // vm_size_t page_size;

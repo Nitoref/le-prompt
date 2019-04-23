@@ -49,7 +49,7 @@ SubPrompt::make_separator(Segment s)
     output.reserve(20); // maybe ?
     if (s.theme.bg == prev_color)
     {
-        output += printer::fg(160); //options.theme.separator.fg
+        output += printer::fg(250); //options.theme.separator.fg
         output += separator2;
         actual_length += separator2_length;
     }

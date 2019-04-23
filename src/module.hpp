@@ -4,19 +4,17 @@
 #include <vector>
 #include <string>
 
+#include "utils.hpp"
+#include "theme.hpp"
+#include "printer.hpp"
 
 
 namespace segment
 {
+
 enum class id: unsigned int;
+
 }
-
-struct Theme
-{
-    int   fg = -1;
-    int   bg = -1;
-};
-
 
 struct Segment
 {
@@ -31,7 +29,6 @@ struct Segment
 };
 
 
-
 class Module: public std::vector<Segment>
 {
     using std::vector<Segment>::vector;
@@ -41,6 +38,9 @@ public:
     
     operator bool() { return !this->empty(); }
 };
+
+
+
 
 
 #endif

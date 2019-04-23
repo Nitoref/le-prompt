@@ -12,7 +12,7 @@ Module
 SegmentPerms(const config& c)
 {
     namespace fs = std::filesystem;
-    auto path = fs::current_path();
+    auto path = c._meta.cwd;
 
 #ifdef _WIN32
     bool write_access = !_access(path.c_str(), W_OK);

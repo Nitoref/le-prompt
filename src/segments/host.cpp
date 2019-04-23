@@ -1,3 +1,4 @@
+#include <cstring>
 #include <string>
 #ifdef _WIN32
 # include <Windows.h>
@@ -12,27 +13,29 @@
 Module
 SegmentHost(const config& c)
 {
-    char* hostname = (char*)malloc(256);
-    gethostname(hostname, 256);
+    char* content_cstr = (char*)malloc(256);
+    gethostname(content_cstr, 256);
     
-    if (!hostname)
+    if (!content_cstr)
     {
     	return {};
     }
 
-    std::string content = hostname;
+    auto content = c.host.symbol;
+    content += content_cstr;
+
     if (c.host.shorten)
     {
 	    if (size_t dot  = content.find('.');
 	    	       dot != std::string::npos)
 	    {
-	    	content.erase(dot);
+	    	content = content.substr(dot);
 	    }
     }
 
 	return Module {
 		{
-			segment::id::home,
+			segment::id::host,
 			content,
 			c.host.theme
 		}
