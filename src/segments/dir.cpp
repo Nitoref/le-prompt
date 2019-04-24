@@ -13,7 +13,7 @@
 
 
 int
-truncate_home(std::filesystem::path& path, std::string symbol)
+truncate_home(std::string& path, std::string symbol)
 {
 
 #ifdef _WIN32
@@ -31,10 +31,9 @@ truncate_home(std::filesystem::path& path, std::string symbol)
     if (home.empty()) {
         return 0;
     }
-    if (path.string().find(home) != std::string::npos)
+    if (path.find(home) != std::string::npos)
     {
-        std::filesystem::path output ("~" + path.string().substr(home.length()));
-        path.swap(output);
+        path = "~" + path.substr(home.length());
         return 1;
     }
     return 0;
@@ -42,23 +41,24 @@ truncate_home(std::filesystem::path& path, std::string symbol)
 
 
 void
-truncate_depth(std::filesystem::path& path, int max_depth, std::string symbol)
+truncate_depth(std::string& path_str, int max_depth, std::string symbol)
 {
+    auto path = std::filesystem::path(path_str);
     size_t path_depth = std::distance(path.begin(), path.end());
     if (path_depth - 1 > max_depth)
     {
         auto path_iterator = path.begin();
-        auto output = *path_iterator / symbol;
-        for (int i = 0; i < path_depth - max_depth; i++) 
+        auto truncated = *path_iterator / symbol;
+        for (int i = 0; i < path_depth - max_depth; ++i) 
         {
-            path_iterator++;
+            ++path_iterator;
         }
 
         for (; path_iterator != path.end(); ++path_iterator)
         {
-            output /= *path_iterator;
+            truncated /= *path_iterator;
         }
-        path.swap(output);
+        path = truncated.string();
     }
 }
 
@@ -67,17 +67,15 @@ Segment
 SegmentDir(const config& c)
 {
 
-    auto path    = c._meta.cwd;
+    std::string path    = c._meta.cwd.string();
     bool at_home = truncate_home(path, c.dir.symbol_home);
 
     if (!c.dir.alias.empty())
     {
-        std::string output = path.string();
         for (auto& [what, with]: c.dir.alias)
         {
-            utils::strrepl(output, what, with);
+            utils::strrepl(path, what, with);
         };
-        path = output;
     }
 
     if (c.dir.depth > 0)
@@ -86,7 +84,7 @@ SegmentDir(const config& c)
     }
 
     Segment segment(segment::id::dir);
-    segment.append(path.string());
+    segment.append(path);
     if (at_home)
         segment.theme(c.dir.theme_home);
     else

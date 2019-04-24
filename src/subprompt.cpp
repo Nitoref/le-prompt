@@ -103,7 +103,7 @@ SubPrompt::preformat()
     size_t i = 0;
     for (auto& segment: segments)
     {
-        id_lookup.at((int)segment.id()).push_back(i++);
+        id_lookup.at((int)segment.id()) = i++;
 
         if (segment.theme().bg == prev_color)
         {

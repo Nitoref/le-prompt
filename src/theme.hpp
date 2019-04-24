@@ -10,7 +10,7 @@ struct Theme
 {
     int   fg = -1;
     int   bg = -1;
-    // std::vector<std::string> font;
+    std::vector<std::string> font;
 };
 
 

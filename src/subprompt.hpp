@@ -2,6 +2,7 @@
 #define SUBPROMPT_H
 
 #include <unordered_set>
+#include <optional>
 #include <functional>
 #include <vector>
 #include <string>
@@ -40,7 +41,7 @@ public:
     size_t length = 0;
     size_t actual_length = 0;
 
-    std::vector<std::vector<int>> id_lookup;
+    std::vector<std::optional<int>> id_lookup;
 
     // Output status
     int prev_color  = -2;

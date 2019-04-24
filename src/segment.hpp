@@ -23,9 +23,9 @@ class Segment
 private:
 
     segment::id  id_;
-    Theme        theme_;
-    size_t       length_;
     std::string  content_;
+    Theme        theme_;
+    size_t       escapes_ = 0;
 
 
 public:
@@ -75,13 +75,13 @@ public:
         content_ += printer::escape(c);
     }
     void
-    append(std::string&& s)
+    append(std::string s)
     {
         content_ += printer::escape(s);
     }
 
     Segment&
-    operator +=(std::string&& s)
+    operator +=(std::string s)
     {
         append(s);
         return *this;
@@ -90,7 +90,12 @@ public:
     void
     append(std::string s, Theme t)
     {
-        content_ += printer::fg(t.fg);
+        std::string style;
+        style += printer::fg(t.fg);
+        style += printer::bg(t.bg);
+        // for (auto& font: t.
+        escapes_ += style.length();
+        content_ += style;
         append(s);
     }
 };

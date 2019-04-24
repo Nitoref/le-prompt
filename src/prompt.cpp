@@ -28,14 +28,12 @@ spawn(std::vector<std::string>& segments, config& config)
 }
 
 std::vector<Segment>
-join(std::vector<std::future<Segment>>& futures, int duration)
+join(std::vector<std::future<Segment>>& futures)
 {
-    using milliseconds = std::chrono::milliseconds;
     std::vector<Segment> segments;
     segments.reserve(futures.size());
     
     for (auto& future: futures) {
-        future.wait_for(milliseconds(duration));
         if (auto segment = future.get()) {
             segments.emplace_back(segment);
         }
@@ -56,9 +54,9 @@ down (left)
     auto right_futures = spawn(conf.segments.right, conf);
     auto down_futures  = spawn(conf.segments.down , conf);
 
-    left.segments  = join(left_futures , conf.global.timeout);
-    right.segments = join(right_futures, conf.global.timeout);
-    down.segments  = join(down_futures , conf.global.timeout);
+    left.segments  = join(left_futures);
+    right.segments = join(right_futures);
+    down.segments  = join(down_futures);
 }
 
 
@@ -92,14 +90,14 @@ Prompt::shrink()
 
     for (auto i = priority_list.rbegin(); i != priority_list.rend(); ++i)
     {
-        for (auto index: left.id_lookup.at((int)*i))
+        if (auto index = left.id_lookup.at((int)*i))
         {
-            left.length -= left.segments.at(index).length()
+            left.length -= left.segments.at(*index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
-        for (auto index: right.id_lookup.at((int)*i))
+        if (auto index = right.id_lookup.at((int)*i))
         {
-            right.length -= right.segments.at(index).length()
+            right.length -= right.segments.at(*index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
         ignored_segments.insert(*i);

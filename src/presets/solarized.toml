@@ -7,10 +7,10 @@ segments.left = [
   'aws',
   'docker',
   'venv',
-  'load',
 ]
 segments.right = [
   'time',
+  'load',
   'context',
   'jobs',
   'git',

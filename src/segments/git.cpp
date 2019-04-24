@@ -26,6 +26,7 @@ struct GitStatus
     size_t conflicted = 0;
     bool tagged   = false;
     bool empty    = false;
+    bool dirty    = false;
     bool detached = false;
     bool ignored  = false;
 };
@@ -60,17 +61,12 @@ SegmentGit(const config& c)
         return {};
     };
 
-    bool dirty = status.ahead     || status.behind
-              || status.staged    || status.notstaged
-              || status.untracked || status.conflicted;
-
-
     std::string branch_symbol;
     if (status.detached && c.git.hash_fallback){
         status.name   = status.hash;
         branch_symbol = c.git.symbol_hash;
     }
-    else{
+    else {
         branch_symbol = c.git.symbol_branch;
     }
 
@@ -89,7 +85,7 @@ SegmentGit(const config& c)
             case '!': if (status.notstaged ) segment += format(c.git.symbol_notstaged , status.notstaged , c.git.count); break;
             case '?': if (status.untracked ) segment += format(c.git.symbol_untracked , status.untracked , c.git.count); break;
             case 'x': if (status.conflicted) segment += format(c.git.symbol_conflicted, status.conflicted, c.git.count); break;
-            case 'd': if (dirty) segment.append(c.git.symbol_dirty); break;
+            case 'd': if (status.dirty     ) segment += c.git.symbol_dirty; break;
             default: segment.append(ch);
         }
     }
@@ -97,7 +93,7 @@ SegmentGit(const config& c)
     if (status.ignored)
         segment.theme(c.git.theme_ignored);
     else
-    if (dirty)
+    if (status.dirty)
         segment.theme(c.git.theme_dirty);
     else
         segment.theme(c.git.theme_clean);
@@ -300,5 +296,11 @@ get_stats(GitStatus& status, git_status_list *status_list)
            }
         }
     }
+
+    status.dirty = status.ahead     || status.behind
+                || status.staged    || status.notstaged
+                || status.untracked || status.conflicted;
+
+
     return 0;
 }

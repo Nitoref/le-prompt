@@ -19,6 +19,6 @@ Segment SegmentAws(const config& c)
 	Segment segment(segment::id::aws);
 	segment.theme(c.aws.theme);
 	segment.append(c.aws.symbol);
-	segment.append(utils::string(content_cstr));
+	segment.append(content_cstr);
 	return segment;
 }
