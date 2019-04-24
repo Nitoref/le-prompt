@@ -12,8 +12,7 @@
 
 
 
-Segment
-SegmentLoad(const config& c)
+Segment SegmentLoad(const config& c)
 {
 
 #ifdef _WIN32

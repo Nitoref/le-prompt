@@ -57,6 +57,7 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("docker"))    { get_docker      (t); } ;
     if (auto t = file -> get_table("hg") )       { get_hg          (t); } ;
     if (auto t = file -> get_table("git") )      { get_git         (t); } ;
+    if (auto t = file -> get_table("load") )     { get_load        (t); } ;
     if (auto t = file -> get_table("jobs"))      { get_jobs        (t); } ;
     if (auto t = file -> get_table("root"))      { get_root        (t); } ;
     if (auto t = file -> get_table("status"))    { get_status      (t); } ;
@@ -185,7 +186,6 @@ void config::get_git(table_ptr table)
     get(table, "theme.conflicted", git.theme_conflicted);
     get(table, "theme.ignored"   , git.theme_ignored);
 
-    get(table, "fancy"   , git.fancy);
     get(table, "count"   , git.count);
     get(table, "template", git.format);
     get(table, "ignore"  , git.ignore);

@@ -40,48 +40,36 @@ public:
         return !content_.empty();
     }
 
-    segment::id id()
-    {
+    segment::id id() {
         return id_;
     }
     
-    std::string&
-    content()
+    std::string& content()
     {
         return content_;
     }
 
-    Theme&
-    theme()
-    {
+    Theme& theme() {
         return theme_;
     }
 
-    size_t
-    length()
-    {
-        return utils::strlen(content_);
+    size_t length() {
+        return utils::strlen(content_) - escapes_;
     }
 
-    void
-    theme(Theme t)
-    {
+    void theme(Theme t) {
         theme_ = t;
     }
     
-    void
-    append(char c)
-    {
+    void append(char c) {
         content_ += printer::escape(c);
     }
-    void
-    append(std::string s)
-    {
+
+    void append(std::string s) {
         content_ += printer::escape(s);
     }
 
-    Segment&
-    operator +=(std::string s)
+    Segment& operator +=(std::string s)
     {
         append(s);
         return *this;
@@ -91,9 +79,8 @@ public:
     append(std::string s, Theme t)
     {
         std::string style;
-        style += printer::fg(t.fg);
-        style += printer::bg(t.bg);
-        // for (auto& font: t.
+        if (t.fg >= 0)
+            style += printer::fg(t.fg);
         escapes_ += style.length();
         content_ += style;
         append(s);

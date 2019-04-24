@@ -12,18 +12,18 @@
 #include "utils.hpp"
 
 
-int
-truncate_home(std::string& path, std::string symbol)
+
+int truncate_home(std::string& path, std::string symbol)
 {
 
 #ifdef _WIN32
-    std::string home = utils::string(std::getenv("USERPROFILE"));
+    auto home = utils::string(std::getenv("USERPROFILE"));
     if (home.empty()) {
         home =  std::getenv("HOMEDRIVE");
         home += std::getenv("HOMEPATH");
     }
 #else
-    std::string home = utils::string(std::getenv("HOME"));
+    auto home = utils::string(std::getenv("HOME"));
     if (home.empty()) {
         home = utils::string(getpwuid(getuid())->pw_dir);
     }
@@ -40,54 +40,57 @@ truncate_home(std::string& path, std::string symbol)
 }
 
 
-void
-truncate_depth(std::string& path_str, int max_depth, std::string symbol)
+void truncate_depth(std::string& path_str, int max_depth, std::string symbol)
 {
     auto path = std::filesystem::path(path_str);
-    size_t path_depth = std::distance(path.begin(), path.end());
-    if (path_depth - 1 > max_depth)
-    {
+    auto path_depth = std::distance(path.begin(), path.end());
+    
+    if (path_depth - 1 > max_depth) {
+        
         auto path_iterator = path.begin();
         auto truncated = *path_iterator / symbol;
-        for (int i = 0; i < path_depth - max_depth; ++i) 
-        {
+        
+        for (int i = 0; i < path_depth - max_depth; ++i) {
             ++path_iterator;
         }
 
-        for (; path_iterator != path.end(); ++path_iterator)
-        {
+        for (; path_iterator != path.end(); ++path_iterator) {
             truncated /= *path_iterator;
         }
+
         path = truncated.string();
     }
 }
 
 
-Segment
-SegmentDir(const config& c)
+Segment SegmentDir(const config& c)
 {
 
     std::string path    = c._meta.cwd.string();
     bool at_home = truncate_home(path, c.dir.symbol_home);
 
-    if (!c.dir.alias.empty())
-    {
-        for (auto& [what, with]: c.dir.alias)
-        {
+    if (!c.dir.alias.empty()) {
+        for (auto& [what, with]: c.dir.alias) {
             utils::strrepl(path, what, with);
         };
     }
 
-    if (c.dir.depth > 0)
-    {
+    if (c.dir.depth > 0) {
         truncate_depth(path, c.dir.depth, c.dir.symbol_wrap);
     }
 
     Segment segment(segment::id::dir);
-    segment.append(path);
-    if (at_home)
+    if (at_home) {
         segment.theme(c.dir.theme_home);
-    else
+    }
+    else {
         segment.theme(c.dir.theme_path);
+    }
+
+    segment.append(std::filesystem::path(path).parent_path() / "", c.dir.theme_path);
+    segment.append(std::filesystem::path(path).filename(), c.dir.theme_cwd);
+
+
+
     return segment;
 }

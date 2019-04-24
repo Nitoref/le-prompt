@@ -48,8 +48,6 @@ left (c.global.separator , c.global.separator2 , c.global.padding_left, c.global
 right(c.global.rseparator, c.global.rseparator2, c.global.padding_left, c.global.padding_right, utils::str_prepend),
 down (left)
 {
-    printer::mode(conf._meta.shell);
-
     auto left_futures  = spawn(conf.segments.left , conf);
     auto right_futures = spawn(conf.segments.right, conf);
     auto down_futures  = spawn(conf.segments.down , conf);

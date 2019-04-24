@@ -16,17 +16,14 @@ SegmentHost(const config& c)
     char* content_cstr = (char*)malloc(256);
     gethostname(content_cstr, 256);
     
-    if (!content_cstr)
-    {
+    if (!content_cstr) {
     	return {};
     }
 
-    if (c.host.shorten)
-    {
+    if (c.host.shorten) {
 	    if (char* dot  = strchr(content_cstr, '.');
-	    	      dot != NULL)
-	    {
-	    	content_cstr = dot;
+	    	      dot != NULL) {
+	    	*dot = '\0';
 	    }
     }
 

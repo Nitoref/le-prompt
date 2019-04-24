@@ -19,10 +19,12 @@ SegmentShell(const config& c)
 
 	Segment segment(segment::id::shell);
 	segment.append(shell_symbols.at(c._meta.shell));
-	if (c._meta.error)
+	if (c._meta.error) {
 		segment.theme(c.shell.theme_failure);
-	else
+	}
+	else {
 		segment.theme(c.shell.theme_success);
+	}
 
 	return segment;
 }

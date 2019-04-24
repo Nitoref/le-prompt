@@ -10,8 +10,8 @@ segments.left = [
 ]
 segments.right = [
   'time',
+  'host',
   'load',
-  'context',
   'jobs',
   'git',
   'hg',
@@ -35,48 +35,53 @@ dir.alias = [
 ]
 
 
+shell.theme.success = {bg = 0}
+shell.theme.failure = {fg = 9, bg = 0}
+
 dir.symbol.wrap  = '…'
-host.symbol      = '@'
+host.symbol      = '@ '
 root.symbol      = ''
 jobs.symbol      = ''
 shell.symbol     = '$'
 
-global.theme.separator   = {fg = 254}
-status.theme.success     = {fg = 254, bg = 235}
-status.theme.failure     = {fg = 254, bg = 160}
-perms.theme.readonly = {fg = 166}
-dir.theme.home = {fg = 254, bg = 61}
-dir.theme.path = {fg = 254, bg = 61}
-dir.theme.cwd  = {fg = 230, bg = 61}
-user.theme     = {fg = 254}
-root.theme     = {fg = 37}
-host.theme     = {fg = 248, bg = 234}
-jobs.theme     = {fg = 136, bg = 235}
-ssh.theme      = {fg = 8,   bg = 9}
-docker.theme   = {fg = 13,  bg = 55}
-venv.theme     = {fg = 8,   bg = 6}
+global.theme.separator   = {fg = 240, bg = 0}
+status.theme.success     = {fg = 254, bg = 0}
+status.theme.failure     = {fg = 9, bg = 0}
+perms.theme.readonly = {fg = 166, bg = 0}
+dir.theme.home = {fg = 11, bg = 0}
+dir.theme.path = {fg = 11, bg = 0}
+dir.theme.cwd  = {fg = 14, bg = 0}
+user.theme     = {fg = 254, bg = 0}
+root.theme     = {fg = 37, bg = 0}
+host.theme     = {bg = 0}
+jobs.theme     = {fg = 136, bg = 0}
+ssh.theme      = {fg = 8,   bg = 0}
+docker.theme   = {fg = 13,  bg = 0}
+venv.theme     = {fg = 8,   bg = 0}
+time.theme     = {fg = 248, bg = 0}
+load.theme     = {fg = 9, bg = 0}
 
 hg.symbol.branch = ' '
 
-git.symbol.branch     = ''
-git.symbol.hash       = ''
-git.symbol.tag        = ''
-git.symbol.stash      = '⚑'
-git.symbol.ahead      = ''
-git.symbol.behind     = ''
-git.symbol.staged     = ''
-git.symbol.notstaged  = ''
-git.symbol.conflicted = '×'
-git.symbol.untracked  = ''
+git.symbol.branch     = ''
+git.symbol.hash       = ' '
+git.symbol.tag        = ' '
+git.symbol.stash      = ' *'
+git.symbol.ahead      = ' ↑'
+git.symbol.behind     = ' ↓'
+git.symbol.staged     = ' ✔'
+git.symbol.notstaged  = ' ✎'
+git.symbol.conflicted = ' ×'
+git.symbol.untracked  = ' ?'
 
-git.theme.clean      = {fg = 64, bg = 230}
-git.theme.dirty      = {fg = 125, bg = 230}
-git.theme.stash      = {fg = 33,  bg = 230}
-git.theme.ahead      = {fg = 37,  bg = 230}
-git.theme.behind     = {fg = 37,  bg = 230}
-git.theme.staged     = {fg = 64,  bg = 230}
-git.theme.notstaged  = {fg = 160, bg = 230}
-git.theme.untracked  = {fg = 136, bg = 230}
-git.theme.conflicted = {fg = 166, bg = 230}
-git.theme.ignored    = {fg = 166, bg = 230}
+git.theme.clean      = {fg = 6,   bg = 0}
+git.theme.dirty      = {fg = 3,   bg = 0}
+git.theme.ignored    = {bg = 14}
+git.theme.stash      = {bg = 0}
+git.theme.ahead      = {bg = 0}
+git.theme.behind     = {bg = 0}
+git.theme.staged     = {bg = 0}
+git.theme.notstaged  = {bg = 0}
+git.theme.untracked  = {bg = 0}
+git.theme.conflicted = {bg = 0}
 # git.ignore = ["/Users/nitoref/freebsd-ports/"]

@@ -141,8 +141,7 @@ struct config
 
 	struct git
 	{
-		bool   fancy  = true;
-		bool   count  = true;
+		bool   count  = false;
 		bool   hash_fallback = true;
 		string format = "@%.><+!?x";
 		strvec ignore = {};

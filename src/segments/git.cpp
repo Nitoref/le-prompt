@@ -1,3 +1,4 @@
+
 #ifdef _WIN32
 # include <Windows.h>
 #else
@@ -42,22 +43,19 @@ int get_name(GitStatus& status, git_repository *repo);
 
 inline std::string format(const std::string& symbol, size_t status, bool show_number)
 {
-    std::string output = " ";
+    std::string output = symbol;
     if (show_number)
         output += std::to_string(status);
-    output += symbol;
     return output;
 }
 
 
 
-Segment
-SegmentGit(const config& c)
+Segment SegmentGit(const config& c)
 {
     GitStatus status; 
 
-    if (get_git_status(status, c.git.ignore))
-    {
+    if (get_git_status(status, c.git.ignore)) {
         return {};
     };
 
@@ -78,25 +76,28 @@ SegmentGit(const config& c)
         switch (ch) {
             case '@': if (!status.name.empty()) segment.append(branch_symbol    + status.name); break;
             case '%': if (!status.tag.empty() ) segment.append(c.git.symbol_tag + status.tag ); break;
-            case '.': if (status.stash     ) segment += format(c.git.symbol_stash     , status.stash     , c.git.count); break;
-            case '>': if (status.ahead     ) segment += format(c.git.symbol_ahead     , status.ahead     , c.git.count); break;
-            case '<': if (status.behind    ) segment += format(c.git.symbol_behind    , status.behind    , c.git.count); break;
-            case '+': if (status.staged    ) segment += format(c.git.symbol_staged    , status.staged    , c.git.count); break;
-            case '!': if (status.notstaged ) segment += format(c.git.symbol_notstaged , status.notstaged , c.git.count); break;
-            case '?': if (status.untracked ) segment += format(c.git.symbol_untracked , status.untracked , c.git.count); break;
-            case 'x': if (status.conflicted) segment += format(c.git.symbol_conflicted, status.conflicted, c.git.count); break;
+            case '.': if (status.stash     ) segment.append(format(c.git.symbol_stash     , status.stash     , c.git.count), c.git.theme_stash     ); break;
+            case '>': if (status.ahead     ) segment.append(format(c.git.symbol_ahead     , status.ahead     , c.git.count), c.git.theme_ahead     ); break;
+            case '<': if (status.behind    ) segment.append(format(c.git.symbol_behind    , status.behind    , c.git.count), c.git.theme_behind    ); break;
+            case '+': if (status.staged    ) segment.append(format(c.git.symbol_staged    , status.staged    , c.git.count), c.git.theme_staged    ); break;
+            case '!': if (status.notstaged ) segment.append(format(c.git.symbol_notstaged , status.notstaged , c.git.count), c.git.theme_notstaged ); break;
+            case '?': if (status.untracked ) segment.append(format(c.git.symbol_untracked , status.untracked , c.git.count), c.git.theme_untracked ); break;
+            case 'x': if (status.conflicted) segment.append(format(c.git.symbol_conflicted, status.conflicted, c.git.count), c.git.theme_conflicted); break;
             case 'd': if (status.dirty     ) segment += c.git.symbol_dirty; break;
             default: segment.append(ch);
         }
     }
 
-    if (status.ignored)
+    if (status.ignored) {
         segment.theme(c.git.theme_ignored);
+    }
     else
-    if (status.dirty)
+    if (status.dirty) {
         segment.theme(c.git.theme_dirty);
-    else
+    }
+    else {
         segment.theme(c.git.theme_clean);
+    }
 
     return segment;
 }
@@ -122,26 +123,21 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
                     | GIT_STATUS_OPT_NO_REFRESH
                     | GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;
 
-    if (git_repository_open_ext(&repository, ".", 0, NULL))
-    {
+
+    if (git_repository_open_ext(&repository, ".", 0, NULL)) {
         return 1;
     }
 
-
-    if (git_repository_is_empty(repository))
-    {
+    if (git_repository_is_empty(repository)) {
         status.empty = true;
         return 0;
     }
 
-
-    if (get_name(status, repository))
-    {
+    if (get_name(status, repository)) {
         return 1; 
     }
 
-    if (git_repository_is_bare(repository))
-    {
+    if (git_repository_is_bare(repository)) {
         return 0;
     }
 
@@ -156,15 +152,14 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
         }
     }
 
-    if (git_status_list_new(&status_list, repository, &status_opt))
-    {
+    if (git_status_list_new(&status_list, repository, &status_opt)) {
         return 1;
     }
 
-    if (get_stats(status, status_list))
-    {
+    if (get_stats(status, status_list)) {
         return 1;
     }
+
     git_stash_foreach(repository, &get_stash, (void*)&status);
 
     git_status_list_free(status_list);
@@ -189,8 +184,7 @@ get_ahead_behind(GitStatus& status, git_repository *repo, git_reference *head)
     git_reference *upstream = NULL;
 
     error = git_branch_upstream(&upstream, head);
-    if (error)
-    {
+    if (error) {
         return error;
     }
 
@@ -212,19 +206,16 @@ get_name(GitStatus& status, git_repository *repo)
     git_reference *head     = NULL;
 
     int error = git_repository_head(&head, repo);
-    if (error)
-    {
-        if (error == GIT_ENOTFOUND || error == GIT_EUNBORNBRANCH)
-        {
+
+    if (error) {
+        if (error == GIT_ENOTFOUND || error == GIT_EUNBORNBRANCH) {
             status.name  = "HEAD (no branch)";
         }
-        else
-        {
+        else {
             return 1;
         }
     }
-    else
-    {
+    else {
         status.name = git_reference_shorthand(head);
     }
 
@@ -234,15 +225,13 @@ get_name(GitStatus& status, git_repository *repo)
     );
     status.hash = utils::string(oid_str);
 
-    if (git_reference_is_tag(head))
-    {
+    if (git_reference_is_tag(head)) {
         git_tag *tag;
         git_tag_lookup(&tag, repo, git_reference_target(head));
         status.tag = utils::string(git_tag_name(tag));
     }
 
-    if (git_repository_head_detached(repo))
-    {
+    if (git_repository_head_detached(repo)) {
         status.detached = true;
     }
 
@@ -263,19 +252,16 @@ get_stats(GitStatus& status, git_status_list *status_list)
         s = git_status_byindex(status_list, i);
 
         if (s->status == GIT_STATUS_CURRENT 
-        ||  s->status & GIT_STATUS_IGNORED)
-        {
+        ||  s->status & GIT_STATUS_IGNORED) {
             continue;
         }
 
-        if (s->status & GIT_STATUS_CONFLICTED)
-        {
+        if (s->status & GIT_STATUS_CONFLICTED) {
             status.conflicted ++;
         }
         else
         if (s->status & ( GIT_STATUS_WT_RENAMED
-                        | GIT_STATUS_WT_NEW))
-        {
+                        | GIT_STATUS_WT_NEW)) {
             status.untracked++;
         }
         else {
@@ -283,15 +269,13 @@ get_stats(GitStatus& status, git_status_list *status_list)
                            | GIT_STATUS_INDEX_DELETED
                            | GIT_STATUS_INDEX_RENAMED
                            | GIT_STATUS_INDEX_MODIFIED
-                           | GIT_STATUS_INDEX_TYPECHANGE))
-           {
+                           | GIT_STATUS_INDEX_TYPECHANGE)) {
                status.staged++;
            }
            if (s->status & ( GIT_STATUS_WT_DELETED
                            | GIT_STATUS_WT_RENAMED
                            | GIT_STATUS_WT_MODIFIED
-                           | GIT_STATUS_WT_TYPECHANGE))
-           {
+                           | GIT_STATUS_WT_TYPECHANGE)) {
                status.notstaged++;
            }
         }

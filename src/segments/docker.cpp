@@ -8,20 +8,18 @@
 Segment
 SegmentDocker(const config& c)
 {
-
 	Segment segment(segment::id::docker);
 	segment.theme(c.docker.theme);
 
 	char* content_cstr = std::getenv("DOCKER_MACHINE_NAME");
-	if (content_cstr)
-	{
+	
+	if (content_cstr) {
 		segment += content_cstr;
 		return segment;
 	}
 
 	content_cstr = std::getenv("DOCKER_HOST");
-	if (!content_cstr)
-	{
+	if (!content_cstr) {
 		return {};
 	}
 

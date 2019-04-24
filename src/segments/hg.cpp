@@ -1,50 +1,39 @@
-#include "modules.hpp"
 #include <filesystem>
 #include <iostream>
 #include <string>
 
+#include "modules.hpp"
 
 
-struct HgStatus
-{
-	std::string hash;
-	std::string branch;
-};
 
-
-Segment
-SegmentHg (const config& c)
+Segment SegmentHg (const config& c)
 {
 	auto path = std::filesystem::current_path();
 	auto hg   = std::filesystem::path(".hg");
 	bool found = false;
 
-	for (;;)
-	{
-		if (std::filesystem::exists(path / hg))
-		{
+	while (true) {
+		if (std::filesystem::exists(path / hg)) {
 			found = true;
 			break;
 		}
-		
 		if (path == path.root_path()) {
 			break;			
 		}
-
 		path = path.parent_path();
 	}
 
-	if (!found)
-	{
+	if (!found) {
 		return {};
 	}
 
-	std::string branch = "default";
+	std::string branch;
 
 	std::ifstream i((path / hg / "branch").c_str());
-	if (i.good())
-	{
+	if (i.good()) {
 		i >> branch;
+	} else {
+		branch = "default";
 	}
 
 	Segment segment(segment::id::hg);

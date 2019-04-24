@@ -12,8 +12,7 @@
 
 
 
-Segment
-SegmentUser(const config& c)
+Segment SegmentUser(const config& c)
 {
     
 #ifdef _WIN32

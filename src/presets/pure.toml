@@ -1,5 +1,5 @@
-segments.left  = ['dir','git', 'hg']
-segments.right = ['time','status','perms','root']
+segments.left  = ['dir', 'git', 'hg', 'venv']
+segments.right = ['time','status','jobs','perms','root']
 segments.down  = ['shell']
 
 global.symbol.separator      = ''
@@ -40,10 +40,10 @@ root.symbol= ' '
 root.theme = {fg = 230}
 
 jobs.symbol = ' '
-jobs.count  = true
+jobs.count  = false
 
 
-git.template  = '@d'
+# git.template  = '@%.?!'
 git.fancy     = false
 git.count     = false
 
@@ -62,14 +62,14 @@ git.theme.dirty  = {fg = 250}
 git.theme.stash  = {fg = 76}
 git.theme.ahead  = {fg = 159}
 git.theme.behind = {fg = 240}
-git.theme.staged = {fg = 113}
-git.theme.notstaged  = {fg = 11}
-git.theme.untracked  = {fg = 14}
+git.theme.staged = {fg = 220}
+git.theme.notstaged  = {fg = 213}
+git.theme.untracked  = {fg = 51}
 git.theme.conflicted = {fg =  9}
 
 host.theme = {fg = 240}
 
-time.template = '%H:%M:%S'
+time.template = '%H:%M:%S  %d/%m/%y'
 time.theme  = {fg = 244}
 
 jobs.theme        = {fg = 151}
@@ -77,9 +77,10 @@ ssh.theme         = {fg = 166}
 aws.theme         = {fg = 22}
 docker.theme      = {fg = 55}
 dot_env.theme     = {fg = 55}
-venv.theme = {fg = 35}
 duration.theme    = {fg = 237}
 
+venv.symbol = 'py'
+venv.theme = {fg = 35}
 
 [[extension]]
 name = "yolk"

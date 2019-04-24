@@ -4,8 +4,7 @@
 Segment
 SegmentRoot(const config& c)
 {
-	if (!c._meta.root)
-	{
+	if (!c._meta.root) {
 		return {};
 	}
 

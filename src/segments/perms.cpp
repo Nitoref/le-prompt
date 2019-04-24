@@ -21,13 +21,14 @@ SegmentPerms(const config& c)
 #endif
     
     Segment segment(segment::id::perms);
-
-    if (c.perms.verbose)
-    {
-        if (!write_access)
+    
+    if (c.perms.verbose) {
+        if (!write_access) {
             segment.theme(c.perms.theme_readonly);
-        else
+        }
+        else {
             segment.theme(c.perms.theme);
+        }
      
         std::string content;
         auto perms = fs::status(path).permissions();
@@ -43,11 +44,10 @@ SegmentPerms(const config& c)
         segment.append(content);
     }
     else
-    if (!write_access)
-    {
+    if (!write_access) {
         segment.theme(c.perms.theme_readonly);
         segment.append(c.perms.symbol_readonly);
     }
-
+    
     return segment;
 }

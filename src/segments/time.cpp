@@ -4,8 +4,7 @@
 #include <sstream>
 
 
-Segment
-SegmentTime(const config& c)
+Segment SegmentTime(const config& c)
 {
 	auto time  = std::chrono::system_clock::now();
 	auto ctime = std::chrono::system_clock::to_time_t(time);

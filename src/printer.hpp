@@ -76,6 +76,7 @@ struct printer
             endl   = "\n";
             break;
         }
+        wrap_mode(true);
     };
 
     static void wrap_mode(bool yes)

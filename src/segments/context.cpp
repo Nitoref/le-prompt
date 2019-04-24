@@ -19,54 +19,50 @@ SegmentContext(const config& c)
 #ifdef _WIN32
     char user_cstr[UNLEN+1];
     DWORD user_name_size = sizeof(user_cstr);
-    if (GetUserName(user_cstr, &user_name_size))
-    {
+    if (GetUserName(user_cstr, &user_name_size)) {
         user_cstr = std::getenv("USERNAME");
     }
 #else
     char* user_cstr = std::getenv("USER");
-    if (!user_cstr)
-    {
+    if (!user_cstr) {
         user_cstr = getpwuid(getuid())->pw_name;
     }
 #endif
     std::string user = utils::string(user_cstr);
     
-    
     char host_c_str[256];
     gethostname(host_c_str, 256);
     std::string host = utils::string(host_c_str);
     
-
-    if (host.empty() && user.empty())
-    {
+    if (host.empty() && user.empty()) {
         return {};
     }
 
     std::string host_short;
-    if (auto dot = host.find('.'); dot != std::string::npos )
-    {
+    if (auto dot = host.find('.'); dot != std::string::npos ) {
     	host_short = host.substr(0, dot);
-    } else host_short = host;
+    } else {
+        host_short = host;
+    }
     
 
-
     Segment segment(segment::id::context);
-    if (c._meta.root)
+
+    if (c._meta.root) {
         segment.theme(c.context.theme_root);
-    else
+    }
+    else {
         segment.theme(c.context.theme);
+    }
 
     bool escaped = false;
-    for (char ch: c.context.format)
-    {
+    for (char ch: c.context.format) {
         if (escaped) {
             segment.append(ch);
         	escaped = false;
         	continue;
         }
-        switch(ch)
-        {
+        switch(ch) {
             case 'u':
                 segment.append(user);
             break;

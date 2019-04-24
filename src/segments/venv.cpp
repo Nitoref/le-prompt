@@ -4,8 +4,7 @@
 #include "utils.hpp"
 
 
-Segment
-SegmentVenv(const config& c)
+Segment SegmentVenv(const config& c)
 {
     char* content_cstr = std::getenv("VIRTUAL_ENV");
 
