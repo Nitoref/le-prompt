@@ -65,7 +65,7 @@ git.symbol.stash      = '⚑'
 git.symbol.ahead      = ''
 git.symbol.behind     = ''
 git.symbol.staged     = ''
-git.symbol.notstaged  = '✎'
+git.symbol.notstaged  = ''
 git.symbol.conflicted = '×'
 git.symbol.untracked  = ''
 

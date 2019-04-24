@@ -88,10 +88,10 @@ struct printer
         }
     }
 
-    static inline std::string escape(std::string what)
+    static inline std::string escape(const std::string& what)
     {
         std::string output;
-        output.reserve(what.length() * 1.5);
+        output.reserve(what.length());
 
         std::string::size_type cursor = 0;
         std::string::size_type item;

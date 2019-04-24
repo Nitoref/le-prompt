@@ -15,7 +15,7 @@ SegmentDocker(const config& c)
 	char* content_cstr = std::getenv("DOCKER_MACHINE_NAME");
 	if (content_cstr)
 	{
-		segment.append(content_cstr);
+		segment += content_cstr;
 		return segment;
 	}
 

@@ -39,6 +39,17 @@ int get_name(GitStatus& status, git_repository *repo);
 
 
 
+inline std::string format(const std::string& symbol, size_t status, bool show_number)
+{
+    std::string output = " ";
+    if (show_number)
+        output += std::to_string(status);
+    output += symbol;
+    return output;
+}
+
+
+
 Segment
 SegmentGit(const config& c)
 {
@@ -64,23 +75,22 @@ SegmentGit(const config& c)
     }
 
 
-
     Segment segment(segment::id::git);
 
     for (char ch: c.git.format)
     {
         switch (ch) {
-            case '@': if (!status.name.empty()) segment.append(branch_symbol           + status.name); break;
-            case '%': if (!status.tag.empty() ) segment.append(c.git.symbol_tag        + status.tag); break;
-            case '.': if (status.stash        ) segment.append(c.git.symbol_stash      + (c.git.count ? std::to_string(status.stash     ) : "")); break;
-            case '>': if (status.ahead        ) segment.append(c.git.symbol_ahead      + (c.git.count ? std::to_string(status.ahead     ) : "")); break;
-            case '<': if (status.behind       ) segment.append(c.git.symbol_behind     + (c.git.count ? std::to_string(status.behind    ) : "")); break;
-            case '+': if (status.staged       ) segment.append(c.git.symbol_staged     + (c.git.count ? std::to_string(status.staged    ) : "")); break;
-            case '!': if (status.notstaged    ) segment.append(c.git.symbol_notstaged  + (c.git.count ? std::to_string(status.notstaged ) : "")); break;
-            case '?': if (status.untracked    ) segment.append(c.git.symbol_untracked  + (c.git.count ? std::to_string(status.untracked ) : "")); break;
-            case 'x': if (status.conflicted   ) segment.append(c.git.symbol_conflicted + (c.git.count ? std::to_string(status.conflicted) : "")); break;
+            case '@': if (!status.name.empty()) segment.append(branch_symbol    + status.name); break;
+            case '%': if (!status.tag.empty() ) segment.append(c.git.symbol_tag + status.tag ); break;
+            case '.': if (status.stash     ) segment += format(c.git.symbol_stash     , status.stash     , c.git.count); break;
+            case '>': if (status.ahead     ) segment += format(c.git.symbol_ahead     , status.ahead     , c.git.count); break;
+            case '<': if (status.behind    ) segment += format(c.git.symbol_behind    , status.behind    , c.git.count); break;
+            case '+': if (status.staged    ) segment += format(c.git.symbol_staged    , status.staged    , c.git.count); break;
+            case '!': if (status.notstaged ) segment += format(c.git.symbol_notstaged , status.notstaged , c.git.count); break;
+            case '?': if (status.untracked ) segment += format(c.git.symbol_untracked , status.untracked , c.git.count); break;
+            case 'x': if (status.conflicted) segment += format(c.git.symbol_conflicted, status.conflicted, c.git.count); break;
             case 'd': if (dirty) segment.append(c.git.symbol_dirty); break;
-            default: break;
+            default: segment.append(ch);
         }
     }
 

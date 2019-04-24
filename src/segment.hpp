@@ -45,13 +45,13 @@ public:
         return id_;
     }
     
-    std::string
+    std::string&
     content()
     {
         return content_;
     }
 
-    Theme
+    Theme&
     theme()
     {
         return theme_;
@@ -60,16 +60,9 @@ public:
     size_t
     length()
     {
-        return length_;
+        return utils::strlen(content_);
     }
 
-
-    void
-    identify(segment::id id)
-    {
-        id_ = id;
-    }
-    
     void
     theme(Theme t)
     {
@@ -79,18 +72,16 @@ public:
     void
     append(char c)
     {
-        length_  ++;
         content_ += printer::escape(c);
     }
     void
-    append(std::string s)
+    append(std::string&& s)
     {
-        length_  += utils::strlen(s);
         content_ += printer::escape(s);
     }
 
     Segment&
-    operator +=(std::string s)
+    operator +=(std::string&& s)
     {
         append(s);
         return *this;
