@@ -58,8 +58,7 @@ down (left)
 }
 
 
-std::string
-Prompt::make()
+std::string Prompt::make()
 {
     left.preformat();
     right.preformat();
@@ -78,37 +77,31 @@ Prompt::make()
 }
 
 
-void
-Prompt::shrink()
+void Prompt::shrink()
 {
-    if (left.length + right.length < conf.global.width_limit * conf._meta.width)
-    {
+    if (left.length + right.length < conf.global.width_limit * conf._meta.width) {
         return;
     }
 
     for (auto i = priority_list.rbegin(); i != priority_list.rend(); ++i)
     {
-        if (auto index = left.id_lookup.at((int)*i))
-        {
+        if (auto index = left.id_lookup.at((int)*i)) {
             left.length -= left.segments.at(*index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
-        if (auto index = right.id_lookup.at((int)*i))
-        {
+        if (auto index = right.id_lookup.at((int)*i)) {
             right.length -= right.segments.at(*index).length()
             + conf.global.padding_left + conf.global.padding_right + 1;
         }
         ignored_segments.insert(*i);
-        if (left.length + right.length < conf.global.width_limit * conf._meta.width)
-        {
+        if (left.length + right.length < conf.global.width_limit * conf._meta.width) {
             return;
         }
     }
 }
 
 
-std::string
-Prompt::print_native()
+std::string Prompt::print_native()
 {
     std::string output;
     std::string rprompt;
@@ -144,8 +137,7 @@ Prompt::print_native()
 }
 
 
-std::string
-Prompt::print_emulated()
+std::string Prompt::print_emulated()
 {
     std::string output;
     std::string rprompt;

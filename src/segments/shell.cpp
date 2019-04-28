@@ -14,11 +14,18 @@ SegmentShell(const config& c)
 		{shell_t::ksh   , c.shell.symbol_ksh  },
 		{shell_t::fish  , c.shell.symbol_fish },
 		{shell_t::ps    , c.shell.symbol_ps   },
-		{shell_t::other , c.shell.symbol_bash },
+		{shell_t::other , c.shell.symbol_all  },
 	};
 
 	Segment segment(segment::id::shell);
-	segment.append(shell_symbols.at(c._meta.shell));
+
+	if (!c.shell.symbol_all.empty()) {
+		segment.append(c.shell.symbol_all);
+	}
+	else {
+		segment.append(shell_symbols.at(c._meta.shell));
+	}
+
 	if (c._meta.error) {
 		segment.theme(c.shell.theme_failure);
 	}

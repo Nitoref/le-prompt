@@ -58,13 +58,12 @@ inline map_t functions = {
 };
 
 inline function_t*
-get(string str)
-{
+get(string str) {
     if (auto s = functions.find(str); s != functions.end()) {
         return &s->second;
     }
     return nullptr;
-};
+}
 
 
 }

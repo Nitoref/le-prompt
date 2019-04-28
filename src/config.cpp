@@ -35,7 +35,7 @@ config::config(int argc, char const *argv[])
     {
         parse(argv[3]);
     }
-    catch (parse_exception e) {
+    catch (parse_exception& e) {
         std::cout << e.what() << "\n";
         exit(1);
     }
@@ -65,7 +65,7 @@ void config::parse(std::string filename)
     if (auto t = file -> get_table("shell"))     { get_shell       (t); } ;
     if (auto t = file -> get_table("time"))      { get_time        (t); } ;
     if (auto t = file -> get_table("ssh") )      { get_ssh         (t); } ;
-};
+}
 
 void config::get_segments(table_ptr table)
 {
@@ -231,6 +231,7 @@ void config::get_shell(table_ptr table)
     get(table , "symbol.ksh"    , shell.symbol_ksh);
     get(table , "symbol.fish"   , shell.symbol_fish);
     get(table , "symbol.ps"     , shell.symbol_ps);
+    get(table , "symbol.all"    , shell.symbol_all);
     get(table , "theme.success" , shell.theme_success);
     get(table , "theme.failure" , shell.theme_failure);
 }

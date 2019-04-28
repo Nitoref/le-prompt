@@ -33,6 +33,7 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <git2.h>
 
 using namespace std;
 
@@ -68,21 +69,102 @@ struct B: public A{};
 struct C: public A{};
 
 
+
+
+
+struct Status
+{
+	string branch;
+	string workdir;
+	bool staged;
+	bool notstaged;
+	bool untracked;
+};
+
+
+int git_diff_callback(const git_diff* a, const git_diff_delta* delta, const char* c, void* payload){
+	if (delta -> status == GIT_DELTA_UNTRACKED) {
+		(*(Status*)payload).untracked = true;
+	} else {
+		(*(Status*)payload).notstaged = true;
+	}
+	if ((*(Status*)payload).notstaged && (*(Status*)payload).untracked)
+		return -10;
+	return 0;
+}
+
 int main(int argc, char **argv, char **envp)
 {
+	Status status;
 
-	std::map<int, A> a {
-		{1, A()},
-		{2, B()},
-		{3, C()},
+    git_repository     *repository = NULL;
+    git_reference      *head       = NULL;
+    git_commit         *commit     = NULL;
+    git_index          *index      = NULL;
+    git_tree           *tree       = NULL;
+    git_diff           *diff       = NULL;
+	git_diff_options   options    = GIT_DIFF_OPTIONS_INIT;
+
+	options.flags = GIT_DIFF_SKIP_BINARY_CHECK | GIT_DIFF_DISABLE_PATHSPEC_MATCH |
+              		GIT_DIFF_INCLUDE_UNTRACKED | GIT_DIFF_RECURSE_UNTRACKED_DIRS;
+
+    git_libgit2_opts(GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION,     0);
+    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
+    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION,   1);
+    git_libgit2_init();
+
+    if (git_repository_open_ext(&repository, ".", 0, NULL)) {
+    	cout << "Unable to open repository.";
+        return 1;
+    }
+    
+    if (git_repository_is_empty(repository)) {
+        cout << "Repository empty\n";
+    	return 1;
+    }
+    
+    if (git_repository_index(&index, repository)) {
+    	cout << "Unable to get index.\n";
+    	return 1;
+    }
+
+	if (git_repository_head(&head, repository))
+	{
+		cout << "Couldn't get head.\n";
+		return 1;
+	};
+    status.branch = git_reference_shorthand(head);
+	cout << "On branch " << status.branch << "\n";
+
+
+	if (git_commit_lookup(&commit, repository, git_reference_target(head)))
+	{
+		cout << "Couldn't get commit.\n";
+		return 1;
 	};
 
+	if (git_commit_tree(&tree, commit)) {
+		cout << "Couldn't get tree.\n";
+		return 1;
+	};
 
+	options.notify_cb = git_diff_callback;
 
+	options.payload = (void*)&status.staged;
+	if (auto e = git_diff_tree_to_index(&diff, repository, tree, index, &options); e && e != -10 ) {
+		cout << "Tree/index diff error.\n";
+		return 1;
+	}
 
+	options.payload = (void*)&status.notstaged;
+	if (auto e = git_diff_index_to_workdir(&diff, repository, index, &options); e && e != -10 ) {
+		cout << "Index/workdir diff error.\n";
+		return 1;
+	}
 
-
-
+	git_diff_free(diff);
+    git_repository_free(repository);
+    git_libgit2_shutdown();
 
 	// auto blob = IOPSCopyPowerSourcesInfo();
 	// auto ps   = IOPSCopyPowerSourcesList(blob);

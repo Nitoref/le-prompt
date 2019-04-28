@@ -1,7 +1,7 @@
 segments.left = [
-  'dir',
   'perms',
   'root',
+  'dir',
   'shell',
   'ssh',
   'aws',
@@ -12,7 +12,7 @@ segments.right = [
   'time',
   'host',
   'load',
-  'jobs',
+  # 'jobs',
   'git',
   'hg',
   'status',
@@ -38,8 +38,10 @@ dir.alias = [
 shell.theme.success = {bg = 0}
 shell.theme.failure = {fg = 9, bg = 0}
 
+perms.symbol.readonly = ''
+
 dir.symbol.wrap  = '…'
-host.symbol      = '@ '
+host.symbol      = '@'
 root.symbol      = ''
 jobs.symbol      = ''
 shell.symbol     = '$'

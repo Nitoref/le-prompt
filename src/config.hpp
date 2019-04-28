@@ -3,7 +3,7 @@
 
 #include "shell.hpp"
 #include "theme.hpp"
-#include <cpptoml.hpp>
+#include <cpptoml.h>
 
 #include <map>
 #include <vector>
@@ -174,7 +174,7 @@ struct config
 
 	struct jobs 
 	{
-		bool   count  = true;
+		bool   count  = false;
 		bool   always = false;
 		string symbol = "…";
 		Theme  theme;
@@ -210,6 +210,7 @@ struct config
 
 	struct shell
 	{
+		string symbol_all  = "$";
 		string symbol_bash = "$";
 		string symbol_csh  = "%";
 		string symbol_zsh  = "%";
