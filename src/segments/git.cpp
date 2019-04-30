@@ -111,8 +111,8 @@ get_git_status(GitStatus& status, std::vector<std::string> ignored_repositories)
     git_status_list    *status_list;
  
     git_libgit2_opts(GIT_OPT_ENABLE_STRICT_HASH_VERIFICATION, 0);
-    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
-    git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION, 1);
+    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_CHECKSUM_VERIFICATION, 1);
+    // git_libgit2_opts(GIT_OPT_DISABLE_INDEX_FILEPATH_VALIDATION, 1);
     git_libgit2_init();
 
     status_opt.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
