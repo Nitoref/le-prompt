@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<!-- DRAGABLE -->
+	<script src="https://cdn.jsdelivr.net/npm/@shopify/draggable@latest/lib/draggable.bundle.js"></script>
+
+	<!-- STYLESHEETS -->
+	<link rel="stylesheet" type="text/css" href="macos-minimal.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body class="night-mode">
+	<div class="halfed">
+
+		<div id="nightModeSwitch" onclick="document.body.classList.toggle('night-mode')">
+			<svg viewBox="0 0 20 20">
+		  		<path d="M17.39 15.14A7.33 7.33 0 0 1 11.75 1.6c.23-.11.56-.23.79-.34a8.19 8.19 0 0 0-5.41.45 9 9 0 1 0 7 16.58 8.42 8.42 0 0 0 4.29-3.84 5.3 5.3 0 0 1-1.03.69z"/>
+			</svg>
+		</div>
+
+		<h1>le-prompt</h1>
+		<p>
+			A fast, fully featured theme with left, right and multi-line prompt support for bash, zsh, fish, ksh, tcsh and powershell.
+		</p>
+
+		<!--  onmouseenter="document.body.className='shift'" onmouseleave="document.body.className=''" -->
+		<div class="macos-window"> 
+		  	<div class="macos-titlebar">
+		    	<div class="macos-buttons">
+		      		<div class="macos-button close">
+						<div class="macos-symbol"></div>
+					</div>
+					<div class="macos-button minimize">
+						<div class="macos-symbol"></div>
+					</div>
+		      		<div class="macos-button zoom">
+						<div class="macos-symbol"></div>
+					</div>
+		    	</div>
+			</div>
+			<div class="macos-content">
+				<div class="prompt-container">
+					<il class="prompt prompt--left" id="leftPrompt"></il>
+					<il class="prompt prompt--right " id="rightPrompt"></il>
+				</div>
+			</div>
+		</div>
+		<br clear="both" />
+
+		<div class="prompt-config">
+
+			<il class="segment-list" id="voidPrompt">
+			</il>
+
+			<div class="prompt-setting-container">
+				<div>
+					<label for="whatever">sure</label>
+					<input type="text" name="whatever" placeholder="">
+				</div>
+				<div>
+					<label for="background">background</label>
+					<input class="color" type="text" name="background" placeholder="#000000" pattern="#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})" oninput="if (this.checkValidity() == true) {this.style.backgroundColor=this.value} else {this.style.backgroundColor=''}">
+				</div>
+				<div>
+					<label for="foreground">foreground</label>
+					<input class="color" type="text" name="foreground" placeholder="#000000" pattern="#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})" oninput="if (this.checkValidity() == true) {this.style.backgroundColor=this.value} else {this.style.backgroundColor=''}">
+				</div>
+				<div>
+					<label for="always">always</label>
+					<input type="checkbox" name="always">
+				</div>
+				<div>
+					<label for="never">never</label>
+					<input type="checkbox" name="never">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+<!-- <script src="colors.js"></script> -->
+<script src="index.js"></script>

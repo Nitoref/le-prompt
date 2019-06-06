@@ -1,0 +1,73 @@
+.macos-window {
+	background: transparent;
+	/*min-width: 100%;*/
+	/*display: inline-block;*/
+	margin: auto;
+	margin-top: 2em;
+	margin-bottom: 40px;
+	border: 1px solid #0009;
+	border-radius: 6px;
+	/*box-shadow: 0 30px 30px 4px #0007;*/
+}
+
+.macos-titlebar {
+	font-family: HelveticaNeue, 'Helvetica Neue', 'Lucida Grande', Arial, sans-serif;
+	background: transparent;
+	color: #aaa;
+	font-size: 10pt;
+	line-height: 20px;
+	text-align: center;
+	width: 100%;
+	height: 20px;
+	border-bottom: 1px solid #0009;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	user-select: none;
+	cursor: default;
+}
+
+.macos-buttons {
+	padding-left: 4px;
+	padding-top: 4px;
+	float: left;
+	line-height: 0px;
+}
+
+.macos-button {
+	margin-left: 4px;
+	width: 11px;
+	height: 11px;
+	border: 1px solid #0009;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.macos-symbol {
+	margin:auto;
+	width: 100%;
+	height: 100%;
+  	background: #0009;
+	visibility: hidden;
+}
+
+.macos-buttons:hover .macos-symbol {
+	visibility: visible;
+}
+
+.close > .macos-symbol {
+	clip-path: polygon(10% 0, 0 10%, 40% 51%, 0 90%, 10% 100%, 50% 60%, 90% 100%, 100% 90%, 60% 50%, 100% 10%, 90% 0, 50% 40%);
+	transform:scale(0.55);
+}
+.minimize > .macos-symbol {
+	transform:scale(0.66, 0.08);
+}
+.zoom > .macos-symbol {
+	border-radius: 2px;
+	transform: scale(0.5);
+}
+
+.macos-content {
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}

@@ -1,4 +1,4 @@
-set(CMAKE_CXX_COMPILER "g++-8")
+set(CMAKE_CXX_COMPILER "g++-9")
 cmake_minimum_required(VERSION 3.0)
 
 project(le-prompt)

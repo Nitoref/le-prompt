@@ -81,11 +81,13 @@ struct printer
 
     static void wrap_mode(bool yes)
     {
-        init = ESCAPE;
-        stop = "";
         if (yes) {
-            init.insert(0, wrap);
+            init = wrap;
+            init += ESCAPE;
             stop = unwrap;
+        } else {
+            init = ESCAPE;
+            stop = "";
         }
     }
 
